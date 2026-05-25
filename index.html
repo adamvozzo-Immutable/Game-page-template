@@ -1082,12 +1082,12 @@
       margin-top: 40px;
       width: 100%;
       justify-content: center;
+      align-items: flex-start;
     }
 
     .cta-card {
       flex: 1;
       max-width: 320px;
-      min-height: 200px;
       padding: 20px 22px;
       background: rgba(20, 18, 36, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -1135,11 +1135,20 @@
     html.rewards .cvp-copy-reward,
     html.rewards .reward-copy-reward { display: block; }
 
-    /* The linking view shares the wishlist/discord layout with the reward
-       prompt — image above, text below — but only when Rewards is on. In
-       generic CVP mode the linking view stays text-only. */
-    .cta-card-view-linking .reward-media { display: none; }
-    html.rewards .cta-card-view-linking .reward-media { display: flex; }
+    /* The linking and success views show the reward image only when Rewards
+       is on (to mirror the reward prompt layout); in generic CVP mode they
+       stay text-only. The reward prompt has its image always visible because
+       the whole prompt-reward view only ever renders in rewards mode. */
+    .cta-card-view-linking .reward-media,
+    .cta-card-view-success .reward-media { display: none; }
+    html.rewards .cta-card-view-linking .reward-media,
+    html.rewards .cta-card-view-success .reward-media { display: flex; }
+
+    /* In rewards-success the image is the celebration; drop the redundant
+       check icon so the card doesn't read as image + tick + heading. */
+    html.rewards .cta-card-view-success .card-success-icon {
+      display: none;
+    }
 
     .cta-card[data-state="success"] .cta-card-view-success {
       display: flex;
@@ -1239,7 +1248,6 @@
     .cta-card .btn-primary,
     .cta-card .btn-discord {
       width: 100%;
-      margin-top: auto;
       height: 46px;
       padding: 0 16px;
       font-size: 13px;
@@ -1994,6 +2002,9 @@
             </button>
           </div>
           <div class="cta-card-view cta-card-view-success">
+            <div class="reward-media reward-media-cutout">
+              <img class="reward-image" src="./reward-livery.png" alt="" loading="lazy" />
+            </div>
             <div class="card-success-icon">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M5 12.5l4.5 4.5L19 7" stroke="#E83382" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2045,6 +2056,9 @@
             </button>
           </div>
           <div class="cta-card-view cta-card-view-success">
+            <div class="reward-media reward-media-cutout">
+              <img class="reward-image" src="./reward-ferrari.png" alt="" loading="lazy" />
+            </div>
             <div class="card-success-icon">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M5 12.5l4.5 4.5L19 7" stroke="#E83382" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
