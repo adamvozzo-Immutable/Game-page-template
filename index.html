@@ -333,6 +333,37 @@
       box-shadow: inset 0 0 0 1px rgba(247, 109, 0, 0.8);
     }
 
+    /* ===== Trailer embed ===== */
+    .trailer-embed {
+      width: 560px;
+      flex-shrink: 0;
+      margin-top: 24px;
+    }
+
+    .trailer-embed.trailer-cvp {
+      width: 100%;
+      margin-top: 0;
+      margin-bottom: 48px;
+    }
+
+    .trailer-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #000;
+    }
+
+    .trailer-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
     /* ===== Demo sub-option (position radio) ===== */
     .demo-suboption {
       display: none;
@@ -1037,6 +1068,17 @@
       alt="Game Badge"
     />
 
+    <!-- Trailer embed — above fold -->
+    <div id="trailer-hero" class="trailer-embed feat-hidden" aria-label="Game trailer">
+      <div class="trailer-frame">
+        <iframe
+          title="Game trailer"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"></iframe>
+      </div>
+    </div>
+
     <!-- Screenshot gallery — above fold (featured + thumbs row) -->
     <div id="gallery-hero" class="screenshot-gallery feat-hidden" aria-label="Gameplay screenshots">
       <div class="gallery-featured">
@@ -1109,15 +1151,6 @@
           </svg>
           Visit Store
         </a>
-
-        <!-- Watch Trailer — toggled by demo panel -->
-        <a href="#" class="btn-secondary" data-feature="trailer" aria-label="Watch Trailer">
-          <svg class="play-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="16" cy="16" r="15" stroke="white" stroke-width="1.5"/>
-            <polygon points="13,10 23,16 13,22" fill="white"/>
-          </svg>
-          <span class="btn-secondary-label">Watch Trailer</span>
-        </a>
       </div>
     </div>
   </main>
@@ -1178,6 +1211,17 @@
 <!-- ===== CVP scroll content — toggled by demo panel ===== -->
 <section class="cvp-content feat-hidden" data-feature="scroll-content" aria-label="Game features">
   <div class="cvp-container">
+
+    <!-- Trailer embed — below fold -->
+    <div id="trailer-cvp" class="trailer-embed trailer-cvp feat-hidden" aria-label="Game trailer">
+      <div class="trailer-frame">
+        <iframe
+          title="Game trailer"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"></iframe>
+      </div>
+    </div>
 
     <!-- Screenshot gallery — below fold (featured + thumbs row) -->
     <div id="gallery-cvp" class="screenshot-gallery gallery-cvp feat-hidden" aria-label="Gameplay screenshots">
@@ -1274,16 +1318,31 @@
 
   <div class="demo-panel-header">Template Options</div>
 
-  <label class="demo-option" for="feat-trailer">
-    <div class="demo-option-text">
-      <span class="demo-option-label">Trailer</span>
-      <span class="demo-option-desc">Watch Trailer button in CTA</span>
+  <div class="demo-option-group">
+    <label class="demo-option" for="feat-trailer">
+      <div class="demo-option-text">
+        <span class="demo-option-label">Trailer</span>
+        <span class="demo-option-desc">Embedded YouTube video</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="feat-trailer" />
+        <span class="toggle-track"></span>
+      </div>
+    </label>
+    <div class="demo-suboption" id="trailer-suboption">
+      <span class="demo-suboption-label">Position</span>
+      <div class="demo-radio-group">
+        <label class="demo-radio">
+          <input type="radio" name="trailer-pos" value="hero" id="tpos-hero" checked />
+          Above fold
+        </label>
+        <label class="demo-radio">
+          <input type="radio" name="trailer-pos" value="cvp" id="tpos-cvp" />
+          Below fold
+        </label>
+      </div>
     </div>
-    <div class="toggle-switch">
-      <input type="checkbox" id="feat-trailer" checked />
-      <span class="toggle-track"></span>
-    </div>
-  </label>
+  </div>
 
   <label class="demo-option" for="feat-store">
     <div class="demo-option-text">
@@ -1450,11 +1509,10 @@
     });
   }
 
-  bindFeature('feat-trailer', 'trailer');
   bindFeature('feat-store', 'store');
   bindFeature('feat-social', 'social');
 
-  // ===== Screenshots gallery + below-fold state =====
+  // ===== Gallery + trailer + below-fold state =====
   var galleryHero       = document.getElementById('gallery-hero');
   var galleryCvp        = document.getElementById('gallery-cvp');
   var screenshotsSub    = document.getElementById('screenshots-suboption');
@@ -1465,9 +1523,31 @@
   var cvpSection        = document.querySelector('[data-feature="scroll-content"]');
   var cvpTextSections   = cvpSection.querySelectorAll('.cvp-section');
 
+  var trailerHero       = document.getElementById('trailer-hero');
+  var trailerCvp        = document.getElementById('trailer-cvp');
+  var trailerHeroFrame  = trailerHero.querySelector('iframe');
+  var trailerCvpFrame   = trailerCvp.querySelector('iframe');
+  var trailerSub        = document.getElementById('trailer-suboption');
+  var featTrailer       = document.getElementById('feat-trailer');
+  var tposHero          = document.getElementById('tpos-hero');
+  var tposCvp           = document.getElementById('tpos-cvp');
+
+  // NOTE: Replace TRAILER_ID with the real Forza Horizon 6 trailer when available.
+  var TRAILER_ID  = 'aqz-KE-bpKQ';
+  var TRAILER_SRC = 'https://www.youtube.com/embed/' + TRAILER_ID + '?rel=0&modestbranding=1';
+
+  function setTrailerSrc(frame, on) {
+    var desired = on ? TRAILER_SRC : '';
+    if (frame.getAttribute('src') !== desired) {
+      frame.setAttribute('src', desired);
+    }
+  }
+
   function updateLayout() {
     var galleryOn    = featScreenshots.checked;
     var galleryBelow = gposCvp.checked;
+    var trailerOn    = featTrailer.checked;
+    var trailerBelow = tposCvp.checked;
     var descriptionOn = featScroll.checked;
 
     // Gallery placement
@@ -1479,8 +1559,23 @@
       galleryCvp.classList.add('feat-hidden');
     }
 
-    // CVP container is visible if Description is on OR gallery is below fold
-    var showCvpContainer = descriptionOn || (galleryOn && galleryBelow);
+    // Trailer placement — only set iframe src on the visible one to avoid double-loading
+    if (trailerOn) {
+      trailerHero.classList.toggle('feat-hidden', trailerBelow);
+      trailerCvp.classList.toggle('feat-hidden', !trailerBelow);
+      setTrailerSrc(trailerHeroFrame, !trailerBelow);
+      setTrailerSrc(trailerCvpFrame, trailerBelow);
+    } else {
+      trailerHero.classList.add('feat-hidden');
+      trailerCvp.classList.add('feat-hidden');
+      setTrailerSrc(trailerHeroFrame, false);
+      setTrailerSrc(trailerCvpFrame, false);
+    }
+
+    // CVP container is visible if Description is on, OR gallery/trailer is below fold
+    var showCvpContainer = descriptionOn
+      || (galleryOn && galleryBelow)
+      || (trailerOn && trailerBelow);
     cvpSection.classList.toggle('feat-hidden', !showCvpContainer);
 
     // CVP text sections only visible when Description is on
@@ -1491,13 +1586,17 @@
     // Enable page scrolling when anything below the fold is visible
     document.documentElement.classList.toggle('scroll-enabled', showCvpContainer);
 
-    // Show position sub-option only when gallery is on
+    // Show sub-options only when their parent feature is on
     screenshotsSub.classList.toggle('visible', galleryOn);
+    trailerSub.classList.toggle('visible', trailerOn);
   }
 
   featScreenshots.addEventListener('change', updateLayout);
   gposHero.addEventListener('change', updateLayout);
   gposCvp.addEventListener('change', updateLayout);
+  featTrailer.addEventListener('change', updateLayout);
+  tposHero.addEventListener('change', updateLayout);
+  tposCvp.addEventListener('change', updateLayout);
   featScroll.addEventListener('change', updateLayout);
 
   // ===== Gallery thumb selection (Steam-style) =====
