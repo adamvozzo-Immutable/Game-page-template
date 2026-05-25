@@ -686,6 +686,127 @@
       border-radius: 6px;
     }
 
+    /* ===== Latest News (Updates sub-toggle of Description) ===== */
+    .news-section {
+      margin-bottom: 96px;
+    }
+
+    .news-section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 16px;
+    }
+
+    .news-heading {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .news-more-inline {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+
+    .news-more-inline:hover {
+      color: #E83382;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .news-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(20, 18, 36, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .news-card:hover {
+      border-color: rgba(232, 51, 130, 0.55);
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .news-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #0a0812;
+    }
+
+    .news-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .news-card:hover .news-image img {
+      transform: scale(1.05);
+    }
+
+    .news-card-body {
+      padding: 16px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .news-tag {
+      align-self: flex-start;
+      background: rgba(232, 51, 130, 0.18);
+      border: 1px solid rgba(232, 51, 130, 0.5);
+      color: #ffaad1;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    .news-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 22px;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .news-date {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.45);
+      margin-top: auto;
+    }
+
     /* ===== Demo options button ===== */
     .demo-toggle {
       position: fixed;
@@ -1562,6 +1683,20 @@
         max-height: 280px;
       }
 
+      /* News grid collapses on mobile */
+      .news-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .news-section {
+        margin-bottom: 64px;
+      }
+
+      .news-heading {
+        font-size: 20px;
+      }
+
       /* Footer — socials wrap, stay centred */
       .footer-rule {
         width: calc(100% - 40px);
@@ -1896,6 +2031,56 @@
 <section class="cvp-content feat-hidden" data-feature="scroll-content" aria-label="Game features">
   <div class="cvp-container">
 
+    <!-- Latest News section — sub-toggle of Description -->
+    <section class="news-section feat-hidden" data-feature="updates" aria-label="Latest news">
+      <div class="news-section-head">
+        <h2 class="news-heading">Latest News</h2>
+        <a class="news-more news-more-inline" href="#">All articles &rarr;</a>
+      </div>
+      <div class="news-grid">
+        <a class="news-card" href="#">
+          <div class="news-image">
+            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.600x338.jpg" alt="" loading="lazy" />
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Patch Notes</span>
+            <h3 class="news-title">Patch 1.1 — Mt. Fuji Hotfix</h3>
+            <span class="news-date">May 22, 2026</span>
+          </div>
+        </a>
+        <a class="news-card" href="#">
+          <div class="news-image">
+            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.600x338.jpg" alt="" loading="lazy" />
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Garage</span>
+            <h3 class="news-title">Inside the JDM Classics Collection</h3>
+            <span class="news-date">May 19, 2026</span>
+          </div>
+        </a>
+        <a class="news-card" href="#">
+          <div class="news-image">
+            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/d4b81f0cafcfba410371e53bd696fb5cc9b434c0/ss_d4b81f0cafcfba410371e53bd696fb5cc9b434c0.600x338.jpg" alt="" loading="lazy" />
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Community</span>
+            <h3 class="news-title">Touge Battles Return for Season Two</h3>
+            <span class="news-date">May 14, 2026</span>
+          </div>
+        </a>
+        <a class="news-card" href="#">
+          <div class="news-image">
+            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/041b9a2854dc647bf54d7d8b36d2f4186ed72c13/ss_041b9a2854dc647bf54d7d8b36d2f4186ed72c13.600x338.jpg" alt="" loading="lazy" />
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Behind the Scenes</span>
+            <h3 class="news-title">Painting Tokyo: Inside the Art Pipeline</h3>
+            <span class="news-date">May 8, 2026</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
     <!-- Trailer embed — below fold -->
     <div id="trailer-cvp" class="trailer-embed trailer-cvp feat-hidden" aria-label="Game trailer">
       <div class="trailer-frame">
@@ -2099,16 +2284,27 @@
     </div>
   </div>
 
-  <label class="demo-option" for="feat-scroll">
-    <div class="demo-option-text">
-      <span class="demo-option-label">Description</span>
-      <span class="demo-option-desc">Has marketing copy</span>
+  <div class="demo-option-group">
+    <label class="demo-option" for="feat-scroll">
+      <div class="demo-option-text">
+        <span class="demo-option-label">Description</span>
+        <span class="demo-option-desc">Has marketing copy</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="feat-scroll" />
+        <span class="toggle-track"></span>
+      </div>
+    </label>
+    <div class="demo-suboption" id="description-suboption">
+      <span class="demo-suboption-label">Add-ons</span>
+      <div class="demo-radio-group">
+        <label class="demo-radio">
+          <input type="checkbox" id="feat-updates" />
+          Updates feed
+        </label>
+      </div>
     </div>
-    <div class="toggle-switch">
-      <input type="checkbox" id="feat-scroll" />
-      <span class="toggle-track"></span>
-    </div>
-  </label>
+  </div>
 
   <label class="demo-option" for="feat-social">
     <div class="demo-option-text">
@@ -2289,6 +2485,7 @@
 
   bindFeature('feat-studio-logo', 'studio-logo');
   bindFeature('feat-release-date', 'release-date');
+  bindFeature('feat-updates', 'updates');
 
   // Social footer toggle — also updates html.no-social so the hero gets
   // extra padding-bottom when the socials aren't there to anchor things.
@@ -2395,6 +2592,8 @@
     // Show sub-options only when their parent feature is on
     screenshotsSub.classList.toggle('visible', galleryOn);
     trailerSub.classList.toggle('visible', trailerOn);
+    var descriptionSub = document.getElementById('description-suboption');
+    if (descriptionSub) descriptionSub.classList.toggle('visible', descriptionOn);
   }
 
   // Only one of trailer / screenshots can hold the above-fold slot.
