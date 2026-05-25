@@ -226,6 +226,7 @@
     }
 
     .btn-primary {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -244,6 +245,27 @@
       color: #ffffff;
       text-decoration: none;
       transition: background 0.2s;
+    }
+
+    /* Reward preview sitting on the pre-sign-in CTA when Motivation + Rewards
+       are both active. The image is anchored to the top edge of the button so
+       the car body extends up above the CTA, with its under-shadow grounded
+       on the pink bar. */
+    .btn-reward-image {
+      display: none;
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      transform: translateX(-50%);
+      height: 170px;
+      width: auto;
+      max-width: none;
+      pointer-events: none;
+      filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.5));
+    }
+
+    html.rewards .btn-reward-image {
+      display: block;
     }
 
     .btn-primary:hover {
@@ -1640,8 +1662,9 @@
       </p>
 
       <div class="cta-row">
-        <!-- Pre-sign-in CTA — label swaps with Motivation scenario -->
+        <!-- Pre-sign-in CTA — label and reward image swap with Motivation scenario -->
         <button class="btn-primary" id="btn-get-started">
+          <img class="btn-reward-image" src="./reward-ferrari.png" alt="" aria-hidden="true" />
           <span class="btn-label">Get updates</span>
         </button>
 
@@ -2510,14 +2533,29 @@
   function updateCtaState() {
     motivationSub.classList.toggle('visible', featMotivation.checked);
     var motivationOn = featMotivation.checked;
+    // Rewards is a sub-mode of Motivation — only active when both are on
+    var rewardsOn = motivationOn && mstyleRewards.checked;
+    document.documentElement.classList.toggle('rewards', rewardsOn);
 
-    // Pre-sign-in CTA + modal copy reframe between generic updates and the
-    // early-access program based on whether Motivation is active.
-    setButtonLabel(btnGetStarted, motivationOn ? 'Get early access' : 'Get updates');
-    modalTitle.textContent = motivationOn ? 'Get Early Access' : 'Get Updates';
-    modalSub.textContent = motivationOn
-      ? 'Join the community for exclusive updates, insider news, and early access perks.'
-      : 'Sign up for news, dev diaries, and release updates direct to your inbox.';
+    // Pre-sign-in CTA + modal copy reframe across three states:
+    // default / motivation / motivation+rewards
+    var ctaLabel, modalTitleCopy, modalSubCopy;
+    if (rewardsOn) {
+      ctaLabel = 'Unlock Exclusive Rewards';
+      modalTitleCopy = 'Unlock Exclusive Rewards';
+      modalSubCopy = 'Sign up to claim the Founder’s Livery Pack on Steam and the Ferrari J50 on Discord.';
+    } else if (motivationOn) {
+      ctaLabel = 'Get early access';
+      modalTitleCopy = 'Get Early Access';
+      modalSubCopy = 'Join the community for exclusive updates, insider news, and early access perks.';
+    } else {
+      ctaLabel = 'Get updates';
+      modalTitleCopy = 'Get Updates';
+      modalSubCopy = 'Sign up for news, dev diaries, and release updates direct to your inbox.';
+    }
+    setButtonLabel(btnGetStarted, ctaLabel);
+    modalTitle.textContent = modalTitleCopy;
+    modalSub.textContent = modalSubCopy;
 
     if (!isSignedIn) return;
     btnWishlist.classList.toggle('feat-hidden', motivationOn);
@@ -2525,13 +2563,9 @@
     ctaCards.classList.toggle('feat-hidden', !motivationOn);
   }
 
-  function updateRewardsState() {
-    document.documentElement.classList.toggle('rewards', mstyleRewards.checked);
-  }
-
   featMotivation.addEventListener('change', updateCtaState);
-  mstyleCvp.addEventListener('change', updateRewardsState);
-  mstyleRewards.addEventListener('change', updateRewardsState);
+  mstyleCvp.addEventListener('change', updateCtaState);
+  mstyleRewards.addEventListener('change', updateCtaState);
 
   var signInTimers = [];
   function clearSignInTimers() {
