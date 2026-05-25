@@ -66,6 +66,37 @@
       background-image: url('./hero-bg.jpg');
     }
 
+    /* In Hero Background mode, deepen the top vignette so the studio logo
+       and release date stay readable over the brighter key art. */
+    html.hero-bg .vignette {
+      background: linear-gradient(
+        to bottom,
+        rgba(8, 6, 16, 0.78) 0%,
+        rgba(8, 6, 16, 0.32) 14%,
+        transparent 30%,
+        rgba(0, 0, 0, 0.6) 62%,
+        rgba(8, 6, 16, 0.9) 100%
+      );
+    }
+
+    /* Hero Background — Minimal variant: drop the subtitle/tagline and
+       lighten the bottom vignette since there's no body copy to anchor. */
+    html.hero-bg-minimal .hero-subtitle,
+    html.hero-bg-minimal .hero-tagline {
+      display: none;
+    }
+
+    html.hero-bg-minimal .vignette {
+      background: linear-gradient(
+        to bottom,
+        rgba(8, 6, 16, 0.78) 0%,
+        rgba(8, 6, 16, 0.32) 14%,
+        transparent 30%,
+        rgba(0, 0, 0, 0.25) 70%,
+        rgba(8, 6, 16, 0.45) 100%
+      );
+    }
+
 
     /* ===== Background video ===== */
     .bg-video {
@@ -248,24 +279,33 @@
     }
 
     /* Reward preview sitting on the pre-sign-in CTA when Motivation + Rewards
-       are both active. The image is anchored to the top edge of the button so
-       the car body extends up above the CTA, with its under-shadow grounded
-       on the pink bar. */
+       are both active. bottom:30% pulls the image down so the under-wheels are
+       INSIDE the upper third of the pink bar — the body extends up above the
+       CTA. The .cta-row margin-top is widened below to keep the tagline clear
+       of the car. */
     .btn-reward-image {
       display: none;
       position: absolute;
       left: 50%;
-      bottom: 100%;
+      bottom: 30%;
       transform: translateX(-50%);
-      height: 170px;
+      height: 200px;
       width: auto;
       max-width: none;
       pointer-events: none;
-      filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.55));
     }
 
     html.rewards .btn-reward-image {
       display: block;
+    }
+
+    /* In Rewards mode, push the cta-row down (which pulls the rest of
+       hero-text upward via margin-top:auto on .hero-text) so the car sticking
+       above the CTA doesn't overlap the tagline. Only applies pre-sign-in;
+       :has() check skips it once btn-get-started is hidden after sign-in. */
+    html.rewards .cta-row:has(#btn-get-started:not(.feat-hidden)) {
+      margin-top: 170px;
     }
 
     .btn-primary:hover {
@@ -2058,16 +2098,31 @@
     </div>
   </label>
 
-  <label class="demo-option" for="feat-hero-bg">
-    <div class="demo-option-text">
-      <span class="demo-option-label">Hero Background</span>
-      <span class="demo-option-desc">Has dedicated key art</span>
+  <div class="demo-option-group">
+    <label class="demo-option" for="feat-hero-bg">
+      <div class="demo-option-text">
+        <span class="demo-option-label">Hero Background</span>
+        <span class="demo-option-desc">Has dedicated key art</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="feat-hero-bg" />
+        <span class="toggle-track"></span>
+      </div>
+    </label>
+    <div class="demo-suboption" id="hero-bg-suboption">
+      <span class="demo-suboption-label">Variant</span>
+      <div class="demo-radio-group">
+        <label class="demo-radio">
+          <input type="radio" name="herobg-mode" value="content" id="herobg-content" checked />
+          With content
+        </label>
+        <label class="demo-radio">
+          <input type="radio" name="herobg-mode" value="minimal" id="herobg-minimal" />
+          Minimal
+        </label>
+      </div>
     </div>
-    <div class="toggle-switch">
-      <input type="checkbox" id="feat-hero-bg" />
-      <span class="toggle-track"></span>
-    </div>
-  </label>
+  </div>
 
   <div class="demo-option-group">
     <label class="demo-option" for="feat-motivation">
@@ -2729,9 +2784,21 @@
   var heroBadge = document.getElementById('hero-badge');
   var BADGE_LIGHT = './modal-logo.svg';
   var BADGE_DARK  = 'https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE6PHT7Q05X3XA9N6W3WCM1.png';
+  var heroBgSub = document.getElementById('hero-bg-suboption');
+  var herobgContent = document.getElementById('herobg-content');
+  var herobgMinimal = document.getElementById('herobg-minimal');
+
+  function updateHeroBgMode() {
+    var heroBgOn = document.getElementById('feat-hero-bg').checked;
+    var isMinimal = heroBgOn && herobgMinimal.checked;
+    document.documentElement.classList.toggle('hero-bg-minimal', isMinimal);
+    heroBgSub.classList.toggle('visible', heroBgOn);
+  }
+
   document.getElementById('feat-hero-bg').addEventListener('change', function () {
     document.documentElement.classList.toggle('hero-bg', this.checked);
     heroBadge.src = this.checked ? BADGE_DARK : BADGE_LIGHT;
+    updateHeroBgMode();
 
     // When the key art is active, push trailer + screenshots below the fold
     // so the hero stays a clean image of the game.
@@ -2741,6 +2808,9 @@
       updateLayout();
     }
   });
+
+  herobgContent.addEventListener('change', updateHeroBgMode);
+  herobgMinimal.addEventListener('change', updateHeroBgMode);
 
   // ===== Video background =====
   var bgImage = document.getElementById('bg-image');
