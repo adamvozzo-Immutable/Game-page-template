@@ -121,6 +121,7 @@
       align-items: center;
       justify-content: flex-start;
       padding-top: 70px;
+      padding-bottom: 148px;
       z-index: 10;
     }
 
@@ -132,7 +133,7 @@
     }
 
     .hero-text {
-      margin-top: 260px;
+      margin-top: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -626,8 +627,8 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer>
+  <!-- Footer — toggled by demo panel -->
+  <footer data-feature="social">
     <div class="footer-rule"></div>
 
     <div class="social-links">
@@ -728,6 +729,17 @@
     </div>
   </label>
 
+  <label class="demo-option" for="feat-social">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Social Links</span>
+      <span class="demo-option-desc">Footer with social icons</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-social" checked />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
   <label class="demo-option" for="feat-video-bg">
     <div class="demo-option-text">
       <span class="demo-option-label">Video Background</span>
@@ -776,6 +788,22 @@
   bindFeature('feat-trailer', 'trailer');
   bindFeature('feat-store', 'store');
   bindFeature('feat-screenshots', 'screenshots');
+
+  // Social links toggle — also adjusts hero bottom padding and screenshot strip
+  var hero = document.querySelector('.hero');
+  var screenshotStrip = document.querySelector('.screenshot-strip');
+
+  document.getElementById('feat-social').addEventListener('change', function () {
+    if (this.checked) {
+      hero.style.paddingBottom = '148px';
+      screenshotStrip.style.bottom = '120px';
+    } else {
+      hero.style.paddingBottom = '40px';
+      screenshotStrip.style.bottom = '24px';
+    }
+  });
+
+  bindFeature('feat-social', 'social');
 
   // ===== Video background =====
   var bgImage = document.getElementById('bg-image');
