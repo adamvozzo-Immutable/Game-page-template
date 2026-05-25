@@ -789,20 +789,6 @@
   bindFeature('feat-store', 'store');
   bindFeature('feat-screenshots', 'screenshots');
 
-  // Social links toggle — also adjusts hero bottom padding and screenshot strip
-  var hero = document.querySelector('.hero');
-  var screenshotStrip = document.querySelector('.screenshot-strip');
-
-  document.getElementById('feat-social').addEventListener('change', function () {
-    if (this.checked) {
-      hero.style.paddingBottom = '148px';
-      screenshotStrip.style.bottom = '120px';
-    } else {
-      hero.style.paddingBottom = '40px';
-      screenshotStrip.style.bottom = '24px';
-    }
-  });
-
   bindFeature('feat-social', 'social');
 
   // ===== Video background =====
