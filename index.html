@@ -157,6 +157,9 @@
       align-items: flex-end;
       gap: 2px;
       text-align: right;
+      /* Stay pinned to the right even when the studio logo is toggled off
+         (justify-content:space-between has nothing to balance against). */
+      margin-left: auto;
     }
 
     .nav-release-eyebrow {
