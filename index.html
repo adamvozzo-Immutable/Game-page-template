@@ -2698,6 +2698,14 @@
   document.getElementById('feat-hero-bg').addEventListener('change', function () {
     document.documentElement.classList.toggle('hero-bg', this.checked);
     heroBadge.src = this.checked ? BADGE_DARK : BADGE_LIGHT;
+
+    // When the key art is active, push trailer + screenshots below the fold
+    // so the hero stays a clean image of the game.
+    if (this.checked) {
+      tposCvp.checked = true;
+      gposCvp.checked = true;
+      updateLayout();
+    }
   });
 
   // ===== Video background =====
