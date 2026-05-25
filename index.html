@@ -144,9 +144,9 @@
       transition: width 0.3s ease;
     }
 
-    /* Shrink badge when the trailer is above the fold so the hero
-       doesn't push content into the social footer */
-    html.trailer-above .hero-badge {
+    /* Shrink badge when any media (trailer or gallery) is above the fold,
+       so the hero doesn't push content into the social footer */
+    html.media-above .hero-badge {
       width: 380px;
     }
 
@@ -1115,7 +1115,7 @@
         height: auto;
       }
 
-      html.trailer-above .hero-badge {
+      html.media-above .hero-badge {
         width: 70%;
         max-width: 280px;
       }
@@ -1794,9 +1794,10 @@
       setTrailerSrc(trailerCvpFrame, false);
     }
 
-    // When trailer is above the fold, shrink the hero badge so it doesn't push
-    // hero text down into the social footer
-    document.documentElement.classList.toggle('trailer-above', trailerOn && !trailerBelow);
+    // Shrink the hero badge when any media (trailer or gallery) is above the fold,
+    // so the hero doesn't push content into the social footer
+    var mediaAbove = (trailerOn && !trailerBelow) || (galleryOn && !galleryBelow);
+    document.documentElement.classList.toggle('media-above', mediaAbove);
 
     // CVP container is visible if Description is on, OR gallery/trailer is below fold
     var showCvpContainer = descriptionOn
@@ -1817,11 +1818,38 @@
     trailerSub.classList.toggle('visible', trailerOn);
   }
 
-  featScreenshots.addEventListener('change', updateLayout);
-  gposHero.addEventListener('change', updateLayout);
+  // Only one of trailer / screenshots can hold the above-fold slot.
+  // When a feature is just turned on (or moved to above-fold) and would clash,
+  // push the other one down to below-fold.
+  function enforceExclusiveAbove(preferred) {
+    var galleryAbove = featScreenshots.checked && gposHero.checked;
+    var trailerAbove = featTrailer.checked && tposHero.checked;
+    if (!galleryAbove || !trailerAbove) return;
+    if (preferred === 'gallery') {
+      tposCvp.checked = true;
+    } else if (preferred === 'trailer') {
+      gposCvp.checked = true;
+    }
+  }
+
+  featScreenshots.addEventListener('change', function () {
+    if (featScreenshots.checked) enforceExclusiveAbove('gallery');
+    updateLayout();
+  });
+  gposHero.addEventListener('change', function () {
+    if (gposHero.checked) enforceExclusiveAbove('gallery');
+    updateLayout();
+  });
+  featTrailer.addEventListener('change', function () {
+    if (featTrailer.checked) enforceExclusiveAbove('trailer');
+    updateLayout();
+  });
+  tposHero.addEventListener('change', function () {
+    if (tposHero.checked) enforceExclusiveAbove('trailer');
+    updateLayout();
+  });
+
   gposCvp.addEventListener('change', updateLayout);
-  featTrailer.addEventListener('change', updateLayout);
-  tposHero.addEventListener('change', updateLayout);
   tposCvp.addEventListener('change', updateLayout);
   featScroll.addEventListener('change', updateLayout);
 
