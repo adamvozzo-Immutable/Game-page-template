@@ -213,6 +213,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 10px;
       height: 52px;
       padding: 0 36px;
       background: #E83382;
@@ -1537,14 +1538,17 @@
       </p>
 
       <div class="cta-row">
-        <!-- Get early access — shown before sign-in -->
+        <!-- Pre-sign-in CTA — label swaps with Motivation scenario -->
         <button class="btn-primary" id="btn-get-started">
-          Get early access
+          <span class="btn-label">Get updates</span>
         </button>
 
         <!-- Post-signup CTAs — shown after email/Google sign-in -->
         <button class="btn-primary feat-hidden" id="btn-wishlist">
-          Wishlist on Steam
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.391 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714 1.002 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949-.26-.626-.749-1.111-1.377-1.371-.624-.26-1.29-.249-1.878-.061l1.523.63c.956.4 1.409 1.5 1.009 2.456-.397.957-1.497 1.41-2.454 1.012zM18.247 8.91c0-1.652-1.345-2.995-2.995-2.995-1.65 0-2.996 1.343-2.996 2.995s1.345 2.995 2.996 2.995c1.65 0 2.995-1.343 2.995-2.995zm-5.241-.004c0-1.24 1.007-2.247 2.248-2.247s2.247 1.007 2.247 2.247c0 1.241-1.007 2.248-2.247 2.248-1.241 0-2.248-1.007-2.248-2.248z"/>
+          </svg>
+          <span class="btn-label">Wishlist on Steam</span>
         </button>
         <button class="btn-discord feat-hidden" id="btn-discord">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1568,7 +1572,12 @@
           <div class="cta-card-view cta-card-view-prompt">
             <h3 class="cta-card-heading">Be First in the Garage</h3>
             <p class="cta-card-body">Lock in launch-day alerts, claim early discounts, and feed Steam's recommendations for racing fans.</p>
-            <button type="button" class="btn-primary card-cta" data-action="wishlist">Wishlist on Steam</button>
+            <button type="button" class="btn-primary card-cta" data-action="wishlist">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.391 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714 1.002 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949-.26-.626-.749-1.111-1.377-1.371-.624-.26-1.29-.249-1.878-.061l1.523.63c.956.4 1.409 1.5 1.009 2.456-.397.957-1.497 1.41-2.454 1.012zM18.247 8.91c0-1.652-1.345-2.995-2.995-2.995-1.65 0-2.996 1.343-2.996 2.995s1.345 2.995 2.996 2.995c1.65 0 2.995-1.343 2.995-2.995zm-5.241-.004c0-1.24 1.007-2.247 2.248-2.247s2.247 1.007 2.247 2.247c0 1.241-1.007 2.248-2.247 2.248-1.241 0-2.248-1.007-2.248-2.248z"/>
+              </svg>
+              <span class="btn-label">Wishlist on Steam</span>
+            </button>
           </div>
           <div class="cta-card-view cta-card-view-reward">
             <div class="reward-media">
@@ -1576,7 +1585,12 @@
             </div>
             <h3 class="cta-card-heading">Founder's Livery Pack</h3>
             <p class="cta-card-body">Wishlist on Steam to claim 3 launch-exclusive liveries &mdash; never sold post-release.</p>
-            <button type="button" class="btn-primary card-cta" data-action="wishlist">Wishlist on Steam</button>
+            <button type="button" class="btn-primary card-cta" data-action="wishlist">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.391 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714 1.002 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949-.26-.626-.749-1.111-1.377-1.371-.624-.26-1.29-.249-1.878-.061l1.523.63c.956.4 1.409 1.5 1.009 2.456-.397.957-1.497 1.41-2.454 1.012zM18.247 8.91c0-1.652-1.345-2.995-2.995-2.995-1.65 0-2.996 1.343-2.996 2.995s1.345 2.995 2.996 2.995c1.65 0 2.995-1.343 2.995-2.995zm-5.241-.004c0-1.24 1.007-2.247 2.248-2.247s2.247 1.007 2.247 2.247c0 1.241-1.007 2.248-2.247 2.248-1.241 0-2.248-1.007-2.248-2.248z"/>
+              </svg>
+              <span class="btn-label">Wishlist on Steam</span>
+            </button>
           </div>
           <div class="cta-card-view cta-card-view-success">
             <div class="card-success-icon">
@@ -1938,8 +1952,8 @@
         src="./modal-logo.svg"
         alt="Game Logo"
       />
-      <h2 class="modal-title">Get Early Access</h2>
-      <p class="modal-sub">Join the community for exclusive updates, insider news, and early access perks.</p>
+      <h2 class="modal-title" id="modal-title">Get Updates</h2>
+      <p class="modal-sub" id="modal-sub">Sign up for news, dev diaries, and release updates direct to your inbox.</p>
 
       <button class="modal-google-btn" id="modal-google">
         <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -2312,16 +2326,33 @@
   var motivationSub  = document.getElementById('motivation-suboption');
   var mstyleCvp      = document.getElementById('mstyle-cvp');
   var mstyleRewards  = document.getElementById('mstyle-rewards');
+  var modalTitle    = document.getElementById('modal-title');
+  var modalSub      = document.getElementById('modal-sub');
 
   var STEAM_URL   = 'https://store.steampowered.com/app/2483190/Forza_Horizon_6/';
   var DISCORD_URL = 'https://discord.gg/forza';
 
   var isSignedIn = false;
 
+  function setButtonLabel(btn, label) {
+    var labelEl = btn.querySelector('.btn-label');
+    if (labelEl) labelEl.textContent = label;
+    else btn.textContent = label;
+  }
+
   function updateCtaState() {
     motivationSub.classList.toggle('visible', featMotivation.checked);
-    if (!isSignedIn) return;
     var motivationOn = featMotivation.checked;
+
+    // Pre-sign-in CTA + modal copy reframe between generic updates and the
+    // early-access program based on whether Motivation is active.
+    setButtonLabel(btnGetStarted, motivationOn ? 'Get early access' : 'Get updates');
+    modalTitle.textContent = motivationOn ? 'Get Early Access' : 'Get Updates';
+    modalSub.textContent = motivationOn
+      ? 'Join the community for exclusive updates, insider news, and early access perks.'
+      : 'Sign up for news, dev diaries, and release updates direct to your inbox.';
+
+    if (!isSignedIn) return;
     btnWishlist.classList.toggle('feat-hidden', motivationOn);
     btnDiscord.classList.toggle('feat-hidden', motivationOn);
     ctaCards.classList.toggle('feat-hidden', !motivationOn);
@@ -2366,12 +2397,6 @@
   // Opens the target in a new tab and flips the button copy to "Link X".
   function openSteam() { window.open(STEAM_URL, '_blank', 'noopener'); }
   function openDiscord() { window.open(DISCORD_URL, '_blank', 'noopener'); }
-
-  function setButtonLabel(btn, label) {
-    var labelEl = btn.querySelector('.btn-label');
-    if (labelEl) labelEl.textContent = label;
-    else btn.textContent = label;
-  }
 
   btnWishlist.addEventListener('click', function () {
     openSteam();
