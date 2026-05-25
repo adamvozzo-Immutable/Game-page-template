@@ -1079,7 +1079,7 @@
       display: flex;
       flex-direction: row;
       gap: 14px;
-      margin-top: 40px;
+      margin-top: 32px;
       width: 100%;
       justify-content: center;
     }
@@ -1148,6 +1148,82 @@
        check icon so the card doesn't read as image + tick + heading. */
     html.rewards .cta-card-view-success .card-success-icon {
       display: none;
+    }
+
+    /* ===== Success state — rotating gradient border + interior glow =====
+       A Houdini @property animates an angle variable; both pseudo-elements
+       use it on a conic-gradient so the bright spot and its soft glow orbit
+       the card in sync. */
+    @property --success-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    .cta-card[data-state="success"] {
+      isolation: isolate;
+      border-color: rgba(255, 255, 255, 0.04);
+    }
+
+    /* Bright thin stroke around the edge */
+    .cta-card[data-state="success"]::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(
+        from var(--success-angle, 0deg),
+        rgba(232, 51, 130, 0) 0deg,
+        rgba(232, 51, 130, 0.95) 60deg,
+        rgba(255, 195, 220, 0.85) 80deg,
+        rgba(232, 51, 130, 0.55) 110deg,
+        rgba(232, 51, 130, 0) 160deg,
+        rgba(232, 51, 130, 0) 360deg
+      );
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      animation: orbit-success 6s linear infinite;
+      z-index: 2;
+    }
+
+    /* Soft pink wash that follows the stroke on the inside of the card */
+    .cta-card[data-state="success"]::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: conic-gradient(
+        from var(--success-angle, 0deg),
+        rgba(232, 51, 130, 0) 0deg,
+        rgba(232, 51, 130, 0.55) 60deg,
+        rgba(232, 51, 130, 0.18) 110deg,
+        rgba(232, 51, 130, 0) 170deg,
+        rgba(232, 51, 130, 0) 360deg
+      );
+      filter: blur(30px);
+      pointer-events: none;
+      animation: orbit-success 6s linear infinite;
+      z-index: 0;
+    }
+
+    /* Card content lifts above the inner glow but stays below the border stroke */
+    .cta-card[data-state="success"] .cta-card-view-success {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes orbit-success {
+      to {
+        --success-angle: 360deg;
+      }
     }
 
     .cta-card[data-state="success"] .cta-card-view-success {
