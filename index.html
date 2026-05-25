@@ -50,6 +50,16 @@
       transition: opacity 0.5s ease;
     }
 
+    /* Hero Background scenario — swap to dedicated key art */
+    html.hero-bg .bg-image {
+      background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/library_hero.jpg');
+    }
+
+    /* Hero Background — shrink nav logo so it doesn't compete with key art */
+    html.hero-bg .nav-logo {
+      height: 22px;
+    }
+
     /* ===== Background video ===== */
     .bg-video {
       position: absolute;
@@ -101,6 +111,7 @@
       height: 34px;
       width: auto;
       display: block;
+      transition: height 0.25s ease;
     }
 
     .nav-release {
@@ -346,7 +357,7 @@
       position: relative;
       left: 50%;
       transform: translateX(-50%);
-      margin: 0 0 48px 0;
+      margin: 0 0 72px 0;
     }
 
     .trailer-frame {
@@ -1326,7 +1337,7 @@
   </div>
 </section>
 
-<!-- ===== Demo options toggle ===== -->
+<!-- ===== Scenarios toggle ===== -->
 <button class="demo-toggle" id="demo-toggle" aria-expanded="false" aria-controls="demo-panel">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <line x1="1" y1="4" x2="15" y2="4" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
@@ -1334,19 +1345,19 @@
     <line x1="1" y1="12" x2="15" y2="12" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
     <circle cx="11" cy="12" r="2" fill="#0a0812" stroke="white" stroke-width="1.4"/>
   </svg>
-  Options
+  Scenarios
 </button>
 
-<!-- ===== Demo options panel ===== -->
-<div class="demo-panel" id="demo-panel" role="dialog" aria-label="Template options" aria-hidden="true">
+<!-- ===== Scenarios panel ===== -->
+<div class="demo-panel" id="demo-panel" role="dialog" aria-label="Available game assets" aria-hidden="true">
 
-  <div class="demo-panel-header">Template Options</div>
+  <div class="demo-panel-header">Available Assets</div>
 
   <div class="demo-option-group">
     <label class="demo-option" for="feat-trailer">
       <div class="demo-option-text">
         <span class="demo-option-label">Trailer</span>
-        <span class="demo-option-desc">Embedded YouTube video</span>
+        <span class="demo-option-desc">Game has a trailer video</span>
       </div>
       <div class="toggle-switch">
         <input type="checkbox" id="feat-trailer" />
@@ -1370,8 +1381,8 @@
 
   <label class="demo-option" for="feat-store">
     <div class="demo-option-text">
-      <span class="demo-option-label">Store Link</span>
-      <span class="demo-option-desc">Wishlist on Steam button</span>
+      <span class="demo-option-label">Store Listing</span>
+      <span class="demo-option-desc">Listed on Steam</span>
     </div>
     <div class="toggle-switch">
       <input type="checkbox" id="feat-store" />
@@ -1383,7 +1394,7 @@
     <label class="demo-option" for="feat-screenshots">
       <div class="demo-option-text">
         <span class="demo-option-label">Screenshots</span>
-        <span class="demo-option-desc">2×2 gameplay gallery</span>
+        <span class="demo-option-desc">Has gameplay screenshots</span>
       </div>
       <div class="toggle-switch">
         <input type="checkbox" id="feat-screenshots" />
@@ -1408,7 +1419,7 @@
   <label class="demo-option" for="feat-scroll">
     <div class="demo-option-text">
       <span class="demo-option-label">Description</span>
-      <span class="demo-option-desc">Feature sections below the hero</span>
+      <span class="demo-option-desc">Has marketing copy</span>
     </div>
     <div class="toggle-switch">
       <input type="checkbox" id="feat-scroll" />
@@ -1419,7 +1430,7 @@
   <label class="demo-option" for="feat-social">
     <div class="demo-option-text">
       <span class="demo-option-label">Social Links</span>
-      <span class="demo-option-desc">Footer with social icons</span>
+      <span class="demo-option-desc">Has social accounts</span>
     </div>
     <div class="toggle-switch">
       <input type="checkbox" id="feat-social" checked />
@@ -1427,10 +1438,21 @@
     </div>
   </label>
 
+  <label class="demo-option" for="feat-hero-bg">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Hero Background</span>
+      <span class="demo-option-desc">Has dedicated key art</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-hero-bg" />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
   <label class="demo-option" for="feat-video-bg">
     <div class="demo-option-text">
       <span class="demo-option-label">Video Background</span>
-      <span class="demo-option-desc">Replace image with trailer</span>
+      <span class="demo-option-desc">Has a hero background video</span>
     </div>
     <div class="toggle-switch">
       <input type="checkbox" id="feat-video-bg" />
@@ -1807,6 +1829,11 @@
     var email = document.getElementById('modal-email').value.trim();
     if (!email || !email.includes('@')) return;
     handleSignIn();
+  });
+
+  // ===== Hero background (dedicated key art) =====
+  document.getElementById('feat-hero-bg').addEventListener('change', function () {
+    document.documentElement.classList.toggle('hero-bg', this.checked);
   });
 
   // ===== Video background =====
