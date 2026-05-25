@@ -1914,7 +1914,12 @@
         );
       }
 
-      html.hero-bg .vignette {
+      /* :not(.hero-bg-minimal) is required — the JS adds both .hero-bg
+         and .hero-bg-minimal to <html> in minimal mode, so without the
+         exclusion this rule's source-order tiebreak would beat the
+         desktop html.hero-bg-minimal .vignette (same specificity) and
+         drag the minimal mode's lighter vignette back down. */
+      html.hero-bg:not(.hero-bg-minimal) .vignette {
         background: linear-gradient(
           to bottom,
           rgba(8, 6, 16, 0.82) 0%,
@@ -1923,11 +1928,6 @@
           rgba(8, 6, 16, 0.95) 100%
         );
       }
-
-      /* Hero Background Minimal — intentionally skip the mobile dim
-         override. The desktop html.hero-bg-minimal .vignette rule still
-         wins on specificity, so the minimal variant keeps its lighter
-         vignette on mobile (no subtitle/tagline to anchor anyway). */
 
       /* Mobile: collapse the alternating lockup back to stacked text-above-image */
       .cvp-section,
