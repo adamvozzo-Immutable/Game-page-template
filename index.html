@@ -320,7 +320,9 @@
       gap: 8px;
       flex-shrink: 0;
       margin-top: auto;
-      margin-bottom: 0;
+      /* margin-bottom matches hero padding-top so gaps above & below the
+         gallery stay equal even in cramped (scrollable) mode. */
+      margin-bottom: 80px;
       width: min(760px, calc((100vh - 560px) * 1.4), calc(100vw - 160px));
       min-width: 420px;
     }
@@ -398,15 +400,16 @@
        never push the footer off-screen. The 560px subtraction roughly
        accounts for nav + footer + hero-text + paddings; the remaining height
        times 16/9 is the widest the 16:9 trailer can be without overflow.
-       margin-top:auto + hero-text's existing margin-top:auto split the
-       leftover hero space evenly, so the gap above the trailer matches the
-       gap between the trailer and the heading. */
+       margin-top:auto + hero-text's margin-top:auto split spare hero space;
+       margin-bottom matches hero padding-top so that even when content fills
+       the hero (no spare space, scrollable mode), the gap above the trailer
+       (hero padding-top) and the gap below it (this margin-bottom) stay equal. */
     .trailer-embed {
       width: min(760px, calc((100vh - 560px) * 16 / 9), calc(100vw - 160px));
       min-width: 360px;
       flex-shrink: 0;
       margin-top: auto;
-      margin-bottom: 0;
+      margin-bottom: 80px;
     }
 
     .trailer-embed.trailer-cvp {
@@ -1419,11 +1422,13 @@
         min-height: 0;
       }
 
-      /* Trailer + gallery — fit available hero height, never push footer off */
+      /* Trailer + gallery — fit available hero height, never push footer off.
+         Mobile padding-top is 16 so margin-bottom is 16 too to keep the
+         "centered between logo and heading" gaps equal in cramped mode. */
       .trailer-embed {
         width: min(calc(100vw - 40px), calc((100vh - 488px) * 16 / 9));
         max-width: calc(100vw - 40px);
-        margin-bottom: 0;
+        margin-bottom: 16px;
       }
 
       .trailer-embed.trailer-cvp {
@@ -1437,7 +1442,7 @@
       .screenshot-gallery {
         width: min(calc(100vw - 40px), calc((100vh - 488px) * 1.4));
         max-width: calc(100vw - 40px);
-        margin-bottom: 0;
+        margin-bottom: 16px;
       }
 
       .gallery-thumbs {
