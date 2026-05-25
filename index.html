@@ -1629,10 +1629,11 @@
   <nav>
     <img
       class="nav-logo"
+      data-feature="studio-logo"
       src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE790C2FEFRNJR5YE2ASWA6.png"
-      alt="Game Logo"
+      alt="Studio Logo"
     />
-    <span class="nav-release">Early Access &mdash; 2026</span>
+    <span class="nav-release" data-feature="release-date">Early Access &mdash; 2026</span>
   </nav>
 
   <!-- Hero -->
@@ -2013,6 +2014,28 @@
 
   <div class="demo-panel-header">Available Assets</div>
 
+  <label class="demo-option" for="feat-studio-logo">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Studio Logo</span>
+      <span class="demo-option-desc">Logo in top-left of nav</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-studio-logo" checked />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
+  <label class="demo-option" for="feat-release-date">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Release Date</span>
+      <span class="demo-option-desc">Release status in top-right</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-release-date" checked />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
   <div class="demo-option-group">
     <label class="demo-option" for="feat-trailer">
       <div class="demo-option-text">
@@ -2263,6 +2286,9 @@
       });
     });
   }
+
+  bindFeature('feat-studio-logo', 'studio-logo');
+  bindFeature('feat-release-date', 'release-date');
 
   // Social footer toggle — also updates html.no-social so the hero gets
   // extra padding-bottom when the socials aren't there to anchor things.
