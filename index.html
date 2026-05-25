@@ -312,11 +312,54 @@
       width: auto;
       max-width: none;
       pointer-events: none;
+      z-index: 1;
       filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.55));
     }
 
     html.rewards .btn-reward-image {
       display: block;
+    }
+
+    /* Slow-spinning pink glow behind the reward car. Conic gradient with two
+       hot spots blurred into a soft halo; rotates so the highlight orbits the
+       car. Sits behind the image (z-index 0) — the label stays on top via
+       z-index 2 below. */
+    .btn-reward-glow {
+      display: none;
+      position: absolute;
+      left: 50%;
+      bottom: -40px;
+      width: 260px;
+      height: 260px;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        rgba(232, 51, 130, 0) 0deg,
+        rgba(232, 51, 130, 0.85) 90deg,
+        rgba(232, 51, 130, 0) 180deg,
+        rgba(232, 51, 130, 0.85) 270deg,
+        rgba(232, 51, 130, 0) 360deg
+      );
+      filter: blur(40px);
+      transform: translateX(-50%);
+      animation: spin-reward-glow 7s linear infinite;
+    }
+
+    html.rewards .btn-reward-glow {
+      display: block;
+    }
+
+    @keyframes spin-reward-glow {
+      from { transform: translateX(-50%) rotate(0deg); }
+      to   { transform: translateX(-50%) rotate(360deg); }
+    }
+
+    /* Keep the CTA label readable over the glow + car */
+    .btn-primary .btn-label {
+      position: relative;
+      z-index: 2;
     }
 
     /* In Rewards mode, push the cta-row down (which pulls the rest of
@@ -1863,6 +1906,7 @@
       <div class="cta-row">
         <!-- Pre-sign-in CTA — label and reward image swap with Motivation scenario -->
         <button class="btn-primary" id="btn-get-started">
+          <span class="btn-reward-glow" aria-hidden="true"></span>
           <img class="btn-reward-image" src="./reward-ferrari.png" alt="" aria-hidden="true" />
           <span class="btn-label">Get updates</span>
         </button>
