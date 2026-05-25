@@ -817,7 +817,7 @@
       display: flex;
       flex-direction: row;
       gap: 14px;
-      margin-top: 28px;
+      margin-top: 40px;
       width: 100%;
       justify-content: center;
     }
@@ -872,6 +872,12 @@
     html.rewards .reward-copy-default { display: none; }
     html.rewards .cvp-copy-reward,
     html.rewards .reward-copy-reward { display: block; }
+
+    /* The linking view shares the wishlist/discord layout with the reward
+       prompt — image above, text below — but only when Rewards is on. In
+       generic CVP mode the linking view stays text-only. */
+    .cta-card-view-linking .reward-media { display: none; }
+    html.rewards .cta-card-view-linking .reward-media { display: flex; }
 
     .cta-card[data-state="success"] .cta-card-view-success {
       display: flex;
@@ -1423,12 +1429,13 @@
         width: 100%;
       }
 
-      /* CVP cards stack on mobile */
+      /* CVP cards stack on mobile — 24px gap above (mobile equivalent of the
+         desktop 40px gap between text and motivation cards). */
       .cta-cards {
         flex-direction: column;
         width: 100%;
         gap: 12px;
-        margin-top: 20px;
+        margin-top: 24px;
       }
 
       .cta-card {
@@ -1437,12 +1444,13 @@
       }
 
       /* Trailer + gallery — fit available hero height, never push footer off.
-         Mobile padding-top is 16 so margin-bottom is 16 too to keep the
-         "centered between logo and heading" gaps equal in cramped mode. */
+         Mobile gaps are 24px (mobile equivalent of the desktop 40px gaps
+         around the media). */
       .trailer-embed {
         width: min(calc(100vw - 40px), calc((100vh - 488px) * 16 / 9));
         max-width: calc(100vw - 40px);
-        margin-bottom: 16px;
+        margin-top: 24px;
+        margin-bottom: 24px;
       }
 
       .trailer-embed.trailer-cvp {
@@ -1456,7 +1464,7 @@
       .screenshot-gallery {
         width: min(calc(100vw - 40px), calc((100vh - 488px) * 1.4));
         max-width: calc(100vw - 40px);
-        margin-bottom: 16px;
+        margin-bottom: 24px;
       }
 
       .gallery-thumbs {
@@ -1687,6 +1695,9 @@
             </button>
           </div>
           <div class="cta-card-view cta-card-view-linking">
+            <div class="reward-media reward-media-cutout">
+              <img class="reward-image" src="./reward-livery.png" alt="" loading="lazy" />
+            </div>
             <h3 class="cta-card-heading">Almost there</h3>
             <p class="cta-card-body cvp-copy-default">Link Steam so we know your wishlist is in.</p>
             <p class="cta-card-body cvp-copy-reward">Link Steam to claim your Founder's Livery Pack.</p>
@@ -1735,6 +1746,9 @@
             </button>
           </div>
           <div class="cta-card-view cta-card-view-linking">
+            <div class="reward-media reward-media-cutout">
+              <img class="reward-image" src="./reward-ferrari.png" alt="" loading="lazy" />
+            </div>
             <h3 class="cta-card-heading">Almost there</h3>
             <p class="cta-card-body cvp-copy-default">Link Discord so we can verify you joined the server.</p>
             <p class="cta-card-body cvp-copy-reward">Link Discord to unlock your Ferrari J50 in-game.</p>
