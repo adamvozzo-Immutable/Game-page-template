@@ -52,9 +52,9 @@
       transition: opacity 0.5s ease;
     }
 
-    /* Hero Background scenario — swap to dedicated key art */
+    /* Hero Background scenario — swap to dedicated 16:9 key art */
     html.hero-bg .bg-image {
-      background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/library_hero.jpg');
+      background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/5ce35cb7c29431e9c58ec2228f6eaa8842953bc2/page_bg_raw.jpg');
     }
 
     /* Hero Background — shrink nav logo so it doesn't compete with key art */
@@ -123,11 +123,17 @@
       color: rgba(255, 255, 255, 0.55);
     }
 
-    /* ===== Hero ===== */
+    /* ===== Hero =====
+       flex: 1 0 auto — grow into spare space (so hero-text's margin-top:auto
+       can push CTAs to the bottom on tall viewports), but never shrink below
+       its content. When the viewport is too short to fit nav + hero + footer,
+       the footer is pushed past .page's bottom and clipped by overflow:hidden,
+       rather than dragged up over the CTAs.
+       Note: no position:relative here so the absolutely-positioned
+       .hero-badge anchors to .page (which is position:relative) and can
+       sit in line with the header on desktop. */
     .hero {
-      position: relative;
-      flex: 1;
-      min-height: 0;
+      flex: 1 0 auto;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -136,16 +142,25 @@
       z-index: 10;
     }
 
+    /* Hero badge is positioned absolute against .page (which is the closest
+       positioned ancestor) so it sits at the top of the screen — visually in
+       line with the header — instead of sitting in the hero flow. On mobile
+       the breakpoint resets it to in-flow placement below the nav. */
     .hero-badge {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 600px;
+      max-width: calc(100vw - 320px);
       object-fit: contain;
       display: block;
-      flex-shrink: 0;
+      z-index: 11;
+      pointer-events: none;
       transition: width 0.3s ease;
     }
 
-    /* Shrink badge when any media (trailer or gallery) is above the fold,
-       so the hero doesn't push content into the social footer */
+    /* Shrink badge when any media (trailer or gallery) is above the fold */
     html.media-above .hero-badge {
       width: 380px;
     }
@@ -1108,9 +1123,14 @@
       }
 
       .hero-badge {
+        position: static;
+        top: auto;
+        left: auto;
+        transform: none;
         width: 100%;
         max-width: 100%;
         height: auto;
+        pointer-events: auto;
       }
 
       html.media-above .hero-badge {
