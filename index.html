@@ -306,6 +306,7 @@
       margin-top: auto;
       margin-bottom: 0;
       width: min(760px, calc((100vh - 560px) * 1.4), calc(100vw - 160px));
+      min-width: 420px;
     }
 
     .gallery-cvp {
@@ -386,6 +387,7 @@
        gap between the trailer and the heading. */
     .trailer-embed {
       width: min(760px, calc((100vh - 560px) * 16 / 9), calc(100vw - 160px));
+      min-width: 360px;
       flex-shrink: 0;
       margin-top: auto;
       margin-bottom: 0;
@@ -803,15 +805,55 @@
       z-index: 2;
     }
 
+    /* Prompt-state visibility: by default show the generic CVP view; when
+       html.rewards is set, swap to the reward view instead. */
     .cta-card[data-state="prompt"] .cta-card-view-prompt {
       display: flex;
     }
+    html.rewards .cta-card[data-state="prompt"] .cta-card-view-prompt {
+      display: none;
+    }
+    html.rewards .cta-card[data-state="prompt"] .cta-card-view-reward {
+      display: flex;
+    }
+
     .cta-card[data-state="success"] .cta-card-view-success {
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
       animation: modalFade 0.3s ease;
+    }
+
+    /* Reward media (image of the in-game item) */
+    .reward-media {
+      width: 100%;
+      height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    .reward-media .reward-image {
+      max-width: 100%;
+      max-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Cut-out style (transparent PNG on dark background) */
+    .reward-media-cutout {
+      background: radial-gradient(ellipse at center, rgba(232, 51, 130, 0.22) 0%, rgba(20, 18, 36, 0) 70%);
+    }
+
+    .reward-media-cutout .reward-image {
+      object-fit: contain;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6));
     }
 
     .cta-card-heading {
@@ -1528,6 +1570,14 @@
             <p class="cta-card-body">Lock in launch-day alerts, claim early discounts, and feed Steam's recommendations for racing fans.</p>
             <button type="button" class="btn-primary card-cta" data-action="wishlist">Wishlist on Steam</button>
           </div>
+          <div class="cta-card-view cta-card-view-reward">
+            <div class="reward-media">
+              <img class="reward-image" src="./hero-bg.jpg" alt="Founder's Livery Pack preview" loading="lazy" />
+            </div>
+            <h3 class="cta-card-heading">Founder's Livery Pack</h3>
+            <p class="cta-card-body">Wishlist on Steam to claim 3 launch-exclusive liveries &mdash; never sold post-release.</p>
+            <button type="button" class="btn-primary card-cta" data-action="wishlist">Wishlist on Steam</button>
+          </div>
           <div class="cta-card-view cta-card-view-success">
             <div class="card-success-icon">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1543,6 +1593,19 @@
           <div class="cta-card-view cta-card-view-prompt">
             <h3 class="cta-card-heading">Race With the Crew</h3>
             <p class="cta-card-body">Dev Q&amp;As, livery contests, beta giveaways, and real-time meetups with the community.</p>
+            <button type="button" class="btn-discord card-cta" data-action="discord">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+              </svg>
+              <span class="btn-label">Join Discord</span>
+            </button>
+          </div>
+          <div class="cta-card-view cta-card-view-reward">
+            <div class="reward-media reward-media-cutout">
+              <img class="reward-image" src="./reward-ferrari.png" alt="Ferrari J50" loading="lazy" />
+            </div>
+            <h3 class="cta-card-heading">Ferrari J50</h3>
+            <p class="cta-card-body">Join &amp; link Discord to unlock this pre-tuned, exclusive hypercar in-game.</p>
             <button type="button" class="btn-discord card-cta" data-action="discord">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
@@ -1823,16 +1886,31 @@
     </div>
   </label>
 
-  <label class="demo-option" for="feat-motivation">
-    <div class="demo-option-text">
-      <span class="demo-option-label">Motivation</span>
-      <span class="demo-option-desc">CVP cards for wishlist &amp; discord</span>
+  <div class="demo-option-group">
+    <label class="demo-option" for="feat-motivation">
+      <div class="demo-option-text">
+        <span class="demo-option-label">Motivation</span>
+        <span class="demo-option-desc">CVP cards for wishlist &amp; discord</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="feat-motivation" />
+        <span class="toggle-track"></span>
+      </div>
+    </label>
+    <div class="demo-suboption" id="motivation-suboption">
+      <span class="demo-suboption-label">Style</span>
+      <div class="demo-radio-group">
+        <label class="demo-radio">
+          <input type="radio" name="motivation-style" value="cvp" id="mstyle-cvp" checked />
+          Generic CVPs
+        </label>
+        <label class="demo-radio">
+          <input type="radio" name="motivation-style" value="rewards" id="mstyle-rewards" />
+          Rewards
+        </label>
+      </div>
     </div>
-    <div class="toggle-switch">
-      <input type="checkbox" id="feat-motivation" />
-      <span class="toggle-track"></span>
-    </div>
-  </label>
+  </div>
 
   <label class="demo-option" for="feat-video-bg">
     <div class="demo-option-text">
@@ -2231,6 +2309,9 @@
   var btnDiscord    = document.getElementById('btn-discord');
   var ctaCards      = document.getElementById('cta-cards');
   var featMotivation = document.getElementById('feat-motivation');
+  var motivationSub  = document.getElementById('motivation-suboption');
+  var mstyleCvp      = document.getElementById('mstyle-cvp');
+  var mstyleRewards  = document.getElementById('mstyle-rewards');
 
   var STEAM_URL   = 'https://store.steampowered.com/app/2483190/Forza_Horizon_6/';
   var DISCORD_URL = 'https://discord.gg/forza';
@@ -2238,6 +2319,7 @@
   var isSignedIn = false;
 
   function updateCtaState() {
+    motivationSub.classList.toggle('visible', featMotivation.checked);
     if (!isSignedIn) return;
     var motivationOn = featMotivation.checked;
     btnWishlist.classList.toggle('feat-hidden', motivationOn);
@@ -2245,7 +2327,13 @@
     ctaCards.classList.toggle('feat-hidden', !motivationOn);
   }
 
+  function updateRewardsState() {
+    document.documentElement.classList.toggle('rewards', mstyleRewards.checked);
+  }
+
   featMotivation.addEventListener('change', updateCtaState);
+  mstyleCvp.addEventListener('change', updateRewardsState);
+  mstyleRewards.addEventListener('change', updateRewardsState);
 
   var signInTimers = [];
   function clearSignInTimers() {
