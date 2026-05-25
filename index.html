@@ -329,22 +329,40 @@
       position: absolute;
       left: 50%;
       bottom: -10px;
-      width: 200px;
-      height: 200px;
+      width: 220px;
+      height: 220px;
       pointer-events: none;
       z-index: 0;
       border-radius: 50%;
-      background: conic-gradient(
-        from 0deg,
-        rgba(232, 51, 130, 0) 0deg,
-        rgba(232, 51, 130, 0.55) 90deg,
-        rgba(232, 51, 130, 0) 180deg,
-        rgba(232, 51, 130, 0.55) 270deg,
-        rgba(232, 51, 130, 0) 360deg
-      );
-      filter: blur(32px);
+      /* Star-burst: a soft radial centre over a 6-spoke conic. The conic
+         spokes are narrow and fully transparent between, so blurring leaves
+         distinct rays rather than a smooth halo. */
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(232, 51, 130, 0.45) 0%,
+          rgba(232, 51, 130, 0.12) 32%,
+          rgba(232, 51, 130, 0) 60%
+        ),
+        conic-gradient(
+          from 0deg,
+          rgba(232, 51, 130, 0) 0deg,
+          rgba(232, 51, 130, 0.75) 30deg,
+          rgba(232, 51, 130, 0) 60deg,
+          rgba(232, 51, 130, 0.75) 90deg,
+          rgba(232, 51, 130, 0) 120deg,
+          rgba(232, 51, 130, 0.75) 150deg,
+          rgba(232, 51, 130, 0) 180deg,
+          rgba(232, 51, 130, 0.75) 210deg,
+          rgba(232, 51, 130, 0) 240deg,
+          rgba(232, 51, 130, 0.75) 270deg,
+          rgba(232, 51, 130, 0) 300deg,
+          rgba(232, 51, 130, 0.75) 330deg,
+          rgba(232, 51, 130, 0) 360deg
+        );
+      filter: blur(18px);
       transform: translateX(-50%);
-      animation: spin-reward-glow 7s linear infinite;
+      animation: spin-reward-glow 9s linear infinite;
     }
 
     html.rewards .btn-reward-glow {
