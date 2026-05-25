@@ -36,6 +36,8 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ===== Background image ===== */
@@ -96,15 +98,13 @@
 
     /* ===== Navigation ===== */
     nav {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 36px 80px;
       z-index: 10;
+      flex-shrink: 0;
     }
 
     .nav-logo {
@@ -125,14 +125,14 @@
 
     /* ===== Hero ===== */
     .hero {
-      position: absolute;
-      inset: 0;
+      position: relative;
+      flex: 1;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding-top: 70px;
-      padding-bottom: 148px;
+      padding: 24px 80px 40px;
       z-index: 10;
     }
 
@@ -435,14 +435,12 @@
 
     /* ===== Footer ===== */
     footer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      position: relative;
       z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .footer-rule {
@@ -1086,9 +1084,9 @@
 
     /* ===== Mobile breakpoint ===== */
     @media (max-width: 720px) {
-      /* Nav — tighter side margins, smaller type */
+      /* Nav — tighter padding so it doesn't eat the hero on small viewports */
       nav {
-        padding: 20px 20px;
+        padding: 16px 20px;
       }
       .nav-logo {
         height: 26px;
@@ -1105,8 +1103,8 @@
       .hero {
         padding-left: 20px;
         padding-right: 20px;
-        padding-top: 64px;
-        padding-bottom: 40px;
+        padding-top: 16px;
+        padding-bottom: 24px;
       }
 
       .hero-badge {
