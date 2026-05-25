@@ -1,0 +1,368 @@
+<!-- Replace image URLs and social hrefs with your own assets before deploying -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Promotional Landing Page</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== Reset ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ===== Root wrapper ===== */
+    .page {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ===== Background image ===== */
+    .bg-image {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE6MVHGVBJ6K69TBP5R8Z5P.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 0;
+    }
+
+    /* ===== Vignette overlay ===== */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(8, 6, 16, 0.4) 0%,
+        transparent 25%,
+        rgba(0, 0, 0, 0.64) 60%,
+        rgba(8, 6, 16, 0.92) 100%
+      );
+      z-index: 1;
+    }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 36px 80px;
+      z-index: 10;
+    }
+
+    .nav-logo {
+      height: 34px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-release {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 70px;
+      z-index: 10;
+    }
+
+    .hero-badge {
+      width: 600px;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .hero-text {
+      margin-top: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-subtitle {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 44px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .hero-tagline {
+      margin-top: 16px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 26px;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 580px;
+      text-align: center;
+    }
+
+    /* ===== CTA row ===== */
+    .cta-row {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 52px;
+      padding: 0 36px;
+      background: #F76D00;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: #e06000;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.75;
+      cursor: pointer;
+      background: none;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      opacity: 1;
+    }
+
+    .btn-secondary-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    /* Play icon SVG */
+    .play-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .footer-rule {
+      width: 480px;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(247, 109, 0, 0.55) 30%,
+        rgba(247, 109, 0, 0.55) 70%,
+        transparent
+      );
+    }
+
+    .social-links {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      padding: 44px 80px;
+    }
+
+    .social-link {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.65;
+      transition: opacity 0.2s ease;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+    }
+
+    .social-link:hover {
+      opacity: 1;
+    }
+
+    .social-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Background -->
+  <div class="bg-image"></div>
+  <div class="vignette"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <img
+      class="nav-logo"
+      src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE790C2FEFRNJR5YE2ASWA6.png"
+      alt="Game Logo"
+    />
+    <span class="nav-release">Early Access &mdash; 2026</span>
+  </nav>
+
+  <!-- Hero -->
+  <main class="hero">
+    <img
+      class="hero-badge"
+      src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE6PHT7Q05X3XA9N6W3WCM1.png"
+      alt="Game Badge"
+    />
+
+    <div class="hero-text">
+      <h1 class="hero-subtitle">Experience Tokyo, Horizon's Largest Ever City</h1>
+      <p class="hero-tagline">
+        Discover the breathtaking landscapes of Japan in over 550 real-world cars and become a racing legend in Forza Horizon's biggest open world driving adventure yet.
+      </p>
+
+      <div class="cta-row">
+        <!-- Primary CTA -->
+        <a href="#" class="btn-primary">Get Started</a>
+
+        <!-- Secondary CTA — Watch Trailer -->
+        <a href="#" class="btn-secondary" aria-label="Watch Trailer">
+          <!-- Play circle icon -->
+          <svg class="play-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="18" cy="18" r="17" stroke="white" stroke-width="1.5"/>
+            <polygon points="15,12 26,18 15,24" fill="white"/>
+          </svg>
+          <span class="btn-secondary-label">Watch Trailer</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-rule"></div>
+
+    <div class="social-links">
+
+      <!-- Twitter / X -->
+      <a href="#" class="social-link" aria-label="Twitter">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L2.25 2.25h6.861l4.265 5.638L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+        </svg>
+        <span>Twitter</span>
+      </a>
+
+      <!-- Discord -->
+      <a href="#" class="social-link" aria-label="Discord">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+        </svg>
+        <span>Discord</span>
+      </a>
+
+      <!-- TikTok -->
+      <a href="#" class="social-link" aria-label="TikTok">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.88a8.28 8.28 0 0 0 4.84 1.54V7a4.85 4.85 0 0 1-1.07-.31z"/>
+        </svg>
+        <span>TikTok</span>
+      </a>
+
+      <!-- YouTube -->
+      <a href="#" class="social-link" aria-label="YouTube">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+        <span>YouTube</span>
+      </a>
+
+      <!-- Instagram -->
+      <a href="#" class="social-link" aria-label="Instagram">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="white" stroke-width="2"/>
+          <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2"/>
+          <circle cx="17.5" cy="6.5" r="1.25" fill="white"/>
+        </svg>
+        <span>Instagram</span>
+      </a>
+
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
