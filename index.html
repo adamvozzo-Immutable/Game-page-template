@@ -1769,6 +1769,7 @@
         max-width: 100%;
         height: auto;
         pointer-events: auto;
+        margin-bottom: 16px;
       }
 
       html.media-above .hero-badge {
@@ -1776,8 +1777,13 @@
         max-width: 280px;
       }
 
+      /* Push the subtitle clear of the logo on mobile (no longer absolutely
+         positioned). margin-top:auto in the desktop rule still applies and
+         keeps the text bottom-anchored, but this top margin guarantees a
+         minimum gap when the hero is short. */
       .hero-text {
         width: 100%;
+        margin-top: 24px;
       }
 
       .hero-subtitle {
@@ -1820,6 +1826,18 @@
         min-height: 0;
       }
 
+      /* Wider cards on mobile mean the reward image has more horizontal room
+         than vertical — bump the cutout slot's height so the whole car fits
+         and switch to object-fit:contain so neither dimension crops. */
+      .reward-media-cutout {
+        height: 220px;
+      }
+
+      .reward-media-cutout .reward-image {
+        object-fit: contain;
+        object-position: center;
+      }
+
       /* Trailer + gallery — fit available hero height, never push footer off.
          Mobile gaps are 24px (mobile equivalent of the desktop 40px gaps
          around the media). */
@@ -1860,6 +1878,39 @@
       .cvp-body {
         font-size: 14px;
         line-height: 22px;
+      }
+
+      /* Mobile: dim the hero background more aggressively so the centered
+         white subtitle/tagline stay legible over the bright key-art midtones
+         (Mt. Fuji's pink sky in hero-bg mode is the worst offender). */
+      .vignette {
+        background: linear-gradient(
+          to bottom,
+          rgba(8, 6, 16, 0.55) 0%,
+          rgba(8, 6, 16, 0.4) 30%,
+          rgba(8, 6, 16, 0.55) 60%,
+          rgba(8, 6, 16, 0.95) 100%
+        );
+      }
+
+      html.hero-bg .vignette {
+        background: linear-gradient(
+          to bottom,
+          rgba(8, 6, 16, 0.82) 0%,
+          rgba(8, 6, 16, 0.5) 30%,
+          rgba(8, 6, 16, 0.6) 60%,
+          rgba(8, 6, 16, 0.95) 100%
+        );
+      }
+
+      html.hero-bg-minimal .vignette {
+        background: linear-gradient(
+          to bottom,
+          rgba(8, 6, 16, 0.82) 0%,
+          rgba(8, 6, 16, 0.5) 30%,
+          rgba(8, 6, 16, 0.45) 60%,
+          rgba(8, 6, 16, 0.75) 100%
+        );
       }
 
       /* Mobile: collapse the alternating lockup back to stacked text-above-image */
