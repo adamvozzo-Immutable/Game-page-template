@@ -40,23 +40,22 @@
       flex-direction: column;
     }
 
-    /* ===== Background ===== */
-    /* Default: plain dark backdrop — no key art unless the Hero Background
-       scenario is toggled on. */
+    /* ===== Background image ===== */
     .bg-image {
       position: absolute;
       inset: 0;
-      background-color: #0a0812;
+      background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/5ce35cb7c29431e9c58ec2228f6eaa8842953bc2/page_bg_raw.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      background-color: #0a0812;
       z-index: 0;
       transition: opacity 0.5s ease;
     }
 
-    /* Hero Background scenario — fill the viewport with the 16:9 key art.
-       background-size:cover keeps the image's height locked to the viewport
-       height and crops horizontally if the viewport is wider than 16:9. */
+    /* Hero Background scenario — fill the viewport with the dedicated key art.
+       background-size:cover locks the image's height to the viewport height
+       and crops horizontally if the viewport is wider than 16:9. */
     html.hero-bg .bg-image {
       background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/5ce35cb7c29431e9c58ec2228f6eaa8842953bc2/page_bg_raw.jpg');
     }
