@@ -1082,12 +1082,12 @@
       margin-top: 40px;
       width: 100%;
       justify-content: center;
-      align-items: flex-start;
     }
 
     .cta-card {
       flex: 1;
       max-width: 320px;
+      min-height: 200px;
       padding: 20px 22px;
       background: rgba(20, 18, 36, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -1248,6 +1248,7 @@
     .cta-card .btn-primary,
     .cta-card .btn-discord {
       width: 100%;
+      margin-top: auto;
       height: 46px;
       padding: 0 16px;
       font-size: 13px;
@@ -2943,6 +2944,10 @@
     // is off the plain Join Discord button is suppressed entirely.
     btnDiscord.classList.add('feat-hidden');
     ctaCards.classList.toggle('feat-hidden', !motivationOn);
+    // When the cards take over, collapse the now-empty cta-row so its
+    // margin-top doesn't add a ghost gap between the tagline and the cards.
+    var ctaRow = document.querySelector('.hero-text .cta-row');
+    if (ctaRow) ctaRow.classList.toggle('feat-hidden', motivationOn);
   }
 
   featMotivation.addEventListener('change', updateCtaState);
