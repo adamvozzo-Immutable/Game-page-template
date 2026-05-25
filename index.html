@@ -328,39 +328,39 @@
       display: none;
       position: absolute;
       left: 50%;
-      bottom: -10px;
-      width: 220px;
-      height: 220px;
+      bottom: 10px;
+      width: 160px;
+      height: 160px;
       pointer-events: none;
-      z-index: 0;
+      /* z-index:-1 keeps the glow behind all sibling text (subtitle/tagline
+         now sit below the CTA after the swap). The button has no stacking
+         context, so a negative z propagates to the hero-text layer. */
+      z-index: -1;
       border-radius: 50%;
-      /* Star-burst: a soft radial centre over a 6-spoke conic. The conic
-         spokes are narrow and fully transparent between, so blurring leaves
-         distinct rays rather than a smooth halo. */
       background:
         radial-gradient(
           circle at center,
-          rgba(232, 51, 130, 0.45) 0%,
-          rgba(232, 51, 130, 0.12) 32%,
+          rgba(232, 51, 130, 0.4) 0%,
+          rgba(232, 51, 130, 0.1) 32%,
           rgba(232, 51, 130, 0) 60%
         ),
         conic-gradient(
           from 0deg,
           rgba(232, 51, 130, 0) 0deg,
-          rgba(232, 51, 130, 0.75) 30deg,
+          rgba(232, 51, 130, 0.6) 30deg,
           rgba(232, 51, 130, 0) 60deg,
-          rgba(232, 51, 130, 0.75) 90deg,
+          rgba(232, 51, 130, 0.6) 90deg,
           rgba(232, 51, 130, 0) 120deg,
-          rgba(232, 51, 130, 0.75) 150deg,
+          rgba(232, 51, 130, 0.6) 150deg,
           rgba(232, 51, 130, 0) 180deg,
-          rgba(232, 51, 130, 0.75) 210deg,
+          rgba(232, 51, 130, 0.6) 210deg,
           rgba(232, 51, 130, 0) 240deg,
-          rgba(232, 51, 130, 0.75) 270deg,
+          rgba(232, 51, 130, 0.6) 270deg,
           rgba(232, 51, 130, 0) 300deg,
-          rgba(232, 51, 130, 0.75) 330deg,
+          rgba(232, 51, 130, 0.6) 330deg,
           rgba(232, 51, 130, 0) 360deg
         );
-      filter: blur(18px);
+      filter: blur(14px);
       transform: translateX(-50%);
       animation: spin-reward-glow 9s linear infinite;
     }
@@ -378,6 +378,23 @@
     .btn-primary .btn-label {
       position: relative;
       z-index: 2;
+    }
+
+    /* ===== Swap primary CTA above its associated text =====
+       Same rule applied wherever a CTA appears with adjacent copy:
+       in the hero (cta-row above subtitle/tagline) and in every
+       motivation card view (button above heading/body). Reward image
+       stays at the very top via order:-2. */
+    .hero-text .cta-row {
+      order: -1;
+    }
+
+    .cta-card-view .reward-media {
+      order: -2;
+    }
+    .cta-card-view .card-cta,
+    .cta-card-view .card-cta-link {
+      order: -1;
     }
 
     /* In Rewards mode, push the cta-row down (which pulls the rest of
