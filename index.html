@@ -152,12 +152,28 @@
     }
 
     .nav-release {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      text-align: right;
+    }
+
+    .nav-release-eyebrow {
       font-family: 'Inter', sans-serif;
-      font-weight: 300;
-      font-size: 12px;
+      font-weight: 500;
+      font-size: 10px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.55);
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .nav-release-date {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.9);
     }
 
     /* ===== Hero =====
@@ -1549,9 +1565,12 @@
       .nav-logo {
         height: 26px;
       }
-      .nav-release {
-        font-size: 10px;
+      .nav-release-eyebrow {
+        font-size: 9px;
         letter-spacing: 0.14em;
+      }
+      .nav-release-date {
+        font-size: 13px;
       }
       html.hero-bg .hero-badge {
         width: 70%;
@@ -1768,7 +1787,10 @@
       src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE790C2FEFRNJR5YE2ASWA6.png"
       alt="Studio Logo"
     />
-    <span class="nav-release" data-feature="release-date">Early Access &mdash; 2026</span>
+    <div class="nav-release" data-feature="release-date">
+      <span class="nav-release-eyebrow">Release date</span>
+      <span class="nav-release-date">25 May 2026</span>
+    </div>
   </nav>
 
   <!-- Hero -->
