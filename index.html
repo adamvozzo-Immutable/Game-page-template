@@ -380,24 +380,6 @@
       z-index: 2;
     }
 
-    /* ===== Action containers sit above text in the hero =====
-       Both the primary cta-row and the motivation cta-cards are pulled above
-       the subtitle/tagline via flex order. Internal card layout (image →
-       heading → body → button) is unchanged. */
-    .hero-text .cta-row,
-    .hero-text .cta-cards {
-      order: -1;
-    }
-
-    .hero-text .cta-row {
-      margin-top: 0;
-      margin-bottom: 48px;
-    }
-
-    .hero-text .cta-cards {
-      margin-top: 0;
-      margin-bottom: 48px;
-    }
 
     /* In Rewards mode, push the cta-row down (which pulls the rest of
        hero-text upward via margin-top:auto on .hero-text) so the car sticking
