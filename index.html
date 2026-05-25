@@ -42,11 +42,32 @@
     .bg-image {
       position: absolute;
       inset: 0;
-      background-image: url('https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE6MVHGVBJ6K69TBP5R8Z5P.jpg');
+      background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/5ce35cb7c29431e9c58ec2228f6eaa8842953bc2/page_bg_raw.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       z-index: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* ===== Background video ===== */
+    .bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .bg-video.active {
+      opacity: 1;
+    }
+
+    .bg-image.dimmed {
+      opacity: 0;
     }
 
     /* ===== Vignette overlay ===== */
@@ -261,22 +282,19 @@
       border-color: rgba(247, 109, 0, 0.7);
     }
 
-    .screenshot-thumb .thumb-bg {
+    .screenshot-thumb img {
       position: absolute;
       inset: 0;
-      background-image: url('https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE6MVHGVBJ6K69TBP5R8Z5P.jpg');
-      background-size: 280%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       transition: transform 0.3s ease;
+      display: block;
     }
 
-    .screenshot-thumb:hover .thumb-bg {
-      transform: scale(1.04);
+    .screenshot-thumb:hover img {
+      transform: scale(1.05);
     }
-
-    .screenshot-thumb:nth-child(1) .thumb-bg { background-position: 8% 25%; }
-    .screenshot-thumb:nth-child(2) .thumb-bg { background-position: 52% 70%; }
-    .screenshot-thumb:nth-child(3) .thumb-bg { background-position: 88% 45%; }
-    .screenshot-thumb:nth-child(4) .thumb-bg { background-position: 30% 85%; }
 
     .screenshot-thumb .thumb-overlay {
       position: absolute;
@@ -528,8 +546,10 @@
 
 <div class="page">
 
-  <!-- Background -->
-  <div class="bg-image"></div>
+  <!-- Background — static image (hidden when video background is active) -->
+  <div class="bg-image" id="bg-image"></div>
+  <!-- Background — video (shown when video background toggle is on) -->
+  <video class="bg-video" id="bg-video" autoplay muted loop playsinline aria-hidden="true"></video>
   <div class="vignette"></div>
 
   <!-- Navigation -->
@@ -561,7 +581,7 @@
         <a href="#" class="btn-primary">Get Started</a>
 
         <!-- Store link — toggled by demo panel -->
-        <a href="#" class="btn-store feat-hidden" data-feature="store" aria-label="Visit Store">
+        <a href="https://store.steampowered.com/app/2483190/Forza_Horizon_6/" class="btn-store feat-hidden" data-feature="store" target="_blank" rel="noopener" aria-label="Visit Store on Steam">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             <line x1="3" y1="6" x2="21" y2="6" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
@@ -585,22 +605,22 @@
   <!-- Screenshot strip — toggled by demo panel -->
   <div class="screenshot-strip feat-hidden" data-feature="screenshots" aria-label="Gameplay screenshots">
     <div class="screenshot-thumb">
-      <div class="thumb-bg"></div>
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.600x338.jpg" alt="Gameplay screenshot 1" loading="lazy" />
       <div class="thumb-overlay"></div>
       <span class="thumb-label">Scene 01</span>
     </div>
     <div class="screenshot-thumb">
-      <div class="thumb-bg"></div>
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.600x338.jpg" alt="Gameplay screenshot 2" loading="lazy" />
       <div class="thumb-overlay"></div>
       <span class="thumb-label">Scene 02</span>
     </div>
     <div class="screenshot-thumb">
-      <div class="thumb-bg"></div>
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/d4b81f0cafcfba410371e53bd696fb5cc9b434c0/ss_d4b81f0cafcfba410371e53bd696fb5cc9b434c0.600x338.jpg" alt="Gameplay screenshot 3" loading="lazy" />
       <div class="thumb-overlay"></div>
       <span class="thumb-label">Scene 03</span>
     </div>
     <div class="screenshot-thumb">
-      <div class="thumb-bg"></div>
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/041b9a2854dc647bf54d7d8b36d2f4186ed72c13/ss_041b9a2854dc647bf54d7d8b36d2f4186ed72c13.600x338.jpg" alt="Gameplay screenshot 4" loading="lazy" />
       <div class="thumb-overlay"></div>
       <span class="thumb-label">Scene 04</span>
     </div>
@@ -708,11 +728,24 @@
     </div>
   </label>
 
+  <label class="demo-option" for="feat-video-bg">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Video Background</span>
+      <span class="demo-option-desc">Replace image with trailer</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-video-bg" />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
 <script>
-  const panel = document.getElementById('demo-panel');
-  const toggleBtn = document.getElementById('demo-toggle');
+  // ===== Demo panel open/close =====
+  var panel = document.getElementById('demo-panel');
+  var toggleBtn = document.getElementById('demo-toggle');
 
   toggleBtn.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -727,14 +760,12 @@
     panel.setAttribute('aria-hidden', 'true');
   });
 
-  panel.addEventListener('click', function (e) {
-    e.stopPropagation();
-  });
+  panel.addEventListener('click', function (e) { e.stopPropagation(); });
 
+  // ===== Feature toggles =====
   function bindFeature(checkboxId, selector) {
     var checkbox = document.getElementById(checkboxId);
     var elements = document.querySelectorAll('[data-feature="' + selector + '"]');
-
     checkbox.addEventListener('change', function () {
       elements.forEach(function (el) {
         el.classList.toggle('feat-hidden', !checkbox.checked);
@@ -745,6 +776,42 @@
   bindFeature('feat-trailer', 'trailer');
   bindFeature('feat-store', 'store');
   bindFeature('feat-screenshots', 'screenshots');
+
+  // ===== Video background =====
+  var bgImage = document.getElementById('bg-image');
+  var bgVideo = document.getElementById('bg-video');
+  var hlsInstance = null;
+  var videoLoaded = false;
+
+  var HLS_URL = 'https://video.akamai.steamstatic.com/store_trailers/2483190/1133501958/842a46e433376224f42832ce35c55f1f85bbe440/1778255437/hls_264_master.m3u8';
+
+  function loadVideo() {
+    if (videoLoaded) return;
+    videoLoaded = true;
+
+    if (bgVideo.canPlayType('application/vnd.apple.mpegurl')) {
+      // Safari — native HLS
+      bgVideo.src = HLS_URL;
+      bgVideo.load();
+    } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+      hlsInstance = new Hls({ autoStartLoad: true, startLevel: -1 });
+      hlsInstance.loadSource(HLS_URL);
+      hlsInstance.attachMedia(bgVideo);
+    }
+  }
+
+  document.getElementById('feat-video-bg').addEventListener('change', function () {
+    if (this.checked) {
+      loadVideo();
+      bgVideo.classList.add('active');
+      bgImage.classList.add('dimmed');
+      bgVideo.play().catch(function () {});
+    } else {
+      bgVideo.classList.remove('active');
+      bgImage.classList.remove('dimmed');
+      bgVideo.pause();
+    }
+  });
 </script>
 
 </body>
