@@ -380,31 +380,23 @@
       z-index: 2;
     }
 
-    /* ===== Swap primary CTA above its associated text =====
-       Same rule applied wherever a CTA appears with adjacent copy:
-       in the hero (cta-row above subtitle/tagline) and in every
-       motivation card view (button above heading/body). Reward image
-       stays at the very top via order:-2. */
-    .hero-text .cta-row {
+    /* ===== Action containers sit above text in the hero =====
+       Both the primary cta-row and the motivation cta-cards are pulled above
+       the subtitle/tagline via flex order. Internal card layout (image →
+       heading → body → button) is unchanged. */
+    .hero-text .cta-row,
+    .hero-text .cta-cards {
       order: -1;
+    }
+
+    .hero-text .cta-row {
       margin-top: 0;
       margin-bottom: 48px;
     }
 
-    .cta-card-view .reward-media {
-      order: -2;
-    }
-    .cta-card-view .card-cta,
-    .cta-card-view .card-cta-link {
-      order: -1;
-      /* Breathing room between the button and the heading + body below it */
-      margin-bottom: 14px;
-    }
-
-    /* Pull the heading tight against the body so the text reads as a single
-       block sitting beneath the action, rather than three equal-spaced rows. */
-    .cta-card-view .cta-card-heading {
-      margin-bottom: -4px;
+    .hero-text .cta-cards {
+      margin-top: 0;
+      margin-bottom: 48px;
     }
 
     /* In Rewards mode, push the cta-row down (which pulls the rest of
