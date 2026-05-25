@@ -255,70 +255,82 @@
       height: 32px;
     }
 
-    /* ===== Screenshot gallery ===== */
+    /* ===== Screenshot gallery (Steam style: featured + thumb row) ===== */
     .screenshot-gallery {
-      display: grid;
-      grid-template-columns: repeat(2, 260px);
-      grid-template-rows: repeat(2, 146px);
+      display: flex;
+      flex-direction: column;
       gap: 8px;
       flex-shrink: 0;
       margin-top: 24px;
+      width: 560px;
     }
 
     .gallery-cvp {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: auto;
-      margin-top: 20px;
+      width: 100%;
+      max-width: 100%;
+      margin-top: 0;
       margin-bottom: 48px;
     }
 
-    .gallery-cvp .screenshot-thumb {
-      height: 200px;
-    }
-
-    .screenshot-thumb {
-      overflow: hidden;
-      cursor: pointer;
+    .gallery-featured {
+      width: 100%;
+      aspect-ratio: 16 / 9;
       position: relative;
+      overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: border-color 0.2s;
-      background: rgba(255,255,255,0.04);
+      background: rgba(0, 0, 0, 0.45);
     }
 
-    .screenshot-thumb:hover {
-      border-color: rgba(247, 109, 0, 0.6);
-    }
-
-    .screenshot-thumb img {
+    .gallery-featured img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.35s ease;
+      animation: featuredFade 0.25s ease;
+    }
+
+    @keyframes featuredFade {
+      from { opacity: 0.35; }
+      to   { opacity: 1; }
+    }
+
+    .gallery-thumbs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .gallery-thumb {
+      flex: 1;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0;
+      opacity: 0.55;
+      transition: opacity 0.18s, border-color 0.18s;
+    }
+
+    .gallery-thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
     }
 
-    .screenshot-thumb:hover img {
-      transform: scale(1.06);
+    .gallery-thumb:hover {
+      opacity: 0.85;
+      border-color: rgba(247, 109, 0, 0.45);
     }
 
-    .screenshot-thumb .thumb-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 55%);
-    }
-
-    .screenshot-thumb .thumb-label {
-      position: absolute;
-      bottom: 9px;
-      left: 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
+    .gallery-thumb.is-active {
+      opacity: 1;
+      border-color: #F76D00;
+      box-shadow: inset 0 0 0 1px rgba(247, 109, 0, 0.8);
     }
 
     /* ===== Demo sub-option (position radio) ===== */
@@ -1014,27 +1026,43 @@
       alt="Game Badge"
     />
 
-    <!-- Screenshot gallery — above fold (in-flow, between badge and text) -->
+    <!-- Screenshot gallery — above fold (featured + thumbs row) -->
     <div id="gallery-hero" class="screenshot-gallery feat-hidden" aria-label="Gameplay screenshots">
-      <div class="screenshot-thumb">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.600x338.jpg" alt="Gameplay screenshot 1" loading="lazy" />
-        <div class="thumb-overlay"></div>
-        <span class="thumb-label">Scene 01</span>
+      <div class="gallery-featured">
+        <img alt="Featured gameplay screenshot"
+          src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.1920x1080.jpg" />
       </div>
-      <div class="screenshot-thumb">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.600x338.jpg" alt="Gameplay screenshot 2" loading="lazy" />
-        <div class="thumb-overlay"></div>
-        <span class="thumb-label">Scene 02</span>
-      </div>
-      <div class="screenshot-thumb">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/d4b81f0cafcfba410371e53bd696fb5cc9b434c0/ss_d4b81f0cafcfba410371e53bd696fb5cc9b434c0.600x338.jpg" alt="Gameplay screenshot 3" loading="lazy" />
-        <div class="thumb-overlay"></div>
-        <span class="thumb-label">Scene 03</span>
-      </div>
-      <div class="screenshot-thumb">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/041b9a2854dc647bf54d7d8b36d2f4186ed72c13/ss_041b9a2854dc647bf54d7d8b36d2f4186ed72c13.600x338.jpg" alt="Gameplay screenshot 4" loading="lazy" />
-        <div class="thumb-overlay"></div>
-        <span class="thumb-label">Scene 04</span>
+      <div class="gallery-thumbs">
+        <button type="button" class="gallery-thumb is-active"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.1920x1080.jpg"
+          aria-label="Screenshot 1">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.600x338.jpg" />
+        </button>
+        <button type="button" class="gallery-thumb"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.1920x1080.jpg"
+          aria-label="Screenshot 2">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.600x338.jpg" />
+        </button>
+        <button type="button" class="gallery-thumb"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/d4b81f0cafcfba410371e53bd696fb5cc9b434c0/ss_d4b81f0cafcfba410371e53bd696fb5cc9b434c0.1920x1080.jpg"
+          aria-label="Screenshot 3">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/d4b81f0cafcfba410371e53bd696fb5cc9b434c0/ss_d4b81f0cafcfba410371e53bd696fb5cc9b434c0.600x338.jpg" />
+        </button>
+        <button type="button" class="gallery-thumb"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/041b9a2854dc647bf54d7d8b36d2f4186ed72c13/ss_041b9a2854dc647bf54d7d8b36d2f4186ed72c13.1920x1080.jpg"
+          aria-label="Screenshot 4">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/041b9a2854dc647bf54d7d8b36d2f4186ed72c13/ss_041b9a2854dc647bf54d7d8b36d2f4186ed72c13.600x338.jpg" />
+        </button>
+        <button type="button" class="gallery-thumb"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/945a08124625ffa26ec0077761fcbe19df07dad5/ss_945a08124625ffa26ec0077761fcbe19df07dad5.1920x1080.jpg"
+          aria-label="Screenshot 5">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/945a08124625ffa26ec0077761fcbe19df07dad5/ss_945a08124625ffa26ec0077761fcbe19df07dad5.600x338.jpg" />
+        </button>
       </div>
     </div>
 
@@ -1140,27 +1168,43 @@
 <section class="cvp-content feat-hidden" data-feature="scroll-content" aria-label="Game features">
   <div class="cvp-container">
 
-    <!-- Screenshot gallery — below fold (shown when gallery position = cvp) -->
+    <!-- Screenshot gallery — below fold (featured + thumbs row) -->
     <div id="gallery-cvp" class="screenshot-gallery gallery-cvp feat-hidden" aria-label="Gameplay screenshots">
-      <div class="screenshot-thumb">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.600x338.jpg" alt="Gameplay screenshot 1" loading="lazy" />
-        <div class="thumb-overlay"></div>
-        <span class="thumb-label">Scene 01</span>
+      <div class="gallery-featured">
+        <img alt="Featured gameplay screenshot"
+          src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.1920x1080.jpg" />
       </div>
-      <div class="screenshot-thumb">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.600x338.jpg" alt="Gameplay screenshot 2" loading="lazy" />
-        <div class="thumb-overlay"></div>
-        <span class="thumb-label">Scene 02</span>
-      </div>
-      <div class="screenshot-thumb">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/d4b81f0cafcfba410371e53bd696fb5cc9b434c0/ss_d4b81f0cafcfba410371e53bd696fb5cc9b434c0.600x338.jpg" alt="Gameplay screenshot 3" loading="lazy" />
-        <div class="thumb-overlay"></div>
-        <span class="thumb-label">Scene 03</span>
-      </div>
-      <div class="screenshot-thumb">
-        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/041b9a2854dc647bf54d7d8b36d2f4186ed72c13/ss_041b9a2854dc647bf54d7d8b36d2f4186ed72c13.600x338.jpg" alt="Gameplay screenshot 4" loading="lazy" />
-        <div class="thumb-overlay"></div>
-        <span class="thumb-label">Scene 04</span>
+      <div class="gallery-thumbs">
+        <button type="button" class="gallery-thumb is-active"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.1920x1080.jpg"
+          aria-label="Screenshot 1">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/706eb79418b2a74192de059693ddcbfaa803108a/ss_706eb79418b2a74192de059693ddcbfaa803108a.600x338.jpg" />
+        </button>
+        <button type="button" class="gallery-thumb"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.1920x1080.jpg"
+          aria-label="Screenshot 2">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.600x338.jpg" />
+        </button>
+        <button type="button" class="gallery-thumb"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/d4b81f0cafcfba410371e53bd696fb5cc9b434c0/ss_d4b81f0cafcfba410371e53bd696fb5cc9b434c0.1920x1080.jpg"
+          aria-label="Screenshot 3">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/d4b81f0cafcfba410371e53bd696fb5cc9b434c0/ss_d4b81f0cafcfba410371e53bd696fb5cc9b434c0.600x338.jpg" />
+        </button>
+        <button type="button" class="gallery-thumb"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/041b9a2854dc647bf54d7d8b36d2f4186ed72c13/ss_041b9a2854dc647bf54d7d8b36d2f4186ed72c13.1920x1080.jpg"
+          aria-label="Screenshot 4">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/041b9a2854dc647bf54d7d8b36d2f4186ed72c13/ss_041b9a2854dc647bf54d7d8b36d2f4186ed72c13.600x338.jpg" />
+        </button>
+        <button type="button" class="gallery-thumb"
+          data-img="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/945a08124625ffa26ec0077761fcbe19df07dad5/ss_945a08124625ffa26ec0077761fcbe19df07dad5.1920x1080.jpg"
+          aria-label="Screenshot 5">
+          <img loading="lazy" alt=""
+            src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/945a08124625ffa26ec0077761fcbe19df07dad5/ss_945a08124625ffa26ec0077761fcbe19df07dad5.600x338.jpg" />
+        </button>
       </div>
     </div>
 
@@ -1269,8 +1313,8 @@
 
   <label class="demo-option" for="feat-scroll">
     <div class="demo-option-text">
-      <span class="demo-option-label">Page Scrolling</span>
-      <span class="demo-option-desc">CVPs &amp; screenshots below hero</span>
+      <span class="demo-option-label">Description</span>
+      <span class="demo-option-desc">Feature sections below the hero</span>
     </div>
     <div class="toggle-switch">
       <input type="checkbox" id="feat-scroll" />
@@ -1401,41 +1445,70 @@
   bindFeature('feat-store', 'store');
   bindFeature('feat-social', 'social');
 
-  // ===== Screenshots gallery toggle + position =====
-  var galleryHero = document.getElementById('gallery-hero');
-  var galleryCvp  = document.getElementById('gallery-cvp');
-  var screenshotsSuboption = document.getElementById('screenshots-suboption');
+  // ===== Screenshots gallery + below-fold state =====
+  var galleryHero       = document.getElementById('gallery-hero');
+  var galleryCvp        = document.getElementById('gallery-cvp');
+  var screenshotsSub    = document.getElementById('screenshots-suboption');
+  var featScreenshots   = document.getElementById('feat-screenshots');
+  var featScroll        = document.getElementById('feat-scroll');
+  var gposHero          = document.getElementById('gpos-hero');
+  var gposCvp           = document.getElementById('gpos-cvp');
+  var cvpSection        = document.querySelector('[data-feature="scroll-content"]');
+  var cvpTextSections   = cvpSection.querySelectorAll('.cvp-section');
 
-  function updateGalleryPosition() {
-    var isHero = document.getElementById('gpos-hero').checked;
-    if (isHero) {
-      galleryHero.classList.remove('feat-hidden');
-      galleryCvp.classList.add('feat-hidden');
+  function updateLayout() {
+    var galleryOn    = featScreenshots.checked;
+    var galleryBelow = gposCvp.checked;
+    var descriptionOn = featScroll.checked;
+
+    // Gallery placement
+    if (galleryOn) {
+      galleryHero.classList.toggle('feat-hidden', galleryBelow);
+      galleryCvp.classList.toggle('feat-hidden', !galleryBelow);
     } else {
       galleryHero.classList.add('feat-hidden');
-      galleryCvp.classList.remove('feat-hidden');
+      galleryCvp.classList.add('feat-hidden');
     }
+
+    // CVP container is visible if Description is on OR gallery is below fold
+    var showCvpContainer = descriptionOn || (galleryOn && galleryBelow);
+    cvpSection.classList.toggle('feat-hidden', !showCvpContainer);
+
+    // CVP text sections only visible when Description is on
+    cvpTextSections.forEach(function (s) {
+      s.classList.toggle('feat-hidden', !descriptionOn);
+    });
+
+    // Enable page scrolling when anything below the fold is visible
+    document.documentElement.classList.toggle('scroll-enabled', showCvpContainer);
+
+    // Show position sub-option only when gallery is on
+    screenshotsSub.classList.toggle('visible', galleryOn);
   }
 
-  document.getElementById('feat-screenshots').addEventListener('change', function () {
-    var show = this.checked;
-    screenshotsSuboption.classList.toggle('visible', show);
-    if (show) {
-      updateGalleryPosition();
-    } else {
-      galleryHero.classList.add('feat-hidden');
-      galleryCvp.classList.add('feat-hidden');
-    }
-  });
+  featScreenshots.addEventListener('change', updateLayout);
+  gposHero.addEventListener('change', updateLayout);
+  gposCvp.addEventListener('change', updateLayout);
+  featScroll.addEventListener('change', updateLayout);
 
-  document.getElementById('gpos-hero').addEventListener('change', updateGalleryPosition);
-  document.getElementById('gpos-cvp').addEventListener('change', updateGalleryPosition);
-
-  // Page scrolling toggle — enables overflow + shows CVP section
-  document.getElementById('feat-scroll').addEventListener('change', function () {
-    document.documentElement.classList.toggle('scroll-enabled', this.checked);
-    var cvp = document.querySelector('[data-feature="scroll-content"]');
-    cvp.classList.toggle('feat-hidden', !this.checked);
+  // ===== Gallery thumb selection (Steam-style) =====
+  document.querySelectorAll('.screenshot-gallery').forEach(function (gallery) {
+    var featuredImg = gallery.querySelector('.gallery-featured img');
+    var thumbs = gallery.querySelectorAll('.gallery-thumb');
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        var src = thumb.getAttribute('data-img');
+        if (!src) return;
+        featuredImg.src = src;
+        // restart fade animation
+        featuredImg.style.animation = 'none';
+        // force reflow so the animation restarts
+        void featuredImg.offsetWidth;
+        featuredImg.style.animation = '';
+        thumbs.forEach(function (t) { t.classList.remove('is-active'); });
+        thumb.classList.add('is-active');
+      });
+    });
   });
 
   // ===== Confetti =====
