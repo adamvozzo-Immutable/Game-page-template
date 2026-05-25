@@ -681,9 +681,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(4, 3, 12, 0.72);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(4, 3, 12, 0.35);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.22s ease;
@@ -697,18 +695,23 @@
     .modal-card {
       position: relative;
       width: 420px;
-      background: rgba(14, 12, 24, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 12px;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(255,255,255,0.07);
+      min-height: 520px;
+      background: rgba(20, 18, 36, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      backdrop-filter: blur(36px) saturate(160%);
+      -webkit-backdrop-filter: blur(36px) saturate(160%);
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04);
       padding: 40px 36px 36px;
       display: flex;
       flex-direction: column;
       align-items: center;
       transform: translateY(12px);
       transition: transform 0.22s ease;
+      overflow: hidden;
     }
 
     .modal-overlay.modal-open .modal-card {
@@ -857,6 +860,106 @@
 
     .modal-submit:hover {
       background: #e06000;
+    }
+
+    /* ===== Modal view states ===== */
+    .modal-view {
+      width: 100%;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: modalFade 0.25s ease;
+    }
+
+    .modal-card[data-state="form"] .modal-view-form { display: flex; }
+    .modal-card[data-state="loading"] .modal-view-loading { display: flex; }
+    .modal-card[data-state="success"] .modal-view-success { display: flex; }
+
+    .modal-view-loading,
+    .modal-view-success {
+      justify-content: center;
+      flex: 1;
+      min-height: 440px;
+      gap: 22px;
+    }
+
+    @keyframes modalFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hide close button on loading/success states */
+    .modal-card[data-state="loading"] .modal-close,
+    .modal-card[data-state="success"] .modal-close {
+      display: none;
+    }
+
+    /* ===== Spinner ===== */
+    .modal-spinner {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #F76D00;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .modal-loading-text {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    /* ===== Success ===== */
+    .modal-success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(247, 109, 0, 0.18);
+      border: 2px solid #F76D00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: successPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-success-icon svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    @keyframes successPop {
+      0%   { transform: scale(0.4); opacity: 0; }
+      60%  { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .modal-success-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .modal-success-sub {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 20px;
+      color: rgba(255, 255, 255, 0.55);
+      text-align: center;
+      max-width: 280px;
+      margin-top: -10px;
     }
 
     /* ===== Confetti canvas ===== */
@@ -1201,40 +1304,61 @@
 
 <!-- ===== Sign-up modal ===== -->
 <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Get Started">
-  <div class="modal-card">
+  <div class="modal-card" id="modal-card" data-state="form">
     <button class="modal-close" id="modal-close" aria-label="Close modal">&times;</button>
-    <img
-      class="modal-logo"
-      src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE6PHT7Q05X3XA9N6W3WCM1.png"
-      alt="Game Logo"
-    />
-    <h2 class="modal-title">Get Early Access</h2>
-    <p class="modal-sub">Join the community for exclusive updates, insider news, and early access perks.</p>
 
-    <button class="modal-google-btn" id="modal-google">
-      <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-        <path fill="none" d="M0 0h48v48H0z"/>
-      </svg>
-      Continue with Google
-    </button>
-
-    <div class="modal-divider"><span>or</span></div>
-
-    <form class="modal-form" id="modal-form" novalidate>
-      <input
-        type="email"
-        class="modal-input"
-        id="modal-email"
-        placeholder="Enter your email address"
-        autocomplete="email"
-        required
+    <!-- ===== Form view ===== -->
+    <div class="modal-view modal-view-form">
+      <img
+        class="modal-logo"
+        src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE6PHT7Q05X3XA9N6W3WCM1.png"
+        alt="Game Logo"
       />
-      <button type="submit" class="modal-submit">Join Now</button>
-    </form>
+      <h2 class="modal-title">Get Early Access</h2>
+      <p class="modal-sub">Join the community for exclusive updates, insider news, and early access perks.</p>
+
+      <button class="modal-google-btn" id="modal-google">
+        <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          <path fill="none" d="M0 0h48v48H0z"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <div class="modal-divider"><span>or</span></div>
+
+      <form class="modal-form" id="modal-form" novalidate>
+        <input
+          type="email"
+          class="modal-input"
+          id="modal-email"
+          placeholder="Enter your email address"
+          autocomplete="email"
+          required
+        />
+        <button type="submit" class="modal-submit">Join Now</button>
+      </form>
+    </div>
+
+    <!-- ===== Loading view ===== -->
+    <div class="modal-view modal-view-loading">
+      <div class="modal-spinner"></div>
+      <span class="modal-loading-text">Connecting&hellip;</span>
+    </div>
+
+    <!-- ===== Success view ===== -->
+    <div class="modal-view modal-view-success">
+      <div class="modal-success-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M5 12.5l4.5 4.5L19 7" stroke="#F76D00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="modal-success-title">You're In</h2>
+      <p class="modal-success-sub">Welcome to the festival. Get ready to race.</p>
+    </div>
   </div>
 </div>
 
@@ -1386,8 +1510,14 @@
 
   // ===== Modal =====
   var modalOverlay = document.getElementById('modal-overlay');
+  var modalCard    = document.getElementById('modal-card');
+
+  function setModalState(state) {
+    modalCard.setAttribute('data-state', state);
+  }
 
   function openModal() {
+    setModalState('form');
     modalOverlay.classList.add('modal-open');
     document.getElementById('modal-email').value = '';
   }
@@ -1400,19 +1530,40 @@
   var btnWishlist   = document.getElementById('btn-wishlist');
   var btnDiscord    = document.getElementById('btn-discord');
 
+  var signInTimers = [];
+  function clearSignInTimers() {
+    signInTimers.forEach(clearTimeout);
+    signInTimers = [];
+  }
+
   function handleSignIn() {
-    closeModal();
-    btnGetStarted.classList.add('feat-hidden');
-    btnWishlist.classList.remove('feat-hidden');
-    btnDiscord.classList.remove('feat-hidden');
-    window.launchConfetti();
+    clearSignInTimers();
+
+    // 1) Loading state — represent network call
+    setModalState('loading');
+
+    // 2) After delay → success state + confetti
+    signInTimers.push(setTimeout(function () {
+      setModalState('success');
+      window.launchConfetti();
+    }, 1400));
+
+    // 3) After 3s in success → close and reveal CTAs
+    signInTimers.push(setTimeout(function () {
+      closeModal();
+      btnGetStarted.classList.add('feat-hidden');
+      btnWishlist.classList.remove('feat-hidden');
+      btnDiscord.classList.remove('feat-hidden');
+    }, 1400 + 3000));
   }
 
   btnGetStarted.addEventListener('click', openModal);
   document.getElementById('modal-close').addEventListener('click', closeModal);
 
   modalOverlay.addEventListener('click', function (e) {
-    if (e.target === modalOverlay) closeModal();
+    if (e.target !== modalOverlay) return;
+    // Only allow backdrop dismissal in the form state
+    if (modalCard.getAttribute('data-state') === 'form') closeModal();
   });
 
   document.getElementById('modal-google').addEventListener('click', function () {
