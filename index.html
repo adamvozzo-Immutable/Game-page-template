@@ -724,7 +724,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(4, 3, 12, 0.35);
+      background: rgba(2, 1, 6, 0.78);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.22s ease;
@@ -903,6 +903,29 @@
 
     .modal-submit:hover {
       background: #e06000;
+    }
+
+    .modal-fineprint {
+      margin-top: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 16px;
+      color: rgba(255, 255, 255, 0.35);
+      text-align: center;
+    }
+
+    .modal-fineprint a {
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.2);
+      text-underline-offset: 2px;
+      transition: color 0.15s, text-decoration-color 0.15s;
+    }
+
+    .modal-fineprint a:hover {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration-color: rgba(255, 255, 255, 0.55);
     }
 
     /* ===== Modal view states ===== */
@@ -1456,6 +1479,14 @@
         />
         <button type="submit" class="modal-submit">Join Now</button>
       </form>
+
+      <p class="modal-fineprint">
+        By continuing you agree to our
+        <a href="#" target="_blank" rel="noopener">Privacy Policy</a>,
+        <a href="#" target="_blank" rel="noopener">Terms of Service</a>, and
+        <a href="#" target="_blank" rel="noopener">Collection Statement</a>.
+        We&rsquo;ll email you about drops and beta access.
+      </p>
     </div>
 
     <!-- ===== Loading view ===== -->
