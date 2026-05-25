@@ -1135,6 +1135,24 @@
       animation: modalFade 0.3s ease;
     }
 
+    /* Linking state — pulse the border + an outer pink halo to draw the
+       eye to the incomplete step while the user is mid-flow. Both the
+       border color and the box-shadow animate together at 1.6s. */
+    .cta-card[data-state="linking"] {
+      animation: pulse-linking 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse-linking {
+      0%, 100% {
+        border-color: rgba(232, 51, 130, 0.35);
+        box-shadow: 0 0 0 0 rgba(232, 51, 130, 0);
+      }
+      50% {
+        border-color: rgba(232, 51, 130, 0.95);
+        box-shadow: 0 0 28px 2px rgba(232, 51, 130, 0.5);
+      }
+    }
+
     /* Within linking + success views, default copy shows by default; when
        html.rewards is set, swap to the reward-flavoured copy. */
     .cvp-copy-reward,
