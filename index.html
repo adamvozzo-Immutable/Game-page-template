@@ -2862,7 +2862,9 @@
 
     if (!isSignedIn) return;
     btnWishlist.classList.toggle('feat-hidden', motivationOn);
-    btnDiscord.classList.toggle('feat-hidden', motivationOn);
+    // Discord is only offered through the Motivation cards. When Motivation
+    // is off the plain Join Discord button is suppressed entirely.
+    btnDiscord.classList.add('feat-hidden');
     ctaCards.classList.toggle('feat-hidden', !motivationOn);
   }
 
