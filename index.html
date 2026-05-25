@@ -1787,7 +1787,11 @@
         max-width: 100%;
         height: auto;
         pointer-events: auto;
-        margin-bottom: 16px;
+        /* Minimum clearance from the subtitle when the hero is short and
+           .hero-text's margin-top:auto collapses to 0. On taller viewports
+           the auto margin pushes the text (and CTAs) to the bottom of the
+           hero, so this margin only kicks in when space is tight. */
+        margin-bottom: 32px;
       }
 
       html.media-above .hero-badge {
@@ -1795,13 +1799,8 @@
         max-width: 280px;
       }
 
-      /* Push the subtitle clear of the logo on mobile (no longer absolutely
-         positioned). margin-top:auto in the desktop rule still applies and
-         keeps the text bottom-anchored, but this top margin guarantees a
-         minimum gap when the hero is short. */
       .hero-text {
         width: 100%;
-        margin-top: 24px;
       }
 
       .hero-subtitle {
