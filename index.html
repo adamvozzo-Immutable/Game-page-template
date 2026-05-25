@@ -387,6 +387,8 @@
        stays at the very top via order:-2. */
     .hero-text .cta-row {
       order: -1;
+      margin-top: 0;
+      margin-bottom: 48px;
     }
 
     .cta-card-view .reward-media {
@@ -395,6 +397,14 @@
     .cta-card-view .card-cta,
     .cta-card-view .card-cta-link {
       order: -1;
+      /* Breathing room between the button and the heading + body below it */
+      margin-bottom: 14px;
+    }
+
+    /* Pull the heading tight against the body so the text reads as a single
+       block sitting beneath the action, rather than three equal-spaced rows. */
+    .cta-card-view .cta-card-heading {
+      margin-bottom: -4px;
     }
 
     /* In Rewards mode, push the cta-row down (which pulls the rest of
