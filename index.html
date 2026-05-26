@@ -21,6 +21,11 @@
       --brand: #E83382;
       --brand-rgb: 232, 51, 130;
       --brand-hover: #c52b6e;
+      /* Height to reserve for everything around the trailer/gallery
+         (nav + paddings + subtitle + CTA row + footer). JS bumps this
+         up when body text / hero stack / motivation cards are enabled
+         so the media auto-shrinks before the CTAs leave the viewport. */
+      --hero-reserve: 460px;
     }
     html.theme-bear {
       --brand: #E11D1D;
@@ -263,8 +268,26 @@
       width: 380px;
     }
 
-    .hero-text {
+    /* Hero stage is a logical wrapper for the headline + trailer/gallery
+       row. display:contents in vertical mode so its children participate
+       directly in .hero's flex column (preserving the existing flow);
+       flips to flex-row when html.hero-horizontal kicks in. */
+    .hero-stage {
+      display: contents;
+    }
+
+    /* Headline (subtitle + tagline) anchors the bottom of the hero in
+       vertical mode via margin-top:auto, just like .hero-text used to.
+       The CTA / cards / strip group below it follows naturally. */
+    .hero-headline {
       margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-text {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -519,6 +542,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       line-height: 1;
+      white-space: nowrap;
       transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
     }
 
@@ -623,10 +647,12 @@
        overlay-locked until the Email card finishes its flow. */
     /* .cta-card.progression-cards-only — compound selector matches the
        same specificity as the later .cta-card { display: flex } rule, so
-       the card stays hidden outside progression-cards mode regardless of
-       source order. */
+       the card stays hidden outside the 3-card layout regardless of
+       source order. Both Rewards-progression-cards and CVP-cards opt
+       in via their own class. */
     .cta-card.progression-cards-only { display: none; }
-    html.progression-cards .cta-card.progression-cards-only {
+    html.progression-cards .cta-card.progression-cards-only,
+    html.cvp-cards .cta-card.progression-cards-only {
       display: flex;
     }
 
@@ -638,8 +664,30 @@
     html.rewards #card-email[data-state="prompt"] .cta-card-view-reward {
       display: none;
     }
+    /* CVP-cards swaps in the no-reward-image generic prompt for the
+       email card and suppresses the rewards-flavoured one. */
+    .cta-card-view-prompt-cvp { display: none; }
+    html.cvp-cards #card-email[data-state="prompt"] .cta-card-view-prompt {
+      display: none;
+    }
+    html.cvp-cards #card-email[data-state="prompt"] .cta-card-view-prompt-cvp {
+      display: flex;
+    }
+    /* In CVP-cards, the wishlist/discord cards keep their generic CVP
+       prompts (no reward-image), so make sure rewards-mode's
+       prompt→reward swap doesn't bleed through. */
+    html.cvp-cards #card-wishlist[data-state="prompt"] .cta-card-view-prompt,
+    html.cvp-cards #card-discord[data-state="prompt"] .cta-card-view-prompt {
+      display: flex;
+    }
+    html.cvp-cards #card-wishlist[data-state="prompt"] .cta-card-view-reward,
+    html.cvp-cards #card-discord[data-state="prompt"] .cta-card-view-reward {
+      display: none;
+    }
     html.progression-cards #card-wishlist,
-    html.progression-cards #card-discord {
+    html.progression-cards #card-discord,
+    html.cvp-cards #card-wishlist,
+    html.cvp-cards #card-discord {
       display: flex;
     }
     /* While the email prerequisite is incomplete, just lock the action
@@ -647,11 +695,15 @@
        see what they're working toward. The card-lock-overlay sits
        exactly where the button is and blocks clicks. */
     html.progression-cards:not(.email-done) #card-wishlist .card-cta,
-    html.progression-cards:not(.email-done) #card-discord .card-cta {
+    html.progression-cards:not(.email-done) #card-discord .card-cta,
+    html.cvp-cards:not(.email-done) #card-wishlist .card-cta,
+    html.cvp-cards:not(.email-done) #card-discord .card-cta {
       visibility: hidden;
     }
     html.progression-cards:not(.email-done) #card-wishlist .card-lock-overlay,
-    html.progression-cards:not(.email-done) #card-discord .card-lock-overlay {
+    html.progression-cards:not(.email-done) #card-discord .card-lock-overlay,
+    html.cvp-cards:not(.email-done) #card-wishlist .card-lock-overlay,
+    html.cvp-cards:not(.email-done) #card-discord .card-lock-overlay {
       display: flex;
     }
 
@@ -782,8 +834,8 @@
       flex-shrink: 0;
       margin-top: auto;
       margin-bottom: 40px;
-      width: min(760px, calc((100vh - 560px) * 1.4), calc(100vw - 160px));
-      min-width: 420px;
+      width: min(760px, calc((100vh - var(--hero-reserve)) * 1.4), calc(100vw - 160px));
+      min-width: 320px;
     }
 
     .gallery-cvp {
@@ -864,8 +916,8 @@
        the hero (no spare space, scrollable mode), the gap above the trailer
        (hero padding-top) and the gap below it (this margin-bottom) stay equal. */
     .trailer-embed {
-      width: min(760px, calc((100vh - 560px) * 16 / 9), calc(100vw - 160px));
-      min-width: 360px;
+      width: min(760px, calc((100vh - var(--hero-reserve)) * 16 / 9), calc(100vw - 160px));
+      min-width: 280px;
       flex-shrink: 0;
       margin-top: auto;
       margin-bottom: 40px;
@@ -969,6 +1021,17 @@
       color: rgba(255, 255, 255, 0.78);
       user-select: none;
     }
+    /* Stacked subsub toggles (e.g., Progression flow + Limited stock)
+       need their own breathing room so they don't collide with the
+       preceding radio row or toggle. */
+    .demo-subsub-toggle + .demo-subsub-toggle,
+    .demo-subsub-layout + .demo-subsub-toggle {
+      margin-top: 12px;
+    }
+    /* Stock toggle is irrelevant unless the cards layout (progression-
+       cards) is in play — hide it everywhere else. */
+    .stock-toggle { display: none; }
+    .stock-toggle.visible { display: flex; }
 
     .demo-subsub-toggle input[type="checkbox"] {
       accent-color: var(--brand);
@@ -1044,6 +1107,25 @@
       width: 18px;
       height: 18px;
       flex-shrink: 0;
+    }
+
+    /* Icons-only mode: drop the text label and grow the SVG so each
+       link has a comfortable touch-target size on mobile + tablet.
+       Parent padding-vertical is trimmed by the same amount the link
+       padding adds, so the footer's overall height stays put. */
+    html.social-icons-only .social-link span {
+      display: none;
+    }
+    html.social-icons-only .social-link {
+      padding: 10px;
+    }
+    html.social-icons-only .social-icon {
+      width: 26px;
+      height: 26px;
+    }
+    html.social-icons-only .social-links {
+      padding-top: 30px;
+      padding-bottom: 30px;
     }
 
     /* ===== Feature toggle helper ===== */
@@ -1335,17 +1417,34 @@
       left: 20px;
       z-index: 999;
       width: 260px;
+      /* Cap to the visible viewport minus space for the trigger button
+         + a 20px breathing margin so the panel never bleeds off-screen
+         on short browsers. Internal overflow becomes scrollable. */
+      max-height: calc(100vh - 76px);
       background: rgba(10, 8, 18, 0.92);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
       /* hidden by default */
       opacity: 0;
       pointer-events: none;
       transform: translateY(6px);
       transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    /* Slim scrollbar so it doesn't crowd the panel content. */
+    .demo-panel::-webkit-scrollbar { width: 6px; }
+    .demo-panel::-webkit-scrollbar-track { background: transparent; }
+    .demo-panel::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 3px;
+    }
+    .demo-panel::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
 
     .demo-panel.open {
@@ -1523,7 +1622,6 @@
     .cta-card {
       flex: 1;
       max-width: 320px;
-      min-height: 200px;
       padding: 20px 22px;
       background: rgba(20, 18, 36, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -1565,10 +1663,15 @@
     .reward-stock-num.is-ticking {
       opacity: 0.7;
     }
-    /* Only show in rewards mode — generic-CVP cards don't have a finite
-       supply to advertise. */
-    html:not(.rewards) .reward-stock-tag {
+    /* Only show when the Limited Stock sub-sub-toggle is on (which is
+       itself only reachable inside Motivation → Rewards). The
+       generic-CVP card style has no scarcity story to tell, so we
+       never surface the tag there. */
+    .reward-stock-tag {
       display: none;
+    }
+    html.rewards.stock .reward-stock-tag {
+      display: inline-block;
     }
 
     .cta-card-view {
@@ -1633,10 +1736,18 @@
     html.rewards .cta-card-view-linking .reward-media,
     html.rewards .cta-card-view-success .reward-media { display: flex; }
 
-    /* In rewards-success the image is the celebration; drop the redundant
-       check icon so the card doesn't read as image + tick + heading. */
-    html.rewards .cta-card-view-success .card-success-icon {
+    /* Standalone circular success icon is replaced by an inline tick
+       next to the heading (see .cta-card-view-success .cta-card-heading
+       ::before below), so hide it everywhere. */
+    .cta-card-view-success .card-success-icon {
       display: none;
+    }
+    /* Inline tick prefixed on the success heading, themed via colour. */
+    .cta-card-view-success .cta-card-heading::before {
+      content: '\2713';
+      margin-right: 8px;
+      color: var(--brand);
+      font-weight: 700;
     }
 
     /* ===== Success state — rotating gradient border + interior glow =====
@@ -1664,9 +1775,9 @@
       background: conic-gradient(
         from var(--success-angle, 0deg),
         rgba(var(--brand-rgb), 0) 0deg,
-        rgba(var(--brand-rgb), 0.95) 60deg,
-        rgba(255, 195, 220, 0.85) 80deg,
-        rgba(var(--brand-rgb), 0.55) 110deg,
+        rgba(var(--brand-rgb), 0.7) 60deg,
+        rgba(255, 200, 220, 0.5) 80deg,
+        rgba(var(--brand-rgb), 0.35) 110deg,
         rgba(var(--brand-rgb), 0) 160deg,
         rgba(var(--brand-rgb), 0) 360deg
       );
@@ -1684,25 +1795,27 @@
     }
 
     /* Soft pink wash that follows the stroke on the inside of the card.
-       inset:-12px pushes the bright arc into the overflow:hidden gutter
-       so most of the conic gradient's "core" is clipped, leaving only
-       the band closest to the card edge visible — that, paired with a
-       tighter blur, hugs the perimeter instead of bleeding into the
-       middle of the card. */
+       A radial mask fades the gradient to transparent across the
+       middle of the card, so the visible glow stays as a ring near
+       the perimeter instead of bleeding into the centre. Alpha is
+       also dropped from the previous values so the wash reads as a
+       gentle accent rather than a strong wash. */
     .cta-card[data-state="success"]::after {
       content: '';
       position: absolute;
-      inset: -12px;
+      inset: 0;
       border-radius: inherit;
       background: conic-gradient(
         from var(--success-angle, 0deg),
         rgba(var(--brand-rgb), 0) 0deg,
-        rgba(var(--brand-rgb), 0.75) 60deg,
-        rgba(var(--brand-rgb), 0.28) 110deg,
+        rgba(var(--brand-rgb), 0.38) 60deg,
+        rgba(var(--brand-rgb), 0.14) 110deg,
         rgba(var(--brand-rgb), 0) 170deg,
         rgba(var(--brand-rgb), 0) 360deg
       );
-      filter: blur(16px);
+      filter: blur(18px);
+      -webkit-mask: radial-gradient(ellipse 90% 90% at center, transparent 40%, black 85%);
+      mask: radial-gradient(ellipse 90% 90% at center, transparent 40%, black 85%);
       pointer-events: none;
       animation: orbit-success 6s linear infinite;
       z-index: 0;
@@ -2519,6 +2632,7 @@
         width: calc(100vw - 32px);
         left: 16px;
         bottom: 52px;
+        max-height: calc(100vh - 68px);
       }
     }
 
@@ -2529,11 +2643,95 @@
     /* Logo aspect is taller than the Forza wordmark — pull the badge size
        down so the SURVIVING wordmark doesn't dominate the hero. */
     html.theme-bear .hero-badge {
-      width: 480px;
+      width: 420px;
     }
     html.theme-bear.media-above .hero-badge,
     html.theme-bear.hero-bg .hero-badge {
-      width: 320px;
+      width: 240px;
+    }
+
+    /* Bear badge is much taller than the Forza wordmark at the same
+       width, so when media (trailer/gallery) is above the fold we need
+       extra padding-top on .hero so the badge has the same 40px gap
+       above the trailer that Forza enjoys (matching .trailer-embed's
+       margin-bottom). 82px = 40px target gap + 42px badge-extension
+       into the .hero zone (badge bottom 148 minus .hero top 106).
+       Desktop-only because mobile pushes the badge into flow and
+       uses its own padding stack. */
+    @media (min-width: 721px) {
+      html.theme-bear.media-above .hero {
+        padding-top: 82px;
+      }
+    }
+
+    /* ===== Hero — horizontal lockup =====
+       Triggered by JS (html.hero-horizontal) when the viewport is wide
+       enough but too short for the stacked layout to keep the trailer
+       at a usable size. Only the .hero-stage (headline + trailer/
+       gallery) flips to a two-column row; the CTA / cards / strip
+       group inside .hero-text stays full-width below. */
+    html.hero-horizontal .hero-stage {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 56px;
+      width: 100%;
+    }
+    html.hero-horizontal .hero-headline {
+      order: 1;
+      flex: 0 1 480px;
+      max-width: 480px;
+      align-items: flex-start;
+      text-align: left;
+      margin-top: 0;
+    }
+    /* Tagline carries its own text-align:center for the stacked layout,
+       so re-align to left when locked next to the media. */
+    html.hero-horizontal .hero-headline .hero-tagline {
+      text-align: left;
+    }
+    /* Gallery in horizontal mode: featured on the left, thumbs as a
+       vertical column on the right (matches Steam's wide layout).
+       Thumbs sized so they cap the right column at a reasonable width
+       and inherit the featured image's full height. */
+    html.hero-horizontal .screenshot-gallery {
+      flex-direction: row;
+      align-items: stretch;
+    }
+    html.hero-horizontal .screenshot-gallery .gallery-featured {
+      flex: 1 1 auto;
+      width: auto;
+    }
+    html.hero-horizontal .screenshot-gallery .gallery-thumbs {
+      flex: 0 0 88px;
+      flex-direction: column;
+    }
+    html.hero-horizontal .screenshot-gallery .gallery-thumb {
+      flex: 1;
+      width: 100%;
+    }
+    html.hero-horizontal .trailer-embed,
+    html.hero-horizontal .screenshot-gallery {
+      order: 2;
+      margin-top: 0;
+      margin-bottom: 0;
+      flex-shrink: 0;
+      /* Sized purely off the available width since vertical room is
+         no longer the constraint. */
+      width: min(620px, calc(50vw - 80px));
+      min-width: 320px;
+    }
+    /* The hero gains a bit of breathing top-padding for the badge in
+       horizontal mode (badge is otherwise centered above an empty
+       gap between the two columns). */
+    html.hero-horizontal .hero {
+      padding-top: 130px;
+    }
+    /* Trim the gap above the CTA group so it doesn't float away from
+       the lockup row when the stage shrinks. */
+    html.hero-horizontal .hero-text {
+      margin-top: 24px;
     }
 
     /* Pixel-art reward sprites: kill the cutout drop-shadow halo and use
@@ -2599,6 +2797,14 @@
       alt="Game Badge"
     />
 
+    <!-- Hero stage — contains the trailer/gallery + headline. Acts as a
+         display:contents passthrough in vertical mode so the existing
+         flex flow is preserved; flips to flex-row in horizontal lockup
+         mode to put the headline next to the media. The CTA / cards /
+         strip area sits outside this wrapper so it always stays full-
+         width below the stage. -->
+    <div class="hero-stage">
+
     <!-- Trailer embed — above fold -->
     <div id="trailer-hero" class="trailer-embed feat-hidden" aria-label="Game trailer">
       <div class="trailer-frame">
@@ -2650,11 +2856,16 @@
       </div>
     </div>
 
-    <div class="hero-text">
-      <h1 class="hero-subtitle" id="hero-subtitle">Experience Tokyo, Horizon's Largest Ever City</h1>
-      <p class="hero-tagline" id="hero-tagline">
+    <div class="hero-headline">
+      <h1 class="hero-subtitle" id="hero-subtitle" data-feature="hero-heading">Experience Tokyo, Horizon's Largest Ever City</h1>
+      <p class="hero-tagline" id="hero-tagline" data-feature="hero-body">
         Discover the breathtaking landscapes of Japan in over 550 real-world cars and become a racing legend in Forza Horizon's biggest open world driving adventure yet.
       </p>
+    </div>
+
+    </div><!-- /.hero-stage -->
+
+    <div class="hero-text">
 
       <!-- Progression hero-stack: 3 reward previews + flow icons. Visible
            only in html.progression mode (not in cards layout). The
@@ -2785,6 +2996,20 @@
               <span class="btn-label">Sign up for updates</span>
             </button>
           </div>
+          <!-- Generic CVP prompt — used when html.cvp-cards is active.
+               No reward image, generic copy that complements the
+               existing wishlist/discord CVP cards. -->
+          <div class="cta-card-view cta-card-view-prompt-cvp">
+            <h3 class="cta-card-heading" data-bear-text="Stay In The Realm">Stay In The Loop</h3>
+            <p class="cta-card-body" data-bear-text="Get patch notes, dev diaries, and launch alerts straight to your inbox.">Get news, dev diaries, and launch updates direct to your inbox.</p>
+            <button type="button" class="btn-primary card-cta" data-action="email">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" />
+              </svg>
+              <span class="btn-label">Sign up for updates</span>
+            </button>
+          </div>
           <div class="cta-card-view cta-card-view-success">
             <div class="reward-media reward-media-cutout">
               <img class="reward-image" src="./reward-supra.png" data-bear-src="./knight.png" alt="" loading="lazy" />
@@ -2810,7 +3035,7 @@
           </div>
           <div class="cta-card-view cta-card-view-prompt">
             <h3 class="cta-card-heading" data-bear-text="Be First Through the Gate">Be First in the Garage</h3>
-            <p class="cta-card-body" data-bear-text="Lock in launch-day alerts, claim early discounts, and feed Steam's recommendations for roguelike fans.">Lock in launch-day alerts, claim early discounts, and feed Steam's recommendations for racing fans.</p>
+            <p class="cta-card-body" data-bear-text="Lock in launch-day alerts, claim early discounts, and boost Steam's roguelike picks.">Lock in launch-day alerts, claim early discounts, and boost Steam's racing picks.</p>
             <button type="button" class="btn-primary card-cta" data-action="wishlist">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.391 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714 1.002 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949-.26-.626-.749-1.111-1.377-1.371-.624-.26-1.29-.249-1.878-.061l1.523.63c.956.4 1.409 1.5 1.009 2.456-.397.957-1.497 1.41-2.454 1.012zM18.247 8.91c0-1.652-1.345-2.995-2.995-2.995-1.65 0-2.996 1.343-2.996 2.995s1.345 2.995 2.996 2.995c1.65 0 2.995-1.343 2.995-2.995zm-5.241-.004c0-1.24 1.007-2.247 2.248-2.247s2.247 1.007 2.247 2.247c0 1.241-1.007 2.248-2.247 2.248-1.241 0-2.248-1.007-2.248-2.248z"/>
@@ -3196,6 +3421,28 @@
     </div>
   </label>
 
+  <label class="demo-option" for="feat-heading">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Heading</span>
+      <span class="demo-option-desc">Hero subtitle line</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-heading" checked />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
+  <label class="demo-option" for="feat-body">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Body text</span>
+      <span class="demo-option-desc">Hero tagline paragraph</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-body" checked />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
   <div class="demo-option-group">
     <label class="demo-option" for="feat-trailer">
       <div class="demo-option-text">
@@ -3281,16 +3528,27 @@
     </div>
   </div>
 
-  <label class="demo-option" for="feat-social">
-    <div class="demo-option-text">
-      <span class="demo-option-label">Social Links</span>
-      <span class="demo-option-desc">Has social accounts</span>
+  <div class="demo-option-group">
+    <label class="demo-option" for="feat-social">
+      <div class="demo-option-text">
+        <span class="demo-option-label">Social Links</span>
+        <span class="demo-option-desc">Has social accounts</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="feat-social" checked />
+        <span class="toggle-track"></span>
+      </div>
+    </label>
+    <div class="demo-suboption" id="social-suboption">
+      <span class="demo-suboption-label">Style</span>
+      <div class="demo-radio-group">
+        <label class="demo-radio">
+          <input type="checkbox" id="feat-social-icons-only" />
+          Icons only
+        </label>
+      </div>
     </div>
-    <div class="toggle-switch">
-      <input type="checkbox" id="feat-social" checked />
-      <span class="toggle-track"></span>
-    </div>
-  </label>
+  </div>
 
   <label class="demo-option" for="feat-legal">
     <div class="demo-option-text">
@@ -3352,6 +3610,16 @@
           Rewards
         </label>
       </div>
+      <!-- Cards layout — sub-sub-toggle for the Generic CVPs style.
+           When on, surfaces all 3 cards (sign-up + wishlist + discord)
+           with the wishlist/discord cards locked behind the sign-up
+           step, mirroring the Rewards progression-cards layout. -->
+      <div class="demo-subsub" id="cvp-subsub">
+        <label class="demo-subsub-toggle" for="feat-cvp-cards">
+          <span>Cards layout</span>
+          <input type="checkbox" id="feat-cvp-cards" />
+        </label>
+      </div>
       <!-- Progression — sub-sub-toggle only revealed when Rewards is the
            chosen motivation style. -->
       <div class="demo-subsub" id="progression-subsub">
@@ -3369,6 +3637,14 @@
             Cards
           </label>
         </div>
+        <!-- Stock counter — top-right "X,XXX remaining" tag on the
+             motivation cards. Only meaningful once the Cards layout
+             is selected (the strip-style hero stack has nowhere to
+             put the tag), so it stays hidden otherwise. -->
+        <label class="demo-subsub-toggle stock-toggle" for="feat-stock" id="stock-toggle">
+          <span>Limited stock</span>
+          <input type="checkbox" id="feat-stock" />
+        </label>
       </div>
     </div>
   </div>
@@ -3498,19 +3774,32 @@
 
   bindFeature('feat-studio-logo', 'studio-logo');
   bindFeature('feat-release-date', 'release-date');
+  bindFeature('feat-heading', 'hero-heading');
+  bindFeature('feat-body', 'hero-body');
   bindFeature('feat-updates', 'updates');
 
   // Social footer toggle — also updates html.no-social so the hero gets
   // extra padding-bottom when the socials aren't there to anchor things.
   var featSocial = document.getElementById('feat-social');
+  var featSocialIconsOnly = document.getElementById('feat-social-icons-only');
+  var socialSub = document.getElementById('social-suboption');
   function updateSocialState() {
     var on = featSocial.checked;
     document.querySelectorAll('[data-feature="social"]').forEach(function (el) {
       el.classList.toggle('feat-hidden', !on);
     });
     document.documentElement.classList.toggle('no-social', !on);
+    // Reveal the icons-only sub-option only while the social row is on.
+    if (socialSub) socialSub.classList.toggle('visible', on);
+    // Toggle html.social-icons-only — gated on the parent feature so
+    // the class doesn't linger when the whole row is off.
+    document.documentElement.classList.toggle(
+      'social-icons-only',
+      on && featSocialIconsOnly.checked
+    );
   }
   featSocial.addEventListener('change', updateSocialState);
+  featSocialIconsOnly.addEventListener('change', updateSocialState);
   updateSocialState();
 
   // Store-link toggle — hide when sign-in has happened, because the
@@ -3611,6 +3900,10 @@
     trailerSub.classList.toggle('visible', trailerOn);
     var descriptionSub = document.getElementById('description-suboption');
     if (descriptionSub) descriptionSub.classList.toggle('visible', descriptionOn);
+
+    // Whether media sits above the fold drives both the trailer/gallery
+    // reserve and the horizontal-lockup decision.
+    if (typeof syncHeroLayout === 'function') syncHeroLayout();
   }
 
   // Only one of trailer / screenshots can hold the above-fold slot.
@@ -3788,6 +4081,78 @@
     };
   })();
 
+  // ===== Hero vertical reserve =====
+  // Sets --hero-reserve so the height-bounded trailer / gallery widths
+  // shrink to keep the CTAs on-screen as more hero content turns on.
+  // Measures the actual rendered chrome (nav + headline + CTA group +
+  // footer) rather than guessing per-scenario, so any future add-on
+  // contributes automatically.
+  function updateHeroReserve() {
+    var headline = document.querySelector('.hero-headline');
+    var heroText = document.querySelector('.hero-text');
+    var nav      = document.querySelector('nav');
+    var footer   = document.querySelector('footer');
+    var hero     = document.querySelector('.hero');
+    if (!nav || !hero) return;
+    var navH      = nav.offsetHeight || 0;
+    var footerH   = (footer && footer.offsetWidth) ? footer.offsetHeight : 0;
+    var headlineH = headline ? headline.offsetHeight : 0;
+    var heroTextH = heroText ? heroText.offsetHeight : 0;
+    var cs = getComputedStyle(hero);
+    var heroPadTop = parseFloat(cs.paddingTop) || 0;
+    var heroPadBot = parseFloat(cs.paddingBottom) || 0;
+    // Trailer margin-bottom (40px) + a small breathing buffer (16px).
+    var reserve = navH + heroPadTop + headlineH + heroTextH + heroPadBot + footerH + 40 + 16;
+    document.documentElement.style.setProperty('--hero-reserve', reserve + 'px');
+  }
+
+  // ===== Hero layout mode (vertical ↔ horizontal lockup) =====
+  // When the stacked layout would crush the trailer/gallery below a
+  // usable size, switch to a side-by-side layout (headline left, media
+  // right). Only relevant when there *is* a trailer or gallery above
+  // the fold — without media the vertical layout has nothing to crush.
+  // Measurement is taken in vertical mode so the headline height isn't
+  // already wrapped by the narrow horizontal column.
+  var HORIZONTAL_MIN_WIDTH = 1000;
+  var MIN_TRAILER_H = 320; // trailer height below this triggers horizontal
+  function updateLayoutMode() {
+    var html = document.documentElement;
+    var trailerHero = document.getElementById('trailer-hero');
+    var galleryHero = document.getElementById('gallery-hero');
+    var trailerAbove = trailerHero && !trailerHero.classList.contains('feat-hidden');
+    var galleryAbove = galleryHero && !galleryHero.classList.contains('feat-hidden');
+    var hasMediaAbove = trailerAbove || galleryAbove;
+    if (!hasMediaAbove || window.innerWidth < HORIZONTAL_MIN_WIDTH) {
+      html.classList.remove('hero-horizontal');
+      return;
+    }
+    // Strip the horizontal class so the measurement reflects the
+    // vertical layout. Browsers re-layout synchronously on the next
+    // offsetHeight read.
+    if (html.classList.contains('hero-horizontal')) html.classList.remove('hero-horizontal');
+    var nav      = document.querySelector('nav');
+    var footer   = document.querySelector('footer');
+    var headline = document.querySelector('.hero-headline');
+    var heroText = document.querySelector('.hero-text');
+    var hero     = document.querySelector('.hero');
+    var cs = hero ? getComputedStyle(hero) : null;
+    var padT = cs ? parseFloat(cs.paddingTop) || 0 : 0;
+    var padB = cs ? parseFloat(cs.paddingBottom) || 0 : 0;
+    var navH      = nav ? nav.offsetHeight : 0;
+    var footerH   = (footer && footer.offsetWidth) ? footer.offsetHeight : 0;
+    var headlineH = headline ? headline.offsetHeight : 0;
+    var heroTextH = heroText ? heroText.offsetHeight : 0;
+    var verticalChrome = navH + padT + headlineH + heroTextH + padB + footerH + 40 + 16;
+    var fitsVertical = (verticalChrome + MIN_TRAILER_H) <= window.innerHeight;
+    html.classList.toggle('hero-horizontal', !fitsVertical);
+  }
+
+  function syncHeroLayout() {
+    updateLayoutMode();
+    updateHeroReserve();
+  }
+  window.addEventListener('resize', syncHeroLayout);
+
   // ===== Modal =====
   var modalOverlay = document.getElementById('modal-overlay');
   var modalCard    = document.getElementById('modal-card');
@@ -3907,6 +4272,9 @@
   var progLayoutHero  = document.getElementById('prog-layout-hero');
   var progLayoutCards = document.getElementById('prog-layout-cards');
   var cardEmail       = document.getElementById('card-email');
+  // CVP cards sub-sub-toggle (3-up gated layout for the Generic CVPs style).
+  var featCvpCards    = document.getElementById('feat-cvp-cards');
+  var cvpSubsub       = document.getElementById('cvp-subsub');
 
   var STEAM_URL   = 'https://store.steampowered.com/app/2483190/Forza_Horizon_6/';
   var DISCORD_URL = 'https://discord.gg/forza';
@@ -3929,6 +4297,11 @@
     // Rewards is a sub-mode of Motivation — only active when both are on
     var rewardsOn = motivationOn && mstyleRewards.checked;
     document.documentElement.classList.toggle('rewards', rewardsOn);
+    // Limited Stock — only meaningful when the cards layout is in
+    // play (progression-cards). The toggle UI and the html.stock
+    // class both gate on that, so the tags disappear whenever the
+    // user switches away from the cards layout.
+    var featStockEl = document.getElementById('feat-stock');
 
     // Progression is a sub-sub-mode of Rewards — the sub-sub UI is only
     // visible when the parent Rewards mode is selected, and its layout
@@ -3940,10 +4313,26 @@
     document.documentElement.classList.toggle('progression', progressionOn);
     document.documentElement.classList.toggle('progression-cards', progressionCards);
 
+    // Stock toggle UI + html.stock — only when cards layout is active.
+    var stockToggleEl = document.getElementById('stock-toggle');
+    stockToggleEl.classList.toggle('visible', progressionCards);
+    document.documentElement.classList.toggle('stock', progressionCards && featStockEl.checked);
+
+    // Cards layout is a sub-sub-mode of Generic CVPs — surfaces all 3
+    // cards with the wishlist/discord cards locked behind the sign-up
+    // step. Only meaningful in CVP mode; force off otherwise so the
+    // class doesn't linger when switching back to Rewards.
+    var cvpOn = motivationOn && mstyleCvp.checked;
+    cvpSubsub.classList.toggle('visible', cvpOn);
+    var cvpCardsOn = cvpOn && featCvpCards.checked;
+    document.documentElement.classList.toggle('cvp-cards', cvpCardsOn);
+
     // Reset the per-flow done state any time the scenario changes, so
     // the locked previews / card overlays / strip success states reflect
-    // a fresh demo state.
-    if (!progressionOn) {
+    // a fresh demo state. Applies whenever NEITHER 3-card-gated layout
+    // (progression-cards or cvp-cards) nor the hero-stack progression
+    // is active.
+    if (!progressionOn && !cvpCardsOn) {
       document.documentElement.classList.remove('email-done');
       if (cardEmail) cardEmail.setAttribute('data-state', 'prompt');
       document.querySelectorAll('.progression-strip .progression-item').forEach(function (item) {
@@ -3966,12 +4355,12 @@
 
     var ctaRow = document.querySelector('.hero-text .cta-row');
 
-    // In progression-cards mode the email card replaces the hero CTA as
-    // the sign-up entry point, so we need the cards container visible
-    // before sign-in (the rest of the cards stay locked behind the
-    // email step). Also hide the cta-row so its margin doesn't push the
-    // cards down.
-    if (progressionCards) {
+    // 3-card gated layout (progression-cards OR cvp-cards) — the email
+    // card replaces the hero CTA as the sign-up entry point, so we
+    // need the cards container visible pre-sign-in (the other cards
+    // stay locked behind the email step). Hide the cta-row so its
+    // margin doesn't push the cards down.
+    if (progressionCards || cvpCardsOn) {
       ctaCards.classList.remove('feat-hidden');
       if (ctaRow) ctaRow.classList.add('feat-hidden');
       return;
@@ -4010,6 +4399,19 @@
   featProgression.addEventListener('change', updateCtaState);
   progLayoutHero.addEventListener('change', updateCtaState);
   progLayoutCards.addEventListener('change', updateCtaState);
+  document.getElementById('feat-stock').addEventListener('change', updateCtaState);
+  featCvpCards.addEventListener('change', updateCtaState);
+
+  // Recompute the media reserve + horizontal/vertical lockup whenever
+  // a scenario that affects hero height changes. Bound after the
+  // updateCtaState handlers so it observes the post-change state.
+  ['feat-motivation', 'mstyle-cvp', 'mstyle-rewards', 'feat-progression',
+   'prog-layout-hero', 'prog-layout-cards', 'feat-cvp-cards',
+   'feat-body', 'feat-heading'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', syncHeroLayout);
+  });
+  syncHeroLayout();
 
   var signInTimers = [];
   function clearSignInTimers() {
@@ -4061,6 +4463,7 @@
           pendingProgressionAction = null;
           updateCtaState();
           updateStoreState();
+          syncHeroLayout();
         }, 350));
       });
     }, 1400));
