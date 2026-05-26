@@ -394,11 +394,11 @@
 
     html.progression:not(.progression-cards) .hero-text .progression-strip {
       display: flex;
-      gap: 18px;
+      gap: 32px;
       justify-content: center;
       align-items: flex-end;
-      margin-top: 12px;
-      margin-bottom: 8px;
+      margin-top: 24px;
+      margin-bottom: 20px;
     }
 
     /* When the strip is in play, slacken the desktop reward-CTA push-down
@@ -420,11 +420,11 @@
        look is driven by image + caption + tag. */
     .progression-item {
       position: relative;
-      flex: 0 1 150px;
+      flex: 0 1 240px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       padding: 0;
       background: transparent;
       border: 0;
@@ -444,8 +444,9 @@
        remains just to lock layout dimensions. */
     .progression-image-frame {
       position: relative;
-      width: 150px;
-      height: 84px;
+      width: 100%;
+      max-width: 240px;
+      height: 150px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -467,11 +468,11 @@
 
     .progression-caption {
       font-family: 'Inter', sans-serif;
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 500;
-      letter-spacing: 0.06em;
-      line-height: 14px;
-      color: rgba(255, 255, 255, 0.88);
+      letter-spacing: 0.04em;
+      line-height: 18px;
+      color: rgba(255, 255, 255, 0.92);
       text-align: center;
     }
 
@@ -480,24 +481,24 @@
     .progression-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
+      gap: 8px;
+      padding: 8px 14px;
       border-radius: 999px;
       background: rgba(20, 18, 36, 0.78);
       border: 1px solid rgba(255, 255, 255, 0.16);
       color: rgba(255, 255, 255, 0.92);
       font-family: 'Inter', sans-serif;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       line-height: 1;
       transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
     }
 
     .progression-tag svg {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       display: block;
     }
 
@@ -548,14 +549,35 @@
     @media (max-width: 720px) {
       html.progression:not(.progression-cards) .hero-text .progression-strip {
         gap: 10px;
+        margin-top: 16px;
+        margin-bottom: 12px;
       }
+      /* flex:1 1 0 (not just flex-basis:0) so flex-grow kicks in and the
+         three items split the available width evenly; without grow they
+         collapse to min-content and stack on top of each other. */
       .progression-item {
-        flex-basis: 0;
+        flex: 1 1 0;
         min-width: 0;
+        gap: 8px;
       }
       .progression-image-frame {
         width: 100%;
-        height: 72px;
+        max-width: none;
+        height: 88px;
+      }
+      .progression-caption {
+        font-size: 11px;
+        line-height: 14px;
+      }
+      .progression-tag {
+        font-size: 10px;
+        padding: 6px 9px;
+        gap: 5px;
+        letter-spacing: 0.06em;
+      }
+      .progression-tag svg {
+        width: 12px;
+        height: 12px;
       }
     }
 
