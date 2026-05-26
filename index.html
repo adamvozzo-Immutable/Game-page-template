@@ -1789,6 +1789,51 @@
       margin-bottom: 24px;
     }
 
+    /* Modal reward preview — replaces the wordmark logo with the
+       Founder's Supra preview when rewards + progression is active. */
+    .modal-reward-preview {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    html.rewards.progression .modal-reward-preview {
+      display: flex;
+    }
+
+    html.rewards.progression .modal-view-form .modal-logo {
+      display: none;
+    }
+
+    .modal-reward-image-frame {
+      width: 100%;
+      height: 132px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at center, rgba(232, 51, 130, 0.22) 0%, rgba(20, 18, 36, 0) 70%);
+      border-radius: 6px;
+    }
+
+    .modal-reward-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55));
+    }
+
+    .modal-reward-caption {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(232, 51, 130, 0.92);
+    }
+
     .modal-title {
       font-family: 'Rajdhani', sans-serif;
       font-weight: 700;
@@ -2413,8 +2458,8 @@
     </div>
 
     <div class="hero-text">
-      <h1 class="hero-subtitle">Experience Tokyo, Horizon's Largest Ever City</h1>
-      <p class="hero-tagline">
+      <h1 class="hero-subtitle" id="hero-subtitle">Experience Tokyo, Horizon's Largest Ever City</h1>
+      <p class="hero-tagline" id="hero-tagline">
         Discover the breathtaking landscapes of Japan in over 550 real-world cars and become a racing legend in Forza Horizon's biggest open world driving adventure yet.
       </p>
 
@@ -3110,6 +3155,14 @@
         src="./modal-logo.svg"
         alt="Game Logo"
       />
+      <!-- Reward preview — only shown in rewards + progression mode so the
+           user sees the Founder's Supra Livery they're signing up to claim. -->
+      <div class="modal-reward-preview" aria-hidden="true">
+        <div class="modal-reward-image-frame">
+          <img src="./reward-supra.png" alt="" />
+        </div>
+        <span class="modal-reward-caption">Founder's Supra Livery</span>
+      </div>
       <h2 class="modal-title" id="modal-title">Get Updates</h2>
       <p class="modal-sub" id="modal-sub">Sign up for news, dev diaries, and release updates direct to your inbox.</p>
 
@@ -3513,6 +3566,23 @@
   var mstyleRewards  = document.getElementById('mstyle-rewards');
   var modalTitle    = document.getElementById('modal-title');
   var modalSub      = document.getElementById('modal-sub');
+  var heroSubtitle  = document.getElementById('hero-subtitle');
+  var heroTagline   = document.getElementById('hero-tagline');
+
+  // Default hero copy, captured up front so we can restore it when the
+  // user toggles out of rewards mode.
+  var HERO_COPY_DEFAULT = {
+    subtitle: heroSubtitle.textContent,
+    tagline: heroTagline.textContent.trim()
+  };
+  var HERO_COPY_REWARDS = {
+    subtitle: 'Become a Founder',
+    tagline: "Wishlist on Steam and link your Discord before launch to lock in Founder-only rewards — the Founder's Livery Pack and Ferrari J50, never sold again."
+  };
+  var HERO_COPY_PROGRESSION = {
+    subtitle: 'Become a Founder',
+    tagline: "Sign up, wishlist on Steam, and join Discord before launch to claim the Founder's Supra Livery, Founder's Livery Pack, and Ferrari J50 — never sold again."
+  };
 
   // Progression sub-sub-toggle controls
   var featProgression = document.getElementById('feat-progression');
@@ -3584,6 +3654,15 @@
     setButtonLabel(btnGetStarted, ctaLabel);
     modalTitle.textContent = modalTitleCopy;
     modalSub.textContent = modalSubCopy;
+
+    // Hero subtitle/tagline reframe — hype the Founder rewards when
+    // rewards mode is active. Progression mode gets the 3-reward
+    // variant; non-progression rewards mode gets the 2-reward variant.
+    var heroCopy = HERO_COPY_DEFAULT;
+    if (progressionOn) heroCopy = HERO_COPY_PROGRESSION;
+    else if (rewardsOn) heroCopy = HERO_COPY_REWARDS;
+    heroSubtitle.textContent = heroCopy.subtitle;
+    heroTagline.textContent = heroCopy.tagline;
 
     // In progression-cards mode the email card replaces the hero CTA as
     // the sign-up entry point, so we need the cards container visible
