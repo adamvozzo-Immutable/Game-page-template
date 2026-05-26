@@ -1463,21 +1463,26 @@
       z-index: 2;
     }
 
-    /* Soft pink wash that follows the stroke on the inside of the card */
+    /* Soft pink wash that follows the stroke on the inside of the card.
+       inset:-12px pushes the bright arc into the overflow:hidden gutter
+       so most of the conic gradient's "core" is clipped, leaving only
+       the band closest to the card edge visible — that, paired with a
+       tighter blur, hugs the perimeter instead of bleeding into the
+       middle of the card. */
     .cta-card[data-state="success"]::after {
       content: '';
       position: absolute;
-      inset: 0;
+      inset: -12px;
       border-radius: inherit;
       background: conic-gradient(
         from var(--success-angle, 0deg),
         rgba(232, 51, 130, 0) 0deg,
-        rgba(232, 51, 130, 0.55) 60deg,
-        rgba(232, 51, 130, 0.18) 110deg,
+        rgba(232, 51, 130, 0.75) 60deg,
+        rgba(232, 51, 130, 0.28) 110deg,
         rgba(232, 51, 130, 0) 170deg,
         rgba(232, 51, 130, 0) 360deg
       );
-      filter: blur(30px);
+      filter: blur(16px);
       pointer-events: none;
       animation: orbit-success 6s linear infinite;
       z-index: 0;
