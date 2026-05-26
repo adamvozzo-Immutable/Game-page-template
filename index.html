@@ -508,20 +508,32 @@
       color: #ffffff;
     }
 
+    .progression-tag-linking,
     .progression-tag-success { display: none; }
 
-    /* Per-step success: hide the default tag, show the success tag, and
-       wrap the image frame in the same rotating pink gradient used on
-       motivation-card success states. */
-    html.email-done .progression-item[data-step="email"] .progression-tag-default,
-    html.steam-done .progression-item[data-step="steam"] .progression-tag-default,
-    html.discord-done .progression-item[data-step="discord"] .progression-tag-default {
+    /* Per-tile state machine: prompt → linking → done. State drives
+       which tag variant is visible and the image's halo treatment. */
+    .progression-item[data-step-state="linking"] .progression-tag-default,
+    .progression-item[data-step-state="done"] .progression-tag-default {
       display: none;
     }
 
-    html.email-done .progression-item[data-step="email"] .progression-tag-success,
-    html.steam-done .progression-item[data-step="steam"] .progression-tag-success,
-    html.discord-done .progression-item[data-step="discord"] .progression-tag-success {
+    /* Linking — first click opened the URL, second click confirms. The
+       tag goes hot pink + pulses to make the next action obvious. */
+    .progression-item[data-step-state="linking"] .progression-tag-linking {
+      display: inline-flex;
+      background: rgba(232, 51, 130, 0.88);
+      border-color: rgba(232, 51, 130, 1);
+      color: #ffffff;
+      animation: pulse-link-tag 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse-link-tag {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232, 51, 130, 0.4); }
+      50%      { box-shadow: 0 0 22px 2px rgba(232, 51, 130, 0.6); }
+    }
+
+    .progression-item[data-step-state="done"] .progression-tag-success {
       display: inline-flex;
       background: rgba(232, 51, 130, 0.22);
       border-color: rgba(232, 51, 130, 0.75);
@@ -531,9 +543,7 @@
     /* Success: pulse a pink halo around the car silhouette via
        drop-shadow on the image itself (follows the cutout, not the
        bounding rect). */
-    html.email-done .progression-item[data-step="email"] .progression-image,
-    html.steam-done .progression-item[data-step="steam"] .progression-image,
-    html.discord-done .progression-item[data-step="discord"] .progression-image {
+    .progression-item[data-step-state="done"] .progression-image {
       animation: pulse-progression-success 2.4s ease-in-out infinite;
     }
 
@@ -2473,7 +2483,7 @@
            email step is unlocked initially; steam/discord unlock after
            the sign-up modal succeeds (html.email-done). -->
       <div class="progression-strip" id="progression-strip">
-        <button type="button" class="progression-item" data-step="email" aria-label="Sign up to claim Supra livery">
+        <button type="button" class="progression-item" data-step="email" data-step-state="prompt" aria-label="Sign up to claim Supra livery">
           <span class="progression-image-frame">
             <img class="progression-image" src="./reward-supra.png" alt="" />
           </span>
@@ -2492,7 +2502,7 @@
             <span>Signed up</span>
           </span>
         </button>
-        <button type="button" class="progression-item" data-step="steam" aria-label="Wishlist on Steam to claim Founder's Livery Pack">
+        <button type="button" class="progression-item" data-step="steam" data-step-state="prompt" aria-label="Wishlist on Steam to claim Founder's Livery Pack">
           <span class="progression-image-frame">
             <img class="progression-image" src="./reward-livery.png" alt="" />
           </span>
@@ -2503,6 +2513,13 @@
             </svg>
             <span>Wishlist</span>
           </span>
+          <span class="progression-tag progression-tag-linking">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 14a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.41 5.6" />
+              <path d="M14 10a5 5 0 0 0-7.07 0L4.1 12.83a5 5 0 0 0 7.07 7.07L12.59 18.4" />
+            </svg>
+            <span>Link Steam</span>
+          </span>
           <span class="progression-tag progression-tag-success">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12l5 5L20 7" />
@@ -2510,7 +2527,7 @@
             <span>Wishlisted</span>
           </span>
         </button>
-        <button type="button" class="progression-item" data-step="discord" aria-label="Join Discord to claim Ferrari J50">
+        <button type="button" class="progression-item" data-step="discord" data-step-state="prompt" aria-label="Join Discord to claim Ferrari J50">
           <span class="progression-image-frame">
             <img class="progression-image" src="./reward-ferrari.png" alt="" />
           </span>
@@ -2520,6 +2537,13 @@
               <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
             </svg>
             <span>Join Discord</span>
+          </span>
+          <span class="progression-tag progression-tag-linking">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 14a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.41 5.6" />
+              <path d="M14 10a5 5 0 0 0-7.07 0L4.1 12.83a5 5 0 0 0 7.07 7.07L12.59 18.4" />
+            </svg>
+            <span>Link Discord</span>
           </span>
           <span class="progression-tag progression-tag-success">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -3582,11 +3606,11 @@
   };
   var HERO_COPY_REWARDS = {
     subtitle: 'Become a Founder',
-    tagline: "Wishlist on Steam and link your Discord before launch to lock in Founder-only rewards — the Founder's Livery Pack and Ferrari J50, never sold again."
+    tagline: 'Sign up, wishlist on Steam, and join the community on Discord before launch to claim pre-release exclusives.'
   };
   var HERO_COPY_PROGRESSION = {
     subtitle: 'Become a Founder',
-    tagline: "Sign up, wishlist on Steam, and join Discord before launch to claim the Founder's Supra Livery, Founder's Livery Pack, and Ferrari J50 — never sold again."
+    tagline: 'Sign up, wishlist on Steam, and join the community on Discord before launch to claim pre-release exclusives.'
   };
 
   // Progression sub-sub-toggle controls
@@ -3634,9 +3658,10 @@
     // a fresh demo state.
     if (!progressionOn) {
       document.documentElement.classList.remove('email-done');
-      document.documentElement.classList.remove('steam-done');
-      document.documentElement.classList.remove('discord-done');
       if (cardEmail) cardEmail.setAttribute('data-state', 'prompt');
+      document.querySelectorAll('.progression-strip .progression-item').forEach(function (item) {
+        item.setAttribute('data-step-state', 'prompt');
+      });
       pendingProgressionAction = null;
     }
 
@@ -3748,14 +3773,20 @@
               fireCardConfetti(cardEmail);
             }
           }
+          // Mark the email hero-stack tile as done.
+          var emailTile = document.querySelector('.progression-item[data-step="email"]');
+          if (emailTile) emailTile.setAttribute('data-step-state', 'done');
+
           // Execute the queued progression action (set by clicking a
-          // locked steam/discord tile before signing in).
-          if (pendingProgressionAction === 'steam') {
-            openSteam();
-            document.documentElement.classList.add('steam-done');
-          } else if (pendingProgressionAction === 'discord') {
-            openDiscord();
-            document.documentElement.classList.add('discord-done');
+          // locked steam/discord tile before signing in). The tile lands
+          // in "linking" state — the user still needs to confirm with a
+          // second click, matching the cards' two-step pattern.
+          if (pendingProgressionAction === 'steam' || pendingProgressionAction === 'discord') {
+            var action = pendingProgressionAction;
+            if (action === 'steam') openSteam();
+            else openDiscord();
+            var queuedTile = document.querySelector('.progression-item[data-step="' + action + '"]');
+            if (queuedTile) queuedTile.setAttribute('data-step-state', 'linking');
           }
           pendingProgressionAction = null;
           updateCtaState();
@@ -3897,34 +3928,37 @@
   });
 
   // ===== Progression hero-stack tile clicks =====
-  // Each tile maps to one step. Steam/Discord clicks before email-done
-  // queue a pending action and open the email modal first.
+  // Mirrors the cards' two-step flow: first click opens the target,
+  // second click confirms. Steam/Discord before email-done queue a
+  // pending action and open the email modal first.
   document.querySelectorAll('.progression-strip .progression-item').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var step = btn.getAttribute('data-step');
+      var state = btn.getAttribute('data-step-state') || 'prompt';
       var html = document.documentElement;
-      // Already-done step — no-op (could re-open the URL, but quieter to skip).
-      if (html.classList.contains(step + '-done')) return;
 
+      if (state === 'done') return; // already complete — no-op
+
+      // Email tile: single transition handled by the modal flow.
       if (step === 'email') {
         openModal();
         return;
       }
 
-      // Steam/Discord before email-done: queue action, open email modal.
+      // Steam/Discord before email-done: queue action, open modal.
       if (!html.classList.contains('email-done')) {
         pendingProgressionAction = step;
         openModal();
         return;
       }
 
-      // Email already done — execute the step directly.
-      if (step === 'steam') {
-        openSteam();
-        html.classList.add('steam-done');
-      } else if (step === 'discord') {
-        openDiscord();
-        html.classList.add('discord-done');
+      // Email is done — two-step confirmation flow.
+      if (state === 'prompt') {
+        if (step === 'steam') openSteam();
+        else if (step === 'discord') openDiscord();
+        btn.setAttribute('data-step-state', 'linking');
+      } else if (state === 'linking') {
+        btn.setAttribute('data-step-state', 'done');
       }
     });
   });
