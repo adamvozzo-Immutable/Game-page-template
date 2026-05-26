@@ -1416,19 +1416,18 @@
       bottom: 56px;
       left: 20px;
       z-index: 999;
-      width: 260px;
+      width: 280px;
       /* Cap to the visible viewport minus space for the trigger button
          + a 20px breathing margin so the panel never bleeds off-screen
-         on short browsers. Internal overflow becomes scrollable. */
+         on short browsers. The sliding view wrapper holds its own
+         scroll, so the panel itself just hides overflow. */
       max-height: calc(100vh - 76px);
       background: rgba(10, 8, 18, 0.92);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      overflow-y: auto;
-      overflow-x: hidden;
-      overscroll-behavior: contain;
+      overflow: hidden;
       /* hidden by default */
       opacity: 0;
       pointer-events: none;
@@ -1436,15 +1435,191 @@
       transition: opacity 0.18s ease, transform 0.18s ease;
     }
 
+    /* Sliding views wrapper — two stacked views side-by-side on the X
+       axis; transform shifts between them. */
+    .demo-views {
+      display: flex;
+      flex-direction: row;
+      width: 200%;
+      transform: translateX(0);
+      transition: transform 0.25s ease;
+    }
+    .demo-panel.show-advanced .demo-views {
+      transform: translateX(-50%);
+    }
+
+    .demo-view {
+      width: 50%;
+      flex-shrink: 0;
+      max-height: calc(100vh - 76px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+    }
+
     /* Slim scrollbar so it doesn't crowd the panel content. */
-    .demo-panel::-webkit-scrollbar { width: 6px; }
-    .demo-panel::-webkit-scrollbar-track { background: transparent; }
-    .demo-panel::-webkit-scrollbar-thumb {
+    .demo-view::-webkit-scrollbar { width: 6px; }
+    .demo-view::-webkit-scrollbar-track { background: transparent; }
+    .demo-view::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.12);
       border-radius: 3px;
     }
-    .demo-panel::-webkit-scrollbar-thumb:hover {
+    .demo-view::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ===== Main view chrome ===== */
+    .demo-view-head {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .demo-view-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+    }
+    .demo-back-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .demo-back-arrow:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .demo-section-heading {
+      margin: 0 0 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .demo-section-note {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* Game-select dropdown */
+    .demo-select-label {
+      display: block;
+      margin-bottom: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .demo-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 14px;
+      padding-right: 32px;
+    }
+    .demo-select:focus {
+      outline: none;
+      border-color: rgba(var(--brand-rgb), 0.55);
+    }
+
+    /* Preset scenario card-buttons */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .preset-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+    }
+    .preset-card:hover {
+      background: rgba(var(--brand-rgb), 0.12);
+      border-color: rgba(var(--brand-rgb), 0.45);
+      color: #fff;
+    }
+    .preset-card.is-active {
+      background: rgba(var(--brand-rgb), 0.18);
+      border-color: rgba(var(--brand-rgb), 0.7);
+      color: #fff;
+    }
+
+    /* Advanced trigger sits at the bottom of the main view */
+    .demo-advanced-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: calc(100% - 32px);
+      margin: 4px 16px 16px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .demo-advanced-trigger:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #fff;
     }
 
     .demo-panel.open {
@@ -2634,6 +2809,9 @@
         bottom: 52px;
         max-height: calc(100vh - 68px);
       }
+      .demo-view {
+        max-height: calc(100vh - 68px);
+      }
     }
 
     /* ===== Bearly Surviving theme overrides =====
@@ -2694,25 +2872,29 @@
     /* Gallery in horizontal mode: featured on the left, thumbs as a
        vertical column on the right (matches Steam's wide layout).
        Thumbs sized so they cap the right column at a reasonable width
-       and inherit the featured image's full height. */
-    html.hero-horizontal .screenshot-gallery {
+       and inherit the featured image's full height. Below-fold CVP
+       gallery is excluded — it stays in its standard stacked layout. */
+    html.hero-horizontal .screenshot-gallery:not(.gallery-cvp) {
       flex-direction: row;
       align-items: stretch;
     }
-    html.hero-horizontal .screenshot-gallery .gallery-featured {
+    html.hero-horizontal .screenshot-gallery:not(.gallery-cvp) .gallery-featured {
       flex: 1 1 auto;
       width: auto;
     }
-    html.hero-horizontal .screenshot-gallery .gallery-thumbs {
+    html.hero-horizontal .screenshot-gallery:not(.gallery-cvp) .gallery-thumbs {
       flex: 0 0 88px;
       flex-direction: column;
     }
-    html.hero-horizontal .screenshot-gallery .gallery-thumb {
+    html.hero-horizontal .screenshot-gallery:not(.gallery-cvp) .gallery-thumb {
       flex: 1;
       width: 100%;
     }
-    html.hero-horizontal .trailer-embed,
-    html.hero-horizontal .screenshot-gallery {
+    /* Horizontal lockup only governs the above-fold media. The CVP
+       (below-fold) variants share the same base classes but live in a
+       different scroll section, so we explicitly exclude them. */
+    html.hero-horizontal .trailer-embed:not(.trailer-cvp),
+    html.hero-horizontal .screenshot-gallery:not(.gallery-cvp) {
       order: 2;
       margin-top: 0;
       margin-bottom: 0;
@@ -3390,12 +3572,73 @@
 <!-- ===== Scenarios panel ===== -->
 <div class="demo-panel" id="demo-panel" role="dialog" aria-label="Available game assets" aria-hidden="true">
 
-  <!-- Theme tabs — switch the whole page between the Forza Horizon 6 and
-       Bearly Surviving asset sets + colour palette. -->
-  <div class="demo-tabs" role="tablist" aria-label="Game theme">
-    <button type="button" class="demo-tab is-active" id="demo-tab-forza" role="tab" aria-selected="true" data-theme="forza">Forza</button>
-    <button type="button" class="demo-tab" id="demo-tab-bear" role="tab" aria-selected="false" data-theme="bear">Bear</button>
-  </div>
+  <!-- Two sliding views: main (preset scenarios) and advanced (full
+       toggle/option set). The wrapper sits inside the panel's
+       overflow:hidden frame and slides on the X axis to swap views. -->
+  <div class="demo-views" id="demo-views">
+
+    <!-- ===== Main view: preset scenarios ===== -->
+    <div class="demo-view demo-view-main">
+      <div class="demo-view-head">
+        <h2 class="demo-view-title">Scenarios</h2>
+      </div>
+
+      <div class="demo-section">
+        <label class="demo-select-label" for="demo-game-select">Select game</label>
+        <select class="demo-select" id="demo-game-select">
+          <option value="forza">Forza</option>
+          <option value="bear">Bear</option>
+        </select>
+      </div>
+
+      <div class="demo-section">
+        <h3 class="demo-section-heading">Phase 1</h3>
+        <div class="preset-grid">
+          <button type="button" class="preset-card" data-preset="p1-s1">
+            <span class="preset-card-name">Scenario 1</span>
+          </button>
+          <button type="button" class="preset-card" data-preset="p1-s2">
+            <span class="preset-card-name">Scenario 2</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h3 class="demo-section-heading">Phase 2</h3>
+        <div class="preset-grid">
+          <button type="button" class="preset-card" data-preset="p2-s1">
+            <span class="preset-card-name">Scenario 1</span>
+          </button>
+          <button type="button" class="preset-card" data-preset="p2-s2">
+            <span class="preset-card-name">Scenario 2</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h3 class="demo-section-heading">Phase 3</h3>
+        <p class="demo-section-note">Out of scope</p>
+      </div>
+
+      <button type="button" class="demo-advanced-trigger" id="demo-advanced-trigger">
+        Advanced options
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- ===== Advanced view: legacy full toggle list ===== -->
+    <div class="demo-view demo-view-advanced">
+
+      <div class="demo-view-head demo-view-head-advanced">
+        <button type="button" class="demo-back-arrow" id="demo-back-arrow" aria-label="Back to scenarios">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <span class="demo-view-title">Advanced options</span>
+      </div>
 
   <div class="demo-panel-header">Available Assets</div>
 
@@ -3660,6 +3903,8 @@
     </div>
   </label>
 
+    </div><!-- /.demo-view-advanced -->
+  </div><!-- /.demo-views -->
 </div>
 
 <!-- ===== Sign-up modal ===== -->
@@ -3751,10 +3996,13 @@
     var isOpen = panel.classList.toggle('open');
     toggleBtn.setAttribute('aria-expanded', String(isOpen));
     panel.setAttribute('aria-hidden', String(!isOpen));
+    // Always land on the main scenarios view when the panel re-opens.
+    if (isOpen) panel.classList.remove('show-advanced');
   });
 
   document.addEventListener('click', function () {
     panel.classList.remove('open');
+    panel.classList.remove('show-advanced');
     toggleBtn.setAttribute('aria-expanded', 'false');
     panel.setAttribute('aria-hidden', 'true');
   });
@@ -4382,7 +4630,13 @@
     // earlier hide (motivation+signed-in path may re-hide it below).
     if (ctaRow) ctaRow.classList.remove('feat-hidden');
 
-    if (!isSignedIn) return;
+    // No card-gated layout active: cards should be hidden pre-sign-in.
+    // Without this reset, a previous cards-mode (e.g. cvp-cards preset)
+    // would leave .cta-cards visible after the scenario flips off.
+    if (!isSignedIn) {
+      ctaCards.classList.add('feat-hidden');
+      return;
+    }
     btnWishlist.classList.toggle('feat-hidden', motivationOn);
     // Discord is only offered through the Motivation cards. When Motivation
     // is off the plain Join Discord button is suppressed entirely.
@@ -4936,17 +5190,177 @@
     setInterval(tick, interval);
   });
 
-  // Tab clicks
-  var tabs = document.querySelectorAll('.demo-tab');
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      var theme = tab.getAttribute('data-theme');
-      tabs.forEach(function (t) {
-        var on = t === tab;
-        t.classList.toggle('is-active', on);
-        t.setAttribute('aria-selected', String(on));
-      });
-      applyTheme(theme);
+  // ===== Game select dropdown (replaces the old theme tabs) =====
+  var gameSelect = document.getElementById('demo-game-select');
+  if (gameSelect) {
+    gameSelect.addEventListener('change', function () {
+      applyTheme(gameSelect.value);
+    });
+  }
+
+  // ===== Advanced view slide-in / back =====
+  var advancedTrigger = document.getElementById('demo-advanced-trigger');
+  var backArrow = document.getElementById('demo-back-arrow');
+  if (advancedTrigger) {
+    advancedTrigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      panel.classList.add('show-advanced');
+    });
+  }
+  if (backArrow) {
+    backArrow.addEventListener('click', function (e) {
+      e.stopPropagation();
+      panel.classList.remove('show-advanced');
+    });
+  }
+
+  // ===== Preset scenarios =====
+  // Each preset is a flat map of input id → desired value (boolean for
+  // checkboxes, true for the radio in the group to select). Inputs not
+  // mentioned in a preset are forced to their "off" default before the
+  // preset's overrides apply, so toggling between presets is stable
+  // regardless of the prior state.
+  var PRESET_DEFAULTS = {
+    'feat-studio-logo': false,
+    'feat-release-date': false,
+    'feat-heading': false,
+    'feat-body': false,
+    'feat-trailer': false,
+    'tpos-hero': true,
+    'tpos-cvp': false,
+    'feat-store': false,
+    'feat-screenshots': false,
+    'gpos-hero': true,
+    'gpos-cvp': false,
+    'feat-scroll': false,
+    'feat-updates': false,
+    'feat-social': false,
+    'feat-social-icons-only': false,
+    'feat-legal': false,
+    'feat-hero-bg': false,
+    'herobg-content': true,
+    'herobg-minimal': false,
+    'feat-motivation': false,
+    'mstyle-cvp': true,
+    'mstyle-rewards': false,
+    'feat-cvp-cards': false,
+    'feat-progression': false,
+    'prog-layout-hero': true,
+    'prog-layout-cards': false,
+    'feat-stock': false,
+    'feat-video-bg': false
+  };
+
+  var PRESETS = {
+    'p1-s1': {
+      'feat-heading': true,
+      'feat-body': true,
+      'feat-social': true,
+      'feat-social-icons-only': true,
+      'feat-hero-bg': true,
+      'herobg-content': true
+    },
+    'p1-s2': {
+      'feat-heading': true,
+      'feat-body': true,
+      'feat-trailer': true,
+      'tpos-hero': true,
+      'feat-screenshots': true,
+      'gpos-hero': false,
+      'gpos-cvp': true,
+      'feat-social': true
+    },
+    'p2-s1': {
+      'feat-studio-logo': true,
+      'feat-release-date': true,
+      'feat-heading': true,
+      'feat-body': true,
+      'feat-trailer': true,
+      'tpos-hero': true,
+      'feat-screenshots': true,
+      'gpos-hero': false,
+      'gpos-cvp': true,
+      'feat-scroll': true,
+      'feat-social': true,
+      'feat-legal': true,
+      'feat-motivation': true,
+      'mstyle-cvp': true,
+      'feat-cvp-cards': true
+    },
+    'p2-s2': {
+      'feat-studio-logo': true,
+      'feat-release-date': true,
+      'feat-heading': true,
+      'feat-body': true,
+      'feat-trailer': true,
+      'tpos-hero': true,
+      'feat-screenshots': true,
+      'gpos-hero': false,
+      'gpos-cvp': true,
+      'feat-scroll': true,
+      'feat-updates': true,
+      'feat-social': true,
+      'feat-legal': true,
+      'feat-motivation': true,
+      'mstyle-cvp': false,
+      'mstyle-rewards': true,
+      'feat-progression': true,
+      'prog-layout-hero': false,
+      'prog-layout-cards': true
+    }
+  };
+
+  function applyPreset(name) {
+    var preset = PRESETS[name];
+    if (!preset) return;
+    // 1) Baseline every known input to its preset-default value.
+    Object.keys(PRESET_DEFAULTS).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        el.checked = !!PRESET_DEFAULTS[id];
+      }
+    });
+    // 2) Layer the preset's overrides on top.
+    Object.keys(preset).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        el.checked = !!preset[id];
+      }
+    });
+    // 3) Dispatch change events so each registered handler observes
+    //    the final state and runs its dependent updates. Inputs are
+    //    fired in dependency order so handlers reading sibling
+    //    state see consistent values.
+    [
+      'feat-studio-logo', 'feat-release-date',
+      'feat-heading', 'feat-body',
+      'feat-store', 'feat-social', 'feat-social-icons-only',
+      'feat-legal',
+      'feat-screenshots', 'gpos-hero', 'gpos-cvp',
+      'feat-trailer', 'tpos-hero', 'tpos-cvp',
+      'feat-scroll', 'feat-updates',
+      'feat-hero-bg', 'herobg-content', 'herobg-minimal',
+      'feat-motivation', 'mstyle-cvp', 'mstyle-rewards',
+      'feat-cvp-cards', 'feat-progression',
+      'prog-layout-hero', 'prog-layout-cards', 'feat-stock',
+      'feat-video-bg'
+    ].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  }
+
+  // Preset card-button clicks → apply the matching preset + flag the
+  // chosen card so the active state is visible.
+  var presetCards = document.querySelectorAll('.preset-card');
+  presetCards.forEach(function (card) {
+    card.addEventListener('click', function () {
+      presetCards.forEach(function (c) { c.classList.remove('is-active'); });
+      card.classList.add('is-active');
+      applyPreset(card.getAttribute('data-preset'));
     });
   });
 </script>
