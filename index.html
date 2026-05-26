@@ -3669,6 +3669,8 @@
     heroSubtitle.textContent = heroCopy.subtitle;
     heroTagline.textContent = heroCopy.tagline;
 
+    var ctaRow = document.querySelector('.hero-text .cta-row');
+
     // In progression-cards mode the email card replaces the hero CTA as
     // the sign-up entry point, so we need the cards container visible
     // before sign-in (the rest of the cards stay locked behind the
@@ -3676,18 +3678,25 @@
     // cards down.
     if (progressionCards) {
       ctaCards.classList.remove('feat-hidden');
-      var ctaRowEarly = document.querySelector('.hero-text .cta-row');
-      if (ctaRowEarly) ctaRowEarly.classList.add('feat-hidden');
+      if (ctaRow) ctaRow.classList.add('feat-hidden');
       return;
     }
 
     // Hero stack progression owns the entire success surface — suppress
-    // the motivation cards even after sign-in so success is communicated
-    // through the strip's per-step states.
+    // the motivation cards AND the primary CTA (the tag tiles are the
+    // CTAs). Hiding the cta-row on the first hero-stack enable was the
+    // bug: previously only the cards branch touched it, so first-time
+    // hero stack left the "Exclusive pre-release rewards" button on
+    // screen.
     if (progressionOn) {
       ctaCards.classList.add('feat-hidden');
+      if (ctaRow) ctaRow.classList.add('feat-hidden');
       return;
     }
+
+    // Not in progression — make sure the cta-row is back from any
+    // earlier hide (motivation+signed-in path may re-hide it below).
+    if (ctaRow) ctaRow.classList.remove('feat-hidden');
 
     if (!isSignedIn) return;
     btnWishlist.classList.toggle('feat-hidden', motivationOn);
@@ -3697,7 +3706,6 @@
     ctaCards.classList.toggle('feat-hidden', !motivationOn);
     // When the cards take over, collapse the now-empty cta-row so its
     // margin-top doesn't add a ghost gap between the tagline and the cards.
-    var ctaRow = document.querySelector('.hero-text .cta-row');
     if (ctaRow) ctaRow.classList.toggle('feat-hidden', motivationOn);
   }
 
