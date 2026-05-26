@@ -1248,6 +1248,47 @@
       margin-top: auto;
     }
 
+    /* ===== Legal section (Privacy + fine print, below the fold) ===== */
+    .legal-section {
+      margin-top: 12px;
+      padding: 8px 0 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+
+    .legal-links {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .legal-links a {
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.15s ease;
+    }
+
+    .legal-links a:hover {
+      color: #ffffff;
+    }
+
+    .legal-sep {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .legal-fineprint {
+      margin-top: 2px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.03em;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
     /* ===== Demo options button ===== */
     .demo-toggle {
       position: fixed;
@@ -3091,6 +3132,22 @@
       <img class="cvp-image" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/0824558c70b2e5ed67fe239d577434929f157a26/ss_0824558c70b2e5ed67fe239d577434929f157a26.1920x1080.jpg" alt="EventLab building" loading="lazy" />
     </div>
 
+    <!-- Legal section — privacy/terms links + copyright fine print.
+         Toggled via the Legal scenario; lives at the bottom of CVP
+         so it always sits below the fold. -->
+    <section class="legal-section feat-hidden" data-feature="legal" aria-label="Legal">
+      <nav class="legal-links" aria-label="Legal links">
+        <a href="#">Privacy Policy</a>
+        <span class="legal-sep" aria-hidden="true">|</span>
+        <a href="#">Terms of Service</a>
+        <span class="legal-sep" aria-hidden="true">|</span>
+        <a href="#">Press Kit</a>
+      </nav>
+      <p class="legal-fineprint">
+        &copy; 2026 Outplay Entertainment Ltd. The incentive program and all related marks are trademarks of Outplay Entertainment Ltd.
+      </p>
+    </section>
+
   </div>
 </section>
 
@@ -3231,6 +3288,17 @@
     </div>
     <div class="toggle-switch">
       <input type="checkbox" id="feat-social" checked />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
+  <label class="demo-option" for="feat-legal">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Legal</span>
+      <span class="demo-option-desc">Privacy + fine print</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-legal" />
       <span class="toggle-track"></span>
     </div>
   </label>
@@ -3492,6 +3560,8 @@
     var trailerOn    = featTrailer.checked;
     var trailerBelow = tposCvp.checked;
     var descriptionOn = featScroll.checked;
+    var legalOn      = document.getElementById('feat-legal').checked;
+    document.querySelector('.legal-section').classList.toggle('feat-hidden', !legalOn);
 
     // Gallery placement
     if (galleryOn) {
@@ -3520,10 +3590,12 @@
     var mediaAbove = (trailerOn && !trailerBelow) || (galleryOn && !galleryBelow);
     document.documentElement.classList.toggle('media-above', mediaAbove);
 
-    // CVP container is visible if Description is on, OR gallery/trailer is below fold
+    // CVP container is visible if Description is on, OR gallery/trailer
+    // is below fold, OR Legal is on (legal sits at the bottom of CVP).
     var showCvpContainer = descriptionOn
       || (galleryOn && galleryBelow)
-      || (trailerOn && trailerBelow);
+      || (trailerOn && trailerBelow)
+      || legalOn;
     cvpSection.classList.toggle('feat-hidden', !showCvpContainer);
 
     // CVP text sections only visible when Description is on
@@ -3575,6 +3647,7 @@
   gposCvp.addEventListener('change', updateLayout);
   tposCvp.addEventListener('change', updateLayout);
   featScroll.addEventListener('change', updateLayout);
+  document.getElementById('feat-legal').addEventListener('change', updateLayout);
 
   // ===== Gallery thumb selection + 5s auto-advance =====
   document.querySelectorAll('.screenshot-gallery').forEach(function (gallery) {
