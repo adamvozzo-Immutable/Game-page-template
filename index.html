@@ -438,6 +438,10 @@
       transform: translateY(-3px);
     }
 
+    /* No box / background — the cutout PNG is shown free-floating, and
+       all glow effects come from drop-shadow filters on .progression-image
+       so they hug the car silhouette instead of a square. The frame
+       remains just to lock layout dimensions. */
     .progression-image-frame {
       position: relative;
       width: 150px;
@@ -445,13 +449,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(ellipse at center, rgba(232, 51, 130, 0.18) 0%, rgba(20, 18, 36, 0) 70%);
-      border-radius: 6px;
-      transition: box-shadow 0.25s ease;
-    }
-
-    .progression-item:hover .progression-image-frame {
-      box-shadow: 0 0 24px rgba(232, 51, 130, 0.35);
     }
 
     .progression-image {
@@ -464,8 +461,8 @@
     }
 
     .progression-item:hover .progression-image {
-      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px rgba(232, 51, 130, 0.45));
-      transform: scale(1.02);
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 22px rgba(232, 51, 130, 0.6));
+      transform: scale(1.03);
     }
 
     .progression-caption {
@@ -530,36 +527,22 @@
       color: #ffe4ef;
     }
 
-    /* Success rotating border around the image frame — re-uses
-       --success-angle / orbit-success defined for the motivation cards. */
-    html.email-done .progression-item[data-step="email"] .progression-image-frame::before,
-    html.steam-done .progression-item[data-step="steam"] .progression-image-frame::before,
-    html.discord-done .progression-item[data-step="discord"] .progression-image-frame::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 8px;
-      padding: 2px;
-      background: conic-gradient(
-        from var(--success-angle, 0deg),
-        rgba(232, 51, 130, 0) 0deg,
-        rgba(232, 51, 130, 0.95) 60deg,
-        rgba(255, 195, 220, 0.85) 80deg,
-        rgba(232, 51, 130, 0.55) 110deg,
-        rgba(232, 51, 130, 0) 160deg,
-        rgba(232, 51, 130, 0) 360deg
-      );
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      mask-composite: exclude;
-      pointer-events: none;
-      animation: orbit-success 6s linear infinite;
-      z-index: 2;
+    /* Success: pulse a pink halo around the car silhouette via
+       drop-shadow on the image itself (follows the cutout, not the
+       bounding rect). */
+    html.email-done .progression-item[data-step="email"] .progression-image,
+    html.steam-done .progression-item[data-step="steam"] .progression-image,
+    html.discord-done .progression-item[data-step="discord"] .progression-image {
+      animation: pulse-progression-success 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-progression-success {
+      0%, 100% {
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px rgba(232, 51, 130, 0.55));
+      }
+      50% {
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 32px rgba(232, 51, 130, 0.95));
+      }
     }
 
     @media (max-width: 720px) {
