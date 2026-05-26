@@ -268,6 +268,23 @@
       width: 380px;
     }
 
+    /* Large logo mode — the badge is moved into the .hero-headline
+       block (by JS) and styled as an in-flow centred image right
+       above the subtitle. Disabled by JS whenever media is above
+       the fold, since the badge would collide with the trailer /
+       gallery in that case. */
+    html.logo-centered .hero-headline .hero-badge {
+      position: static;
+      top: auto;
+      left: auto;
+      transform: none;
+      width: min(80%, 720px);
+      max-width: 720px;
+      height: auto;
+      margin: 0 auto 56px;
+      display: block;
+    }
+
     /* Hero stage is a logical wrapper for the headline + trailer/gallery
        row. display:contents in vertical mode so its children participate
        directly in .hero's flex column (preserving the existing flow);
@@ -673,6 +690,13 @@
     html.cvp-cards #card-email[data-state="prompt"] .cta-card-view-prompt-cvp {
       display: flex;
     }
+    /* Email-card success body has two variants: the default mentions
+       the reward by name, the CVP one talks generically about
+       sticking around for launch. Pick the right one based on whether
+       cvp-cards mode is active. */
+    .success-body-cvp { display: none; }
+    html.cvp-cards #card-email .success-body-default { display: none; }
+    html.cvp-cards #card-email .success-body-cvp { display: block; }
     /* In CVP-cards, the wishlist/discord cards keep their generic CVP
        prompts (no reward-image), so make sure rewards-mode's
        prompt→reward swap doesn't bleed through. */
@@ -694,12 +718,10 @@
        button — the reward image + copy stay readable so the user can
        see what they're working toward. The card-lock-overlay sits
        exactly where the button is and blocks clicks. */
-    html.progression-cards:not(.email-done) #card-wishlist .card-cta,
-    html.progression-cards:not(.email-done) #card-discord .card-cta,
-    html.cvp-cards:not(.email-done) #card-wishlist .card-cta,
-    html.cvp-cards:not(.email-done) #card-discord .card-cta {
-      visibility: hidden;
-    }
+    /* Locked: the action button stays visible but in a disabled style
+       (see the .card-cta override further down), and the
+       .card-lock-overlay is repositioned to a small inline hint just
+       under the button. */
     html.progression-cards:not(.email-done) #card-wishlist .card-lock-overlay,
     html.progression-cards:not(.email-done) #card-discord .card-lock-overlay,
     html.cvp-cards:not(.email-done) #card-wishlist .card-lock-overlay,
@@ -709,38 +731,73 @@
 
     /* Geometry mirrors .cta-card .btn-primary: 22px side padding from
        .cta-card, 20px bottom padding, 46px button height. */
+    /* Lock hint — small line of "lock + Sign up first" anchored
+       absolutely to the bottom of the card. Position:absolute keeps
+       it out of the flex flow so the action button doesn't get
+       pushed up: every card's button sits at the same baseline,
+       and the hint sits in the bottom padding the card reserves. */
     .card-lock-overlay {
       display: none;
       position: absolute;
-      left: 22px;
-      right: 22px;
-      bottom: 20px;
-      height: 46px;
+      left: 0;
+      right: 0;
+      bottom: 14px;
       align-items: center;
       justify-content: center;
-      flex-direction: row;
-      gap: 10px;
-      background: rgba(8, 6, 16, 0.85);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      z-index: 5;
-      pointer-events: auto;
+      gap: 6px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      pointer-events: none;
     }
-
+    /* Reserve room in the card's bottom padding for the hint so the
+       action buttons across all three cards stay horizontally
+       aligned (the locked cards would otherwise push their button
+       up by the hint's height). */
+    html.progression-cards:not(.email-done) .cta-card,
+    html.cvp-cards:not(.email-done) .cta-card {
+      padding-bottom: 36px;
+    }
     .card-lock-overlay svg {
-      width: 16px;
-      height: 16px;
-      color: rgba(255, 255, 255, 0.85);
+      width: 11px;
+      height: 11px;
+      color: rgba(255, 255, 255, 0.55);
     }
-
     .card-lock-overlay-text {
       font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.85);
+      color: rgba(255, 255, 255, 0.55);
+    }
+    /* Disabled action button — desaturated outline so the user still
+       reads the eventual action but can't click it yet. */
+    html.progression-cards:not(.email-done) #card-wishlist .card-cta,
+    html.progression-cards:not(.email-done) #card-discord .card-cta,
+    html.cvp-cards:not(.email-done) #card-wishlist .card-cta,
+    html.cvp-cards:not(.email-done) #card-discord .card-cta {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: rgba(255, 255, 255, 0.55);
+      pointer-events: none;
+      box-shadow: none;
+    }
+    html.progression-cards:not(.email-done) #card-wishlist .card-cta svg,
+    html.progression-cards:not(.email-done) #card-discord .card-cta svg,
+    html.cvp-cards:not(.email-done) #card-wishlist .card-cta svg,
+    html.cvp-cards:not(.email-done) #card-discord .card-cta svg {
+      opacity: 0.55;
+    }
+    html.progression-cards:not(.email-done) #card-wishlist .card-cta::after,
+    html.progression-cards:not(.email-done) #card-wishlist .card-cta::before,
+    html.progression-cards:not(.email-done) #card-discord .card-cta::after,
+    html.progression-cards:not(.email-done) #card-discord .card-cta::before,
+    html.cvp-cards:not(.email-done) #card-wishlist .card-cta::after,
+    html.cvp-cards:not(.email-done) #card-wishlist .card-cta::before,
+    html.cvp-cards:not(.email-done) #card-discord .card-cta::after,
+    html.cvp-cards:not(.email-done) #card-discord .card-cta::before {
+      display: none;
     }
 
     /* Keep the CTA label readable over the glow + car */
@@ -760,6 +817,60 @@
 
     .btn-primary:hover {
       background: var(--brand-hover);
+    }
+
+    /* ===== Sticky CTA =====
+       Floats at bottom-right on desktop and bottom-centre on mobile so
+       the primary action is always reachable while the user is reading
+       below-fold content. Slides in once the hero CTA scrolls offscreen
+       and disappears the moment the user signs in or no CTA is active. */
+    .sticky-cta {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 950;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 48px;
+      padding: 0 24px;
+      background: var(--brand);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 0 24px rgba(var(--brand-rgb), 0.35);
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease, background 0.15s ease;
+    }
+    .sticky-cta.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .sticky-cta:hover {
+      background: var(--brand-hover);
+    }
+    @media (max-width: 720px) {
+      .sticky-cta {
+        bottom: 16px;
+        right: 16px;
+        left: auto;
+        height: 44px;
+        padding: 0 20px;
+        font-size: 13px;
+      }
     }
 
     .btn-store {
@@ -1107,6 +1218,14 @@
       width: 18px;
       height: 18px;
       flex-shrink: 0;
+    }
+
+    /* Hide the Discord social link once Motivation is active, since
+       Discord already appears in the motivation cards / hero stack
+       and the duplicate footer entry just creates two parallel
+       discovery paths for the same action. */
+    html.motivation-on .social-link-discord {
+      display: none;
     }
 
     /* Icons-only mode: drop the text label and grow the SVG so each
@@ -1687,6 +1806,17 @@
       border-bottom: none;
     }
 
+    /* Disabled row — used by Large Logo when media is above the
+       fold (where it would otherwise collide with the trailer /
+       screenshot gallery). */
+    .demo-option.is-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .demo-option.is-disabled .toggle-switch {
+      pointer-events: none;
+    }
+
     .demo-option:hover {
       background: rgba(255, 255, 255, 0.04);
     }
@@ -1807,6 +1937,251 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+    }
+
+    /* ===== Borderless cards mode =====
+       Strip the card container so the sprite + copy sit directly on
+       the hero background, and grow the reward image to fill the
+       reclaimed space. Drop the backdrop blur too so the page art
+       reads cleanly through. */
+    html.cards-borderless .cta-card {
+      background: transparent;
+      border-color: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      padding: 10px 12px;
+    }
+    html.cards-borderless .reward-media-cutout {
+      height: 200px;
+      background: radial-gradient(ellipse at center, rgba(var(--brand-rgb), 0.18) 0%, rgba(20, 18, 36, 0) 70%);
+    }
+    html.cards-borderless .reward-media-cutout .reward-image {
+      object-position: center 60%;
+    }
+    /* Bear sprites use object-fit:contain — give them a touch more
+       breathing room inside the taller frame. */
+    html.cards-borderless.theme-bear .reward-media-cutout .reward-image {
+      padding: 4px;
+    }
+    /* Drop the success-state rotating border + interior glow in
+       borderless mode since there's no container edge to trace. */
+    html.cards-borderless .cta-card[data-state="success"]::before,
+    html.cards-borderless .cta-card[data-state="success"]::after {
+      display: none;
+    }
+    /* Lock hint still needs to read, but the surrounding card no
+       longer provides contrast; lift the colour a touch. */
+    html.cards-borderless .card-lock-overlay,
+    html.cards-borderless .card-lock-overlay svg,
+    html.cards-borderless .card-lock-overlay-text {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ===== Compact cards =====
+       The card itself becomes a 2-column grid (heading + action
+       stacked left, oversized reward sprite spanning the right);
+       the active view passes through with display:contents so its
+       children flow into the card's grid. Inactive views keep
+       their display:none and stay hidden. No CTA button: the whole
+       card is the click target. */
+    html.cards-compact #card-email,
+    html.cards-compact #card-wishlist,
+    html.cards-compact #card-discord {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        "heading"
+        "action"
+        "lock";
+      row-gap: 2px;
+      align-items: center;
+      max-width: 380px;
+      padding: 16px 130px 16px 18px;
+      position: relative;
+      cursor: pointer;
+      overflow: visible;
+      transition: background 0.18s, border-color 0.18s, transform 0.18s;
+    }
+    /* Wider gap between compact cards so the oversized sprite
+       spilling past the right edge doesn't crowd the next card. */
+    html.cards-compact .cta-cards {
+      gap: 40px;
+    }
+    html.cards-compact #card-email:hover,
+    html.cards-compact #card-wishlist:hover,
+    html.cards-compact #card-discord:hover {
+      background: rgba(var(--brand-rgb), 0.1);
+      border-color: rgba(var(--brand-rgb), 0.5);
+      transform: translateY(-2px);
+    }
+    /* Locked cards in compact mode read as disabled — flatten the
+       hover state and switch the cursor so the user sees the email
+       step is the prerequisite. */
+    html.cards-compact.progression-cards:not(.email-done) #card-wishlist,
+    html.cards-compact.progression-cards:not(.email-done) #card-discord,
+    html.cards-compact.cvp-cards:not(.email-done) #card-wishlist,
+    html.cards-compact.cvp-cards:not(.email-done) #card-discord {
+      cursor: not-allowed;
+    }
+    html.cards-compact.progression-cards:not(.email-done) #card-wishlist:hover,
+    html.cards-compact.progression-cards:not(.email-done) #card-discord:hover,
+    html.cards-compact.cvp-cards:not(.email-done) #card-wishlist:hover,
+    html.cards-compact.cvp-cards:not(.email-done) #card-discord:hover {
+      background: rgba(20, 18, 36, 0.5);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: none;
+    }
+    html.cards-compact.cards-borderless.progression-cards:not(.email-done) #card-wishlist:hover,
+    html.cards-compact.cards-borderless.progression-cards:not(.email-done) #card-discord:hover,
+    html.cards-compact.cards-borderless.cvp-cards:not(.email-done) #card-wishlist:hover,
+    html.cards-compact.cards-borderless.cvp-cards:not(.email-done) #card-discord:hover {
+      background: transparent;
+      border-color: transparent;
+    }
+    /* Suppress the inner reward-image hover (drop-shadow halo + lift)
+       for locked cards so the sprite stays in its idle state, mirroring
+       the disabled-card affordance. */
+    html.cards-compact.progression-cards:not(.email-done) #card-wishlist:hover .reward-image,
+    html.cards-compact.progression-cards:not(.email-done) #card-discord:hover .reward-image,
+    html.cards-compact.cvp-cards:not(.email-done) #card-wishlist:hover .reward-image,
+    html.cards-compact.cvp-cards:not(.email-done) #card-discord:hover .reward-image {
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6));
+      transform: none;
+    }
+    html.cards-compact.cards-borderless .cta-card:hover {
+      background: transparent;
+    }
+    /* Active-view passthroughs — match the same selectors that show
+       each view as display:flex so the visible view becomes a layout
+       transparent shell and its children participate directly in
+       the card's grid. */
+    html.cards-compact .cta-card[data-state="prompt"] .cta-card-view-prompt,
+    html.cards-compact .cta-card[data-state="success"] .cta-card-view-success,
+    html.cards-compact .cta-card[data-state="linking"] .cta-card-view-linking,
+    html.cards-compact .cta-card[data-state="reward"] .cta-card-view-reward,
+    html.cards-compact.rewards .cta-card[data-state="prompt"] .cta-card-view-reward,
+    html.cards-compact.rewards #card-email[data-state="prompt"] .cta-card-view-prompt,
+    html.cards-compact.cvp-cards #card-email[data-state="prompt"] .cta-card-view-prompt-cvp,
+    html.cards-compact.cvp-cards #card-wishlist[data-state="prompt"] .cta-card-view-prompt,
+    html.cards-compact.cvp-cards #card-discord[data-state="prompt"] .cta-card-view-prompt {
+      display: contents;
+    }
+    html.cards-compact .cta-card-heading {
+      grid-area: heading;
+      font-size: 18px;
+      line-height: 22px;
+      letter-spacing: 0.08em;
+      margin: 0;
+      text-align: left;
+    }
+    /* Hide body copy in compact mode for every state except success
+       (where the post-action message is the celebration). The
+       linking-view rewards-mode :not() exclusion lets us also
+       suppress the rewards "Link X to claim your reward" line. */
+    html.cards-compact .cta-card-view:not(.cta-card-view-success) .cta-card-body {
+      display: none;
+    }
+    html.cards-compact.rewards .cta-card-view-linking .cvp-copy-reward,
+    html.cards-compact.rewards .cta-card-view-linking .reward-copy-reward {
+      display: none;
+    }
+    /* Compact copy is left-aligned across heading + body, including
+       the success view (which is centred by default elsewhere). */
+    html.cards-compact .cta-card-heading,
+    html.cards-compact .cta-card-body,
+    html.cards-compact .cta-card-view-success .cta-card-heading,
+    html.cards-compact .cta-card-view-success .cta-card-body {
+      text-align: left;
+      max-width: none;
+    }
+    /* Reward sprite: free-floating, anchored so its LEFT edge sits
+       against the text column's padding-right boundary and its
+       RIGHT edge spills past the card. Growing the sprite extends
+       further to the right rather than encroaching on the heading
+       / action copy. z-index sits above the success-state border
+       so the rotating stroke doesn't cut through the sprite. */
+    html.cards-compact .reward-media,
+    html.cards-compact .reward-media-cutout {
+      position: absolute;
+      right: -50px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 190px;
+      height: 190px;
+      margin: 0;
+      background: radial-gradient(ellipse at center, rgba(var(--brand-rgb), 0.22) 0%, rgba(20, 18, 36, 0) 70%);
+      pointer-events: none;
+      z-index: 3;
+    }
+    html.cards-compact .reward-media-cutout .reward-image {
+      object-fit: contain;
+      object-position: center;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+    }
+    /* The action button becomes an inline action label that reads
+       like body copy; the parent card carries the click. */
+    html.cards-compact .card-cta,
+    html.cards-compact .card-cta-link {
+      grid-area: action;
+      width: auto;
+      height: auto;
+      padding: 0;
+      margin: 0;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: rgba(255, 255, 255, 0.75);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      line-height: 18px;
+      text-transform: none;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: flex-start;
+      justify-self: start;
+    }
+    /* Action label is text-only in compact mode — drop the leading
+       icon so the row reads like simple body copy. */
+    html.cards-compact .card-cta svg,
+    html.cards-compact .card-cta-link svg {
+      display: none;
+    }
+    html.cards-compact .card-cta::before,
+    html.cards-compact .card-cta::after {
+      display: none !important;
+    }
+    /* Drop the success circle — the action-label slot already shows
+       the tick + post-signup copy. */
+    html.cards-compact .card-success-icon {
+      display: none;
+    }
+    /* Stock tag sits flush with the heading row on the right of the
+       text column. */
+    html.cards-compact .reward-stock-tag {
+      top: 6px;
+      right: 6px;
+    }
+    /* Lock hint sits below the action label inside the text column
+       (instead of anchored to the bottom of the card). */
+    html.cards-compact .card-lock-overlay {
+      position: static;
+      grid-area: lock;
+      justify-self: start;
+      justify-content: flex-start;
+      margin-top: 4px;
+    }
+    /* No bottom-padding reservation needed in compact mode — the
+       hint sits inline with the action label. */
+    html.cards-compact.progression-cards:not(.email-done) .cta-card,
+    html.cards-compact.cvp-cards:not(.email-done) .cta-card {
+      padding-bottom: 16px;
     }
 
     /* "X,XXX remaining" stock counter — only meaningful in rewards mode,
@@ -2819,12 +3194,14 @@
        without juggling specificity. */
 
     /* Logo aspect is taller than the Forza wordmark — pull the badge size
-       down so the SURVIVING wordmark doesn't dominate the hero. */
-    html.theme-bear .hero-badge {
+       down so the SURVIVING wordmark doesn't dominate the hero. The
+       :not(.logo-centered) guard lets the large-logo mode override
+       these widths cleanly when active. */
+    html.theme-bear:not(.logo-centered) .hero-badge {
       width: 420px;
     }
-    html.theme-bear.media-above .hero-badge,
-    html.theme-bear.hero-bg .hero-badge {
+    html.theme-bear.media-above:not(.logo-centered) .hero-badge,
+    html.theme-bear.hero-bg:not(.logo-centered) .hero-badge {
       width: 240px;
     }
 
@@ -2840,6 +3217,50 @@
       html.theme-bear.media-above .hero {
         padding-top: 82px;
       }
+    }
+
+    /* Horizontal-lockup vignette: the standard top→bottom vignette
+       leaves the bright key art showing in the middle horizontal band,
+       which is exactly where the headline + body copy sit when the
+       hero is locked side-by-side. Layer a radial dim over the
+       central band so the text always has a darker backing, while the
+       outer left/right edges of the key art stay visible. */
+    /* Horizontal lockup vignette = the standard top/bottom dim plus
+       an extra radial spot tucked behind the headline column so the
+       text always has its own dark backing without darkening the
+       trailer side of the page. */
+    html.hero-horizontal .vignette {
+      background:
+        radial-gradient(
+          ellipse 28% 55% at 28% 50%,
+          rgba(0, 0, 0, 0.75) 0%,
+          rgba(0, 0, 0, 0.55) 40%,
+          rgba(0, 0, 0, 0) 80%
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(8, 6, 16, 0.4) 0%,
+          transparent 25%,
+          rgba(0, 0, 0, 0.64) 60%,
+          rgba(8, 6, 16, 0.92) 100%
+        );
+    }
+    html.hero-horizontal.hero-bg .vignette {
+      background:
+        radial-gradient(
+          ellipse 28% 55% at 28% 50%,
+          rgba(0, 0, 0, 0.82) 0%,
+          rgba(0, 0, 0, 0.6) 40%,
+          rgba(0, 0, 0, 0) 80%
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(8, 6, 16, 0.78) 0%,
+          rgba(8, 6, 16, 0.32) 14%,
+          transparent 30%,
+          rgba(0, 0, 0, 0.6) 62%,
+          rgba(8, 6, 16, 0.9) 100%
+        );
     }
 
     /* ===== Hero — horizontal lockup =====
@@ -2960,7 +3381,7 @@
       class="nav-logo"
       data-feature="studio-logo"
       src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE790C2FEFRNJR5YE2ASWA6.png"
-      data-bear-src="./bearly-surviving-logo.webp"
+      data-bear-src="./bearly-surviving-logo.png"
       alt="Studio Logo"
     />
     <div class="nav-release" data-feature="release-date">
@@ -2975,7 +3396,7 @@
       class="hero-badge"
       id="hero-badge"
       src="./modal-logo.svg"
-      data-bear-src="./bearly-surviving-logo.webp"
+      data-bear-src="./bearly-surviving-logo.png"
       alt="Game Badge"
     />
 
@@ -3202,7 +3623,8 @@
               </svg>
             </div>
             <h3 class="cta-card-heading">Signed up</h3>
-            <p class="cta-card-body" data-bear-text="Crown is locked in. Now wishlist on Steam and join Discord to claim the rest.">Supra livery is locked in. Now wishlist on Steam and join Discord to unlock the rest.</p>
+            <p class="cta-card-body success-body-default" data-bear-text="Crown is locked in. Now wishlist on Steam and join Discord to claim the rest.">Supra livery is locked in. Now wishlist on Steam and join Discord to unlock the rest.</p>
+            <p class="cta-card-body success-body-cvp" data-bear-text="You're in. Now wishlist on Steam and join the Discord to stay close to the launch.">You're in. Now wishlist on Steam and join Discord to stay close to the launch.</p>
           </div>
         </div>
 
@@ -3213,7 +3635,7 @@
               <rect x="5" y="11" width="14" height="10" rx="2" />
               <path d="M8 11V7a4 4 0 0 1 8 0v4" />
             </svg>
-            <span class="card-lock-overlay-text">Sign up first</span>
+            <span class="card-lock-overlay-text">Reward locked until sign up complete</span>
           </div>
           <div class="cta-card-view cta-card-view-prompt">
             <h3 class="cta-card-heading" data-bear-text="Be First Through the Gate">Be First in the Garage</h3>
@@ -3229,8 +3651,8 @@
             <div class="reward-media reward-media-cutout">
               <img class="reward-image" src="./reward-livery.png" data-bear-src="./slime.png" alt="Founder's Livery Pack preview" loading="lazy" />
             </div>
-            <h3 class="cta-card-heading" data-bear-text="Crowned Slime Companion">Founder's Livery Pack</h3>
-            <p class="cta-card-body" data-bear-text="Wishlist on Steam to summon the Crowned Slime — a launch-only party companion, never craftable post-release.">Wishlist on Steam to claim 3 launch-exclusive liveries &mdash; never sold post-release.</p>
+            <h3 class="cta-card-heading" data-bear-text="Slime Companion">Founder's Livery Pack</h3>
+            <p class="cta-card-body" data-bear-text="Wishlist on Steam to summon the Slime — a launch-only party companion, never craftable post-release.">Wishlist on Steam to claim 3 launch-exclusive liveries &mdash; never sold post-release.</p>
             <button type="button" class="btn-primary card-cta" data-action="wishlist">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.391 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714 1.002 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949-.26-.626-.749-1.111-1.377-1.371-.624-.26-1.29-.249-1.878-.061l1.523.63c.956.4 1.409 1.5 1.009 2.456-.397.957-1.497 1.41-2.454 1.012zM18.247 8.91c0-1.652-1.345-2.995-2.995-2.995-1.65 0-2.996 1.343-2.996 2.995s1.345 2.995 2.996 2.995c1.65 0 2.995-1.343 2.995-2.995zm-5.241-.004c0-1.24 1.007-2.247 2.248-2.247s2.247 1.007 2.247 2.247c0 1.241-1.007 2.248-2.247 2.248-1.241 0-2.248-1.007-2.248-2.248z"/>
@@ -3244,7 +3666,7 @@
             </div>
             <h3 class="cta-card-heading">Almost there</h3>
             <p class="cta-card-body cvp-copy-default">Link Steam so we know your wishlist is in.</p>
-            <p class="cta-card-body cvp-copy-reward" data-bear-text="Link Steam to claim your Crowned Slime.">Link Steam to claim your Founder's Livery Pack.</p>
+            <p class="cta-card-body cvp-copy-reward" data-bear-text="Link Steam to claim your Slime.">Link Steam to claim your Founder's Livery Pack.</p>
             <button type="button" class="btn-primary card-cta-link" data-action="wishlist">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.391 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714 1.002 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949-.26-.626-.749-1.111-1.377-1.371-.624-.26-1.29-.249-1.878-.061l1.523.63c.956.4 1.409 1.5 1.009 2.456-.397.957-1.497 1.41-2.454 1.012zM18.247 8.91c0-1.652-1.345-2.995-2.995-2.995-1.65 0-2.996 1.343-2.996 2.995s1.345 2.995 2.996 2.995c1.65 0 2.995-1.343 2.995-2.995zm-5.241-.004c0-1.24 1.007-2.247 2.248-2.247s2.247 1.007 2.247 2.247c0 1.241-1.007 2.248-2.247 2.248-1.241 0-2.248-1.007-2.248-2.248z"/>
@@ -3264,7 +3686,7 @@
             <h3 class="cta-card-heading reward-copy-default">Wishlisted</h3>
             <h3 class="cta-card-heading reward-copy-reward" data-bear-text="Slime summoned">Pack claimed</h3>
             <p class="cta-card-body reward-copy-default">Confirm on the Steam tab we just opened.</p>
-            <p class="cta-card-body reward-copy-reward" data-bear-text="Your Crowned Slime joins your party at launch.">Your Founder's Livery Pack lands in your garage at launch.</p>
+            <p class="cta-card-body reward-copy-reward" data-bear-text="Your Slime joins your party at launch.">Your Founder's Livery Pack lands in your garage at launch.</p>
           </div>
         </div>
 
@@ -3275,7 +3697,7 @@
               <rect x="5" y="11" width="14" height="10" rx="2" />
               <path d="M8 11V7a4 4 0 0 1 8 0v4" />
             </svg>
-            <span class="card-lock-overlay-text">Sign up first</span>
+            <span class="card-lock-overlay-text">Reward locked until sign up complete</span>
           </div>
           <div class="cta-card-view cta-card-view-prompt">
             <h3 class="cta-card-heading" data-bear-text="Survive With the Crew">Race With the Crew</h3>
@@ -3291,8 +3713,8 @@
             <div class="reward-media reward-media-cutout">
               <img class="reward-image" src="./reward-ferrari.png" data-bear-src="./bear.png" alt="Ferrari J50" loading="lazy" />
             </div>
-            <h3 class="cta-card-heading" data-bear-text="Crowned Bear Mount">Ferrari J50</h3>
-            <p class="cta-card-body" data-bear-text="Join &amp; link Discord to unlock the Crowned Bear — your fastest mount through the cursed forest.">Join &amp; link Discord to unlock this pre-tuned, exclusive hypercar in-game.</p>
+            <h3 class="cta-card-heading" data-bear-text="Bear Mount">Ferrari J50</h3>
+            <p class="cta-card-body" data-bear-text="Join &amp; link Discord to unlock the Bear — your fastest mount through the cursed forest.">Join &amp; link Discord to unlock this pre-tuned, exclusive hypercar in-game.</p>
             <button type="button" class="btn-discord card-cta" data-action="discord">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
@@ -3306,7 +3728,7 @@
             </div>
             <h3 class="cta-card-heading">Almost there</h3>
             <p class="cta-card-body cvp-copy-default">Link Discord so we can verify you joined the server.</p>
-            <p class="cta-card-body cvp-copy-reward" data-bear-text="Link Discord to unlock your Crowned Bear mount.">Link Discord to unlock your Ferrari J50 in-game.</p>
+            <p class="cta-card-body cvp-copy-reward" data-bear-text="Link Discord to unlock your Bear mount.">Link Discord to unlock your Ferrari J50 in-game.</p>
             <button type="button" class="btn-discord card-cta-link" data-action="discord">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
@@ -3326,7 +3748,7 @@
             <h3 class="cta-card-heading reward-copy-default">Linked</h3>
             <h3 class="cta-card-heading reward-copy-reward" data-bear-text="Bear unlocked">Ferrari unlocked</h3>
             <p class="cta-card-body reward-copy-default">Finish in the Discord tab we just opened.</p>
-            <p class="cta-card-body reward-copy-reward" data-bear-text="Your Crowned Bear is waiting at the gate at launch.">Your Ferrari J50 is waiting in-game at launch.</p>
+            <p class="cta-card-body reward-copy-reward" data-bear-text="Your Bear is waiting at the gate at launch.">Your Ferrari J50 is waiting in-game at launch.</p>
           </div>
         </div>
       </div>
@@ -3347,8 +3769,9 @@
         <span>Twitter</span>
       </a>
 
-      <!-- Discord -->
-      <a href="#" class="social-link" aria-label="Discord">
+      <!-- Discord — hidden when motivation flow is active (Discord
+           already lives in the cards / hero stack at that point). -->
+      <a href="#" class="social-link social-link-discord" aria-label="Discord">
         <svg class="social-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
         </svg>
@@ -3558,6 +3981,14 @@
   </div>
 </section>
 
+<!-- Sticky CTA — mirrors #btn-get-started for users scrolling past
+     the hero CTA on a scrollable page. Hidden whenever the hero CTA
+     itself is hidden (post-sign-in, hero-stack/cards modes) or while
+     the page isn't scrollable. -->
+<button type="button" class="sticky-cta" id="sticky-cta" aria-label="Get updates">
+  <span class="sticky-cta-label btn-label">Get updates</span>
+</button>
+
 <!-- ===== Scenarios toggle ===== -->
 <button class="demo-toggle" id="demo-toggle" aria-expanded="false" aria-controls="demo-panel">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -3587,7 +4018,7 @@
         <label class="demo-select-label" for="demo-game-select">Select game</label>
         <select class="demo-select" id="demo-game-select">
           <option value="forza">Forza</option>
-          <option value="bear">Bear</option>
+          <option value="bear" selected>Bear</option>
         </select>
       </div>
 
@@ -3649,6 +4080,17 @@
     </div>
     <div class="toggle-switch">
       <input type="checkbox" id="feat-studio-logo" checked />
+      <span class="toggle-track"></span>
+    </div>
+  </label>
+
+  <label class="demo-option" for="feat-large-logo" id="feat-large-logo-row">
+    <div class="demo-option-text">
+      <span class="demo-option-label">Large Logo</span>
+      <span class="demo-option-desc">Centered above the heading</span>
+    </div>
+    <div class="toggle-switch">
+      <input type="checkbox" id="feat-large-logo" />
       <span class="toggle-track"></span>
     </div>
   </label>
@@ -3889,6 +4331,18 @@
           <input type="checkbox" id="feat-stock" />
         </label>
       </div>
+      <!-- Card-style sub-toggles — apply whenever motivation cards
+           render, regardless of the underlying style/layout. -->
+      <div class="demo-subsub" id="borderless-subsub">
+        <label class="demo-subsub-toggle" for="feat-cards-borderless">
+          <span>Borderless cards</span>
+          <input type="checkbox" id="feat-cards-borderless" />
+        </label>
+        <label class="demo-subsub-toggle" for="feat-cards-compact">
+          <span>Compact cards</span>
+          <input type="checkbox" id="feat-cards-compact" />
+        </label>
+      </div>
     </div>
   </div>
 
@@ -3918,7 +4372,7 @@
       <img
         class="modal-logo"
         src="./modal-logo.svg"
-        data-bear-src="./bearly-surviving-logo.webp"
+        data-bear-src="./bearly-surviving-logo.png"
         alt="Game Logo"
       />
       <!-- Reward preview — only shown in rewards + progression mode so the
@@ -4025,6 +4479,42 @@
   bindFeature('feat-heading', 'hero-heading');
   bindFeature('feat-body', 'hero-body');
   bindFeature('feat-updates', 'updates');
+
+  // ===== Large logo placement =====
+  // When on, the hero badge is reparented as the first child of
+  // .hero-headline and styled large + centred. Force-off whenever
+  // media is above the fold (trailer/screenshot gallery would
+  // otherwise collide), and visibly disable the toggle row in that
+  // state so the scenario UI matches the constraint.
+  var featLargeLogo  = document.getElementById('feat-large-logo');
+  var largeLogoRow   = document.getElementById('feat-large-logo-row');
+  function updateLargeLogo() {
+    var html = document.documentElement;
+    var mediaAbove = html.classList.contains('media-above');
+    if (largeLogoRow) largeLogoRow.classList.toggle('is-disabled', mediaAbove);
+    // Keep the user's intent intact — apply only when media isn't
+    // above the fold. When the trailer/gallery later moves below
+    // the fold, the large logo re-applies automatically.
+    var on = featLargeLogo.checked && !mediaAbove;
+    html.classList.toggle('logo-centered', on);
+    var badge = document.getElementById('hero-badge');
+    if (!badge) return;
+    var headline = document.querySelector('.hero-headline');
+    var hero     = document.querySelector('.hero');
+    if (on) {
+      if (headline && badge.parentElement !== headline) {
+        headline.insertBefore(badge, headline.firstChild);
+      }
+    } else {
+      // Restore: badge sits as the first DOM child of .hero (its
+      // original position before reparenting).
+      if (hero && badge.parentElement !== hero) {
+        hero.insertBefore(badge, hero.firstChild);
+      }
+    }
+    if (typeof refreshBadgeSrc === 'function') refreshBadgeSrc();
+  }
+  if (featLargeLogo) featLargeLogo.addEventListener('change', updateLargeLogo);
 
   // Social footer toggle — also updates html.no-social so the hero gets
   // extra padding-bottom when the socials aren't there to anchor things.
@@ -4362,7 +4852,10 @@
   // Measurement is taken in vertical mode so the headline height isn't
   // already wrapped by the narrow horizontal column.
   var HORIZONTAL_MIN_WIDTH = 1000;
-  var MIN_TRAILER_H = 320; // trailer height below this triggers horizontal
+  // Comfortable minimum trailer height for vertical mode — at
+  // 16:9 this renders ~427px wide, still a usable preview before
+  // we'd rather fall back to the horizontal lockup.
+  var MIN_TRAILER_H = 240;
   function updateLayoutMode() {
     var html = document.documentElement;
     var trailerHero = document.getElementById('trailer-hero');
@@ -4370,7 +4863,13 @@
     var trailerAbove = trailerHero && !trailerHero.classList.contains('feat-hidden');
     var galleryAbove = galleryHero && !galleryHero.classList.contains('feat-hidden');
     var hasMediaAbove = trailerAbove || galleryAbove;
-    if (!hasMediaAbove || window.innerWidth < HORIZONTAL_MIN_WIDTH) {
+    // Horizontal lockup only makes sense when there's hero text to
+    // sit alongside the media. With both heading and body off the
+    // left column would be empty, so stay vertical instead.
+    var featHeading = document.getElementById('feat-heading');
+    var featBody    = document.getElementById('feat-body');
+    var hasHeroText = (featHeading && featHeading.checked) || (featBody && featBody.checked);
+    if (!hasMediaAbove || !hasHeroText || window.innerWidth < HORIZONTAL_MIN_WIDTH) {
       html.classList.remove('hero-horizontal');
       return;
     }
@@ -4386,20 +4885,132 @@
     var cs = hero ? getComputedStyle(hero) : null;
     var padT = cs ? parseFloat(cs.paddingTop) || 0 : 0;
     var padB = cs ? parseFloat(cs.paddingBottom) || 0 : 0;
-    var navH      = nav ? nav.offsetHeight : 0;
-    var footerH   = (footer && footer.offsetWidth) ? footer.offsetHeight : 0;
-    var headlineH = headline ? headline.offsetHeight : 0;
-    var heroTextH = heroText ? heroText.offsetHeight : 0;
-    var verticalChrome = navH + padT + headlineH + heroTextH + padB + footerH + 40 + 16;
-    var fitsVertical = (verticalChrome + MIN_TRAILER_H) <= window.innerHeight;
+    // Theme-independent chrome estimate. Dynamic offsetHeight reads
+    // varied between themes because text wraps differently, which
+    // gave Bear a different horizontal breakpoint than Forza even at
+    // the same scenario. Build the estimate from scenario state
+    // instead so both themes share the same trigger point.
+    var navH    = nav ? nav.offsetHeight : 0;
+    var footerH = (footer && footer.offsetWidth) ? footer.offsetHeight : 0;
+    var chrome = navH + padT + padB + footerH + 40 + 16; // structural shell
+    // Headline contribution — fixed lines, theme-independent.
+    var featH = document.getElementById('feat-heading');
+    var featB = document.getElementById('feat-body');
+    if (featH && featH.checked) chrome += 60;  // ~1–2 lines of subtitle
+    if (featB && featB.checked) chrome += 84;  // ~3 lines of tagline
+    // Below-the-headline group: hero stack, cards, or just the CTA row.
+    if (html.classList.contains('progression') && !html.classList.contains('progression-cards')) {
+      chrome += 260; // hero stack tiles + gaps
+    } else {
+      var ctaCardsEl = document.getElementById('cta-cards');
+      var cardsOn = ctaCardsEl && !ctaCardsEl.classList.contains('feat-hidden');
+      chrome += cardsOn ? 280 : 88; // motivation cards vs CTA row
+    }
+    var fitsVertical = (chrome + MIN_TRAILER_H) <= window.innerHeight;
     html.classList.toggle('hero-horizontal', !fitsVertical);
   }
 
   function syncHeroLayout() {
+    if (typeof updateLargeLogo === 'function') updateLargeLogo();
     updateLayoutMode();
     updateHeroReserve();
+    updateStickyCta();
   }
   window.addEventListener('resize', syncHeroLayout);
+
+  // ===== Sticky CTA =====
+  // Mirrors whichever sign-up entry is currently primary on the page
+  // (hero #btn-get-started, or the email card's sign-up button when
+  // cards mode has taken over). Visible only when that primary CTA
+  // has fully scrolled offscreen, the page is scroll-enabled, and a
+  // primary CTA actually exists (so no sticky post-sign-in or when a
+  // hero-stack scenario suppresses CTAs entirely).
+  var stickyCta = document.getElementById('sticky-cta');
+  var stickyCtaLabel = stickyCta ? stickyCta.querySelector('.sticky-cta-label') : null;
+  // Helper: return the first laid-out (visible) match for a selector
+  // inside `root`. Skips elements whose ancestor chain is display:none.
+  function firstVisible(root, selector) {
+    if (!root) return null;
+    var els = root.querySelectorAll(selector);
+    for (var i = 0; i < els.length; i++) {
+      if (els[i].offsetParent !== null) return els[i];
+    }
+    return null;
+  }
+
+  // Priority-ordered walk of the sign-up funnel — returns the next
+  // best action button on the page, or null if the user has cleared
+  // every step.
+  function findPrimaryCta() {
+    // 1. Pre-sign-in hero CTA (Get updates / Get early access / etc.)
+    var hero = document.getElementById('btn-get-started');
+    var ctaRow = document.querySelector('.hero-text .cta-row');
+    if (hero && !hero.classList.contains('feat-hidden')
+        && ctaRow && !ctaRow.classList.contains('feat-hidden')) {
+      return hero;
+    }
+    // 2. Pre-sign-in cards mode: email card's visible prompt button.
+    var emailCard = document.getElementById('card-email');
+    if (emailCard && emailCard.getAttribute('data-state') === 'prompt'
+        && emailCard.offsetParent !== null) {
+      var emailBtn = firstVisible(emailCard, '.card-cta[data-action="email"]');
+      if (emailBtn) return emailBtn;
+    }
+    // 3. Post-sign-in standalone Wishlist button (motivation off).
+    var btnWishlist = document.getElementById('btn-wishlist');
+    if (btnWishlist && !btnWishlist.classList.contains('feat-hidden')) {
+      return btnWishlist;
+    }
+    // 4. Post-sign-in motivation cards — walk in order, skipping
+    //    cards that have already reached their success state. The
+    //    first remaining card's action button is the next best step.
+    var cardOrder = ['card-wishlist', 'card-discord'];
+    for (var i = 0; i < cardOrder.length; i++) {
+      var card = document.getElementById(cardOrder[i]);
+      if (!card || card.offsetParent === null) continue;
+      var state = card.getAttribute('data-state') || 'prompt';
+      if (state === 'success') continue;
+      // Pick the laid-out CTA inside the active view (prompt /
+      // reward / linking). card-cta-link is the linking-state
+      // confirm button used by the rewards two-step flow.
+      var cta = firstVisible(card, '.card-cta, .card-cta-link');
+      if (cta) return cta;
+    }
+    // 5. Standalone store link (e.g. Steam wishlist) — last fallback.
+    var btnStore = document.querySelector('.btn-store');
+    if (btnStore && !btnStore.classList.contains('feat-hidden')) {
+      return btnStore;
+    }
+    return null;
+  }
+  function updateStickyCta() {
+    if (!stickyCta) return;
+    var html = document.documentElement;
+    var scrollOn = html.classList.contains('scroll-enabled');
+    var primary = scrollOn ? findPrimaryCta() : null;
+    if (!primary) {
+      stickyCta.classList.remove('is-visible');
+      return;
+    }
+    if (stickyCtaLabel) {
+      var labelEl = primary.querySelector('.btn-label');
+      stickyCtaLabel.textContent = labelEl
+        ? labelEl.textContent
+        : primary.textContent.trim();
+    }
+    // Show only when the primary CTA's bottom edge is above the
+    // viewport — i.e. it's fully scrolled offscreen.
+    var rect = primary.getBoundingClientRect();
+    stickyCta.classList.toggle('is-visible', rect.bottom <= 0);
+  }
+  if (stickyCta) {
+    stickyCta.addEventListener('click', function () {
+      var primary = findPrimaryCta();
+      if (primary) primary.click();
+      else openModal();
+    });
+  }
+  window.addEventListener('scroll', updateStickyCta, { passive: true });
 
   // ===== Modal =====
   var modalOverlay = document.getElementById('modal-overlay');
@@ -4504,7 +5115,7 @@
         },
         rewards: {
           title: 'Founder loot before launch',
-          sub: 'Sign up to claim the Knight’s Crown — then wishlist for the Crowned Slime and join Discord for the Bear Companion.'
+          sub: 'Sign up to claim the Knight’s Crown — then wishlist for the Slime and join Discord for the Bear Companion.'
         }
       },
       successCopy: 'Welcome to the realm. Sharpen your sword.'
@@ -4542,6 +5153,22 @@
   function updateCtaState() {
     motivationSub.classList.toggle('visible', featMotivation.checked);
     var motivationOn = featMotivation.checked;
+    document.documentElement.classList.toggle('motivation-on', motivationOn);
+    // Borderless / Compact card style sub-toggles — only meaningful
+    // when motivation is on. Gate the classes on motivation so the
+    // toggle states don't leak into pages where no cards render.
+    var featBorderlessEl = document.getElementById('feat-cards-borderless');
+    var featCompactEl    = document.getElementById('feat-cards-compact');
+    var borderlessSub    = document.getElementById('borderless-subsub');
+    if (borderlessSub) borderlessSub.classList.toggle('visible', motivationOn);
+    document.documentElement.classList.toggle(
+      'cards-borderless',
+      motivationOn && featBorderlessEl && featBorderlessEl.checked
+    );
+    document.documentElement.classList.toggle(
+      'cards-compact',
+      motivationOn && featCompactEl && featCompactEl.checked
+    );
     // Rewards is a sub-mode of Motivation — only active when both are on
     var rewardsOn = motivationOn && mstyleRewards.checked;
     document.documentElement.classList.toggle('rewards', rewardsOn);
@@ -4655,6 +5282,35 @@
   progLayoutCards.addEventListener('change', updateCtaState);
   document.getElementById('feat-stock').addEventListener('change', updateCtaState);
   featCvpCards.addEventListener('change', updateCtaState);
+  var featBorderless = document.getElementById('feat-cards-borderless');
+  if (featBorderless) featBorderless.addEventListener('change', updateCtaState);
+  var featCompact = document.getElementById('feat-cards-compact');
+  if (featCompact) featCompact.addEventListener('change', updateCtaState);
+
+  // Compact mode delegates card clicks to whichever .card-cta /
+  // .card-cta-link is currently laid out inside the card (each card
+  // contains a button per view variant; only one is visible at a
+  // time). Locked cards (visible lock overlay) ignore clicks; the
+  // CTA's own click handler covers state transitions
+  // (prompt→linking→success).
+  document.querySelectorAll('.cta-card').forEach(function (card) {
+    card.addEventListener('click', function (e) {
+      if (!document.documentElement.classList.contains('cards-compact')) return;
+      // Don't double-fire when the user clicks the inner action element.
+      if (e.target.closest('.card-cta, .card-cta-link')) return;
+      // Locked card (visible lock overlay) ignores clicks.
+      var lock = card.querySelector('.card-lock-overlay');
+      if (lock && lock.offsetParent !== null) return;
+      // Find the *visible* CTA inside the active view variant.
+      var ctas = card.querySelectorAll('.card-cta, .card-cta-link');
+      for (var i = 0; i < ctas.length; i++) {
+        if (ctas[i].offsetParent !== null) {
+          ctas[i].click();
+          return;
+        }
+      }
+    });
+  });
 
   // Recompute the media reserve + horizontal/vertical lockup whenever
   // a scenario that affects hero height changes. Bound after the
@@ -4911,6 +5567,23 @@
   var herobgContent = document.getElementById('herobg-content');
   var herobgMinimal = document.getElementById('herobg-minimal');
 
+  // Single source of truth for the badge image. Bear theme always
+  // uses its own logo; for Forza, hero-bg mode swaps to the dark
+  // wordmark *unless* the badge has been relocated by the large-logo
+  // toggle — once it sits over the hero copy, the radial vignette
+  // gives it enough darkness that the white wordmark reads better.
+  function refreshBadgeSrc() {
+    if (!heroBadge) return;
+    if (typeof currentTheme !== 'undefined' && currentTheme === 'bear') {
+      heroBadge.src = './bearly-surviving-logo.png';
+      return;
+    }
+    var html = document.documentElement;
+    var heroBgOn   = html.classList.contains('hero-bg');
+    var centered   = html.classList.contains('logo-centered');
+    heroBadge.src = (heroBgOn && !centered) ? BADGE_DARK : BADGE_LIGHT;
+  }
+
   function updateHeroBgMode() {
     var heroBgOn = document.getElementById('feat-hero-bg').checked;
     var isMinimal = heroBgOn && herobgMinimal.checked;
@@ -4920,7 +5593,7 @@
 
   document.getElementById('feat-hero-bg').addEventListener('change', function () {
     document.documentElement.classList.toggle('hero-bg', this.checked);
-    heroBadge.src = this.checked ? BADGE_DARK : BADGE_LIGHT;
+    refreshBadgeSrc();
     updateHeroBgMode();
 
     // When the key art is active, push trailer + screenshots below the fold
@@ -5126,15 +5799,10 @@
     var successSub = document.getElementById('modal-success-sub');
     if (successSub) successSub.textContent = THEME_COPY[theme].successCopy;
 
-    // 7. Hero badge has its own light/dark swap tied to hero-bg mode.
-    //    Override directly here so the bear logo wins even when hero-bg
-    //    is on (the bear logo has the contrast it needs against both
-    //    the forest backdrop and the standard dark page bg).
-    if (heroBadge) {
-      heroBadge.src = bear
-        ? './bearly-surviving-logo.webp'
-        : (document.documentElement.classList.contains('hero-bg') ? BADGE_DARK : BADGE_LIGHT);
-    }
+    // 7. Hero badge — handled by the shared refreshBadgeSrc helper
+    //    so the same logic applies wherever theme / hero-bg /
+    //    large-logo state changes.
+    if (typeof refreshBadgeSrc === 'function') refreshBadgeSrc();
 
     // 8. Trailer needs an element swap (iframe ↔ video).
     applyTrailerForTheme(theme);
@@ -5161,7 +5829,7 @@
   // when the user toggles hero-bg while the Bear theme is active.
   document.getElementById('feat-hero-bg').addEventListener('change', function () {
     if (currentTheme === 'bear') {
-      heroBadge.src = './bearly-surviving-logo.webp';
+      heroBadge.src = './bearly-surviving-logo.png';
     }
   });
 
@@ -5222,6 +5890,7 @@
   // regardless of the prior state.
   var PRESET_DEFAULTS = {
     'feat-studio-logo': false,
+    'feat-large-logo': false,
     'feat-release-date': false,
     'feat-heading': false,
     'feat-body': false,
@@ -5248,6 +5917,8 @@
     'prog-layout-hero': true,
     'prog-layout-cards': false,
     'feat-stock': false,
+    'feat-cards-borderless': false,
+    'feat-cards-compact': false,
     'feat-video-bg': false
   };
 
@@ -5255,6 +5926,7 @@
     'p1-s1': {
       'feat-heading': true,
       'feat-body': true,
+      'feat-large-logo': true,
       'feat-social': true,
       'feat-social-icons-only': true,
       'feat-hero-bg': true,
@@ -5345,7 +6017,9 @@
       'feat-motivation', 'mstyle-cvp', 'mstyle-rewards',
       'feat-cvp-cards', 'feat-progression',
       'prog-layout-hero', 'prog-layout-cards', 'feat-stock',
-      'feat-video-bg'
+      'feat-cards-borderless', 'feat-cards-compact',
+      'feat-video-bg',
+      'feat-large-logo'
     ].forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
@@ -5363,6 +6037,14 @@
       applyPreset(card.getAttribute('data-preset'));
     });
   });
+
+  // ===== Default landing state: Bear theme + Phase 1 / Scenario 1 =====
+  // applyTheme first so the bear assets + palette are in place before
+  // the preset starts dispatching change events for the toggle set.
+  applyTheme('bear');
+  applyPreset('p1-s1');
+  var defaultCard = document.querySelector('.preset-card[data-preset="p1-s1"]');
+  if (defaultCard) defaultCard.classList.add('is-active');
 </script>
 
 </body>
