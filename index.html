@@ -32,6 +32,36 @@
       --brand-rgb: 225, 29, 29;
       --brand-hover: #b21515;
     }
+    /* Into the Fire — molten orange/red volcano */
+    html.theme-fire {
+      --brand: #F25F1E;
+      --brand-rgb: 242, 95, 30;
+      --brand-hover: #c64a13;
+    }
+    /* Foxy Dumplings — warm dumpling-stamp red */
+    html.theme-foxy {
+      --brand: #E83A4E;
+      --brand-rgb: 232, 58, 78;
+      --brand-hover: #c22a3c;
+    }
+    /* Haunted Bloodlines — deep blood crimson */
+    html.theme-haunted {
+      --brand: #B91C1C;
+      --brand-rgb: 185, 28, 28;
+      --brand-hover: #911414;
+    }
+    /* Fly Corp — bright sky blue */
+    html.theme-fly {
+      --brand: #2DA8E8;
+      --brand-rgb: 45, 168, 232;
+      --brand-hover: #1d86bf;
+    }
+    /* Above the Snow — icy alpine cyan */
+    html.theme-snow {
+      --brand: #5BB7D6;
+      --brand-rgb: 91, 183, 214;
+      --brand-hover: #3f95b3;
+    }
 
     /* ===== Reset ===== */
     *, *::before, *::after {
@@ -95,6 +125,30 @@
     }
     html.theme-bear.hero-bg .bg-image {
       background-image: url('./bearly-surviving-hero.png');
+    }
+
+    /* New themes — bg defaults to the library_hero / header, hero-bg
+       scenario swaps in the same canonical art (no separate key-art file
+       for these themes, so both states share the wide hero). */
+    html.theme-fire .bg-image,
+    html.theme-fire.hero-bg .bg-image {
+      background-image: url('./assets/fire/library_hero.jpg');
+    }
+    html.theme-foxy .bg-image,
+    html.theme-foxy.hero-bg .bg-image {
+      background-image: url('./assets/foxy/hero.jpg');
+    }
+    html.theme-haunted .bg-image,
+    html.theme-haunted.hero-bg .bg-image {
+      background-image: url('./assets/haunted/library_hero.jpg');
+    }
+    html.theme-fly .bg-image,
+    html.theme-fly.hero-bg .bg-image {
+      background-image: url('./assets/fly/library_hero.jpg');
+    }
+    html.theme-snow .bg-image,
+    html.theme-snow.hero-bg .bg-image {
+      background-image: url('./assets/snow/library_hero.jpg');
     }
 
     /* In Hero Background mode, deepen the top vignette so the studio logo
@@ -4038,8 +4092,13 @@
       <div class="demo-section">
         <label class="demo-select-label" for="demo-game-select">Select game</label>
         <select class="demo-select" id="demo-game-select">
-          <option value="forza">Forza</option>
-          <option value="bear" selected>Bear</option>
+          <option value="forza">Forza Horizon 6</option>
+          <option value="bear" selected>Bearly Surviving</option>
+          <option value="fire">Into the Fire</option>
+          <option value="foxy">Foxy Dumplings</option>
+          <option value="haunted">Haunted Bloodlines</option>
+          <option value="fly">Fly Corp</option>
+          <option value="snow">Above the Snow</option>
         </select>
       </div>
 
@@ -5065,19 +5124,23 @@
     var html = document.documentElement;
     html.classList.remove('modal-reward-context');
     pendingRewardCardId = null;
-    // Restore the modal reward preview to its theme default.
+    // Restore the modal reward preview to its theme default. For extra
+    // themes the default reward is the email-card reward (set up by
+    // applyExtraTheme); for Forza/Bear we fall back to the data-*-src
+    // captured on the modal image.
     var modalImg = document.querySelector('.modal-reward-preview .modal-reward-image-frame img');
     var modalCaption = document.querySelector('.modal-reward-caption');
+    var extraTheme = (typeof EXTRA_THEMES !== 'undefined') ? EXTRA_THEMES[currentTheme] : null;
     if (modalImg) {
-      var defaultSrc = (typeof currentTheme !== 'undefined' && currentTheme === 'bear')
-        ? modalImg.dataset.bearSrc
-        : modalImg.dataset.forzaSrc;
+      var defaultSrc;
+      if (extraTheme) defaultSrc = extraTheme.rewards.email.img;
+      else defaultSrc = (currentTheme === 'bear') ? modalImg.dataset.bearSrc : modalImg.dataset.forzaSrc;
       if (defaultSrc) modalImg.setAttribute('src', defaultSrc);
     }
     if (modalCaption) {
-      var defaultText = (typeof currentTheme !== 'undefined' && currentTheme === 'bear')
-        ? modalCaption.dataset.bearText
-        : modalCaption.dataset.forzaText;
+      var defaultText;
+      if (extraTheme) defaultText = extraTheme.rewards.email.name;
+      else defaultText = (currentTheme === 'bear') ? modalCaption.dataset.bearText : modalCaption.dataset.forzaText;
       if (defaultText) modalCaption.textContent = defaultText;
     }
     // Restore modal title / sub to the current scenario default.
@@ -5195,8 +5258,293 @@
         }
       },
       successCopy: 'Welcome to the realm. Sharpen your sword.'
+    },
+    fire: {
+      hero: {
+        default: {
+          subtitle: 'Outlast the Eruption',
+          tagline: 'Race an exploding volcano. Rescue survivors, manage scarce resources, and carve escape routes through ash and lava.'
+        },
+        rewards: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to lock in founder-only survivor gear.'
+        },
+        progression: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to lock in founder-only survivor gear.'
+        }
+      },
+      cta: { default: 'Get updates', motivation: 'Get early access', rewards: 'Founder gear before launch' },
+      modal: {
+        default: { title: 'Get Updates', sub: 'Sign up for dev diaries, playtest invites, and release alerts straight to your inbox.' },
+        motivation: { title: 'Get Early Access', sub: 'Join the survivors for playtest keys, insider drops, and early access perks.' },
+        rewards: { title: 'Founder gear before launch', sub: 'Sign up to claim the Founder Loadout — then wishlist for the Ember Skin Pack and join Discord for the Volcanic Companion.' }
+      },
+      successCopy: 'Welcome to the rim. Grab your gear and run.'
+    },
+    foxy: {
+      hero: {
+        default: {
+          subtitle: 'Cook With Love',
+          tagline: 'Run a cozy food truck, cook dumplings from around the world, and discover how a meal can mend more than just hunger.'
+        },
+        rewards: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to claim the Foxy founder bundle.'
+        },
+        progression: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to claim the Foxy founder bundle.'
+        }
+      },
+      cta: { default: 'Get updates', motivation: 'Get early access', rewards: 'Founder bundle before launch' },
+      modal: {
+        default: { title: 'Get Updates', sub: 'Sign up for new recipes, cozy dev diaries, and release alerts in your inbox.' },
+        motivation: { title: 'Get Early Access', sub: 'Join the kitchen for tasting keys, recipe drops, and early access perks.' },
+        rewards: { title: 'Founder bundle before launch', sub: 'Sign up for the Golden Dumpling Cart — then wishlist for the Chef’s Apron and join Discord for the Lucky Foxy.' }
+      },
+      successCopy: 'Welcome to the kitchen. Time to fold some dumplings.'
+    },
+    haunted: {
+      hero: {
+        default: {
+          subtitle: 'Survive the Mansion',
+          tagline: 'A first-person psychological horror. Plumb the eerie depths of a living, breathing mansion that watches your every move.'
+        },
+        rewards: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to claim pre-release haunted exclusives.'
+        },
+        progression: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to claim pre-release haunted exclusives.'
+        }
+      },
+      cta: { default: 'Get updates', motivation: 'Get early access', rewards: 'Founder relics before launch' },
+      modal: {
+        default: { title: 'Get Updates', sub: 'Sign up for dev diaries, jump-scare reveals, and release alerts straight to your inbox.' },
+        motivation: { title: 'Get Early Access', sub: 'Join the séance for insider playtest invites, lore drops, and early access perks.' },
+        rewards: { title: 'Founder relics before launch', sub: 'Sign up for the Founder’s Lantern — then wishlist for the Ancestor’s Locket and join Discord for the Spectral Pet.' }
+      },
+      successCopy: 'Welcome to the manor. Mind the corridors.'
+    },
+    fly: {
+      hero: {
+        default: {
+          subtitle: 'Build Your Empire',
+          tagline: 'Open routes, buy planes, upgrade airports, and grow a global transport network across hundreds of cities.'
+        },
+        rewards: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to lock in founder-only fleet skins.'
+        },
+        progression: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to lock in founder-only fleet skins.'
+        }
+      },
+      cta: { default: 'Get updates', motivation: 'Get early access', rewards: 'Founder fleet before launch' },
+      modal: {
+        default: { title: 'Get Updates', sub: 'Sign up for dev diaries, route updates, and release alerts straight to your inbox.' },
+        motivation: { title: 'Get Early Access', sub: 'Join the hangar for insider beta invites, route drops, and early access perks.' },
+        rewards: { title: 'Founder fleet before launch', sub: 'Sign up for the Founder Concorde Skin — then wishlist for the Vintage Plane Pack and join Discord for the Pilot’s Wings.' }
+      },
+      successCopy: 'Cleared for takeoff. Welcome aboard.'
+    },
+    snow: {
+      hero: {
+        default: {
+          subtitle: 'Welcome to the Alps',
+          tagline: 'Build the perfect alpine resort in this cozy narrative tycoon. Attract alpinists, manage the shelter, and forge new trails.'
+        },
+        rewards: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to claim cozy founder rewards.'
+        },
+        progression: {
+          subtitle: 'Become a Founder',
+          tagline: 'Sign up, wishlist on Steam, and join the Discord before launch to claim cozy founder rewards.'
+        }
+      },
+      cta: { default: 'Get updates', motivation: 'Get early access', rewards: 'Founder cabin before launch' },
+      modal: {
+        default: { title: 'Get Updates', sub: 'Sign up for dev diaries, trail reveals, and release alerts straight to your inbox.' },
+        motivation: { title: 'Get Early Access', sub: 'Join the lodge for insider beta keys, story drops, and early access perks.' },
+        rewards: { title: 'Founder cabin before launch', sub: 'Sign up for the Founder’s Cabin — then wishlist for the Cozy Lodge Pack and join Discord for the Snow Hare Companion.' }
+      },
+      successCopy: 'Welcome to the lodge. Fire’s on.'
     }
   };
+
+  // ===== Extra-theme manifests =====
+  // Forza is the baseline (DOM truth) and Bear is wired via the legacy
+  // data-bear-* attribute pattern. The 5 themes below patch the DOM
+  // imperatively from this manifest so the markup stays compact — no
+  // need to sprinkle five more attribute variants on every element.
+  var EXTRA_THEMES = {
+    fire: {
+      title: 'Into the Fire — Promotional Landing Page',
+      logo: './assets/fire/logo.png',
+      modalLogoMaxWidth: '320px',
+      rewards: {
+        email:    { name: 'Founder Loadout',    img: './assets/fire/ss1.jpg' },
+        wishlist: { name: 'Ember Skin Pack',    img: './assets/fire/ss2.jpg' },
+        discord:  { name: 'Volcanic Companion', img: './assets/fire/ss3.jpg' }
+      },
+      cards: {
+        emailStayHeading: 'Stay Ahead of the Eruption',
+        emailStayBody: 'Get dev diaries, playtest invites, and launch alerts straight to your inbox.',
+        emailSuccessDefault: 'Loadout is locked in. Now wishlist on Steam and join Discord to claim the rest.',
+        emailSuccessCvp: 'You’re in. Now wishlist on Steam and join Discord to stay close to the launch.',
+        wishlistBeFirstHeading: 'Be First Through the Ash',
+        wishlistBeFirstBody: 'Lock in launch-day alerts, claim early discounts, and boost Steam’s survival picks.',
+        wishlistBody: 'Never reissued post-release.',
+        wishlistLinking: 'Link Steam to claim your Ember Skin Pack.',
+        wishlistSuccessHeading: 'Pack claimed',
+        wishlistSuccessBody: 'Your Ember Skin Pack is waiting in your loadout at launch.',
+        discordJoinHeading: 'Survive With the Crew',
+        discordJoinBody: 'Dev Q&As, extraction contests, beta giveaways, and real-time meetups with the community.',
+        discordBody: 'Discord-exclusive — claim before launch.',
+        discordLinking: 'Link Discord to unlock your Volcanic Companion in-game.',
+        discordSuccessHeading: 'Companion unlocked',
+        discordSuccessBody: 'Your Volcanic Companion is waiting on the rim at launch.'
+      },
+      storeUrl: 'https://store.steampowered.com/app/2988030/Into_the_Fire/',
+      discordUrl: '#',
+      trailerPoster: './assets/fire/trailer_poster.jpg',
+      gallery: ['./assets/fire/ss1.jpg', './assets/fire/ss2.jpg', './assets/fire/ss3.jpg', './assets/fire/ss1.jpg', './assets/fire/ss2.jpg']
+    },
+    foxy: {
+      title: 'Foxy Dumplings — Promotional Landing Page',
+      logo: './assets/foxy/logo_big.png',
+      modalLogoMaxWidth: '320px',
+      rewards: {
+        email:    { name: 'Golden Dumpling Cart', img: './assets/foxy/ss1.jpg' },
+        wishlist: { name: 'Chef’s Apron',    img: './assets/foxy/ss2.jpg' },
+        discord:  { name: 'Lucky Foxy Companion', img: './assets/foxy/ss3.jpg' }
+      },
+      cards: {
+        emailStayHeading: 'Stay In The Kitchen',
+        emailStayBody: 'Get new recipes, cozy dev diaries, and launch alerts straight to your inbox.',
+        emailSuccessDefault: 'Cart is locked in. Now wishlist on Steam and join Discord to claim the rest.',
+        emailSuccessCvp: 'You’re in. Now wishlist on Steam and join Discord to stay close to the launch.',
+        wishlistBeFirstHeading: 'Be First To The Counter',
+        wishlistBeFirstBody: 'Lock in launch-day alerts, claim early discounts, and boost Steam’s cozy picks.',
+        wishlistBody: 'Never restocked post-release.',
+        wishlistLinking: 'Link Steam to claim your Chef’s Apron.',
+        wishlistSuccessHeading: 'Apron claimed',
+        wishlistSuccessBody: 'Your Chef’s Apron is on the hook in the truck at launch.',
+        discordJoinHeading: 'Cook With the Crew',
+        discordJoinBody: 'Recipe swaps, dev Q&As, beta tastings, and real-time meetups with the community.',
+        discordBody: 'Discord-exclusive — claim before launch.',
+        discordLinking: 'Link Discord to unlock your Lucky Foxy in-game.',
+        discordSuccessHeading: 'Foxy unlocked',
+        discordSuccessBody: 'Your Lucky Foxy is curled up beside the cart at launch.'
+      },
+      storeUrl: 'https://store.steampowered.com/app/4184130/Foxy_Dumplings/',
+      discordUrl: '#',
+      trailerPoster: './assets/foxy/trailer_poster.jpg',
+      gallery: ['./assets/foxy/ss1.jpg', './assets/foxy/ss2.jpg', './assets/foxy/ss3.jpg', './assets/foxy/ss1.jpg', './assets/foxy/ss2.jpg']
+    },
+    haunted: {
+      title: 'Haunted Bloodlines — Promotional Landing Page',
+      logo: './assets/haunted/logo.png',
+      modalLogoMaxWidth: '320px',
+      rewards: {
+        email:    { name: 'Founder’s Lantern',  img: './assets/haunted/ss1.jpg' },
+        wishlist: { name: 'Ancestor’s Locket',  img: './assets/haunted/ss2.jpg' },
+        discord:  { name: 'Spectral Pet',            img: './assets/haunted/ss3.jpg' }
+      },
+      cards: {
+        emailStayHeading: 'Stay In The Manor',
+        emailStayBody: 'Get dev diaries, jump-scare reveals, and launch alerts straight to your inbox.',
+        emailSuccessDefault: 'Lantern is lit. Now wishlist on Steam and join Discord to claim the rest.',
+        emailSuccessCvp: 'You’re in. Now wishlist on Steam and join Discord to stay close to the launch.',
+        wishlistBeFirstHeading: 'Be First Through The Door',
+        wishlistBeFirstBody: 'Lock in launch-day alerts, claim early discounts, and boost Steam’s horror picks.',
+        wishlistBody: 'Never reissued post-release.',
+        wishlistLinking: 'Link Steam to claim your Ancestor’s Locket.',
+        wishlistSuccessHeading: 'Locket claimed',
+        wishlistSuccessBody: 'Your Ancestor’s Locket is waiting on the mantel at launch.',
+        discordJoinHeading: 'Investigate With the Crew',
+        discordJoinBody: 'Dev Q&As, lore drops, beta sittings, and real-time meetups with the community.',
+        discordBody: 'Discord-exclusive — claim before launch.',
+        discordLinking: 'Link Discord to summon your Spectral Pet in-game.',
+        discordSuccessHeading: 'Spirit bound',
+        discordSuccessBody: 'Your Spectral Pet is drifting beside you at launch.'
+      },
+      storeUrl: 'https://store.steampowered.com/app/2725610/Haunted_Bloodlines/',
+      discordUrl: '#',
+      trailerPoster: './assets/haunted/trailer_poster.jpg',
+      gallery: ['./assets/haunted/ss1.jpg', './assets/haunted/ss2.jpg', './assets/haunted/ss3.jpg', './assets/haunted/ss1.jpg', './assets/haunted/ss2.jpg']
+    },
+    fly: {
+      title: 'Fly Corp — Promotional Landing Page',
+      logo: './assets/fly/logo.png',
+      modalLogoMaxWidth: '320px',
+      rewards: {
+        email:    { name: 'Founder Concorde Skin', img: './assets/fly/ss1.jpg' },
+        wishlist: { name: 'Vintage Plane Pack',    img: './assets/fly/ss2.jpg' },
+        discord:  { name: 'Pilot’s Wings',    img: './assets/fly/ss3.jpg' }
+      },
+      cards: {
+        emailStayHeading: 'Stay In The Tower',
+        emailStayBody: 'Get dev diaries, route updates, and launch alerts straight to your inbox.',
+        emailSuccessDefault: 'Skin is locked in. Now wishlist on Steam and join Discord to claim the rest.',
+        emailSuccessCvp: 'You’re in. Now wishlist on Steam and join Discord to stay close to the launch.',
+        wishlistBeFirstHeading: 'Be First On The Runway',
+        wishlistBeFirstBody: 'Lock in launch-day alerts, claim early discounts, and boost Steam’s tycoon picks.',
+        wishlistBody: 'Never relisted post-release.',
+        wishlistLinking: 'Link Steam to claim your Vintage Plane Pack.',
+        wishlistSuccessHeading: 'Fleet claimed',
+        wishlistSuccessBody: 'Your Vintage Plane Pack is on the apron at launch.',
+        discordJoinHeading: 'Fly With the Crew',
+        discordJoinBody: 'Dev Q&As, route contests, beta giveaways, and real-time meetups with the community.',
+        discordBody: 'Discord-exclusive — claim before launch.',
+        discordLinking: 'Link Discord to unlock your Pilot’s Wings in-game.',
+        discordSuccessHeading: 'Wings unlocked',
+        discordSuccessBody: 'Your Pilot’s Wings are pinned on your jacket at launch.'
+      },
+      storeUrl: 'https://store.steampowered.com/app/1372530/Fly_Corp/',
+      discordUrl: '#',
+      trailerPoster: './assets/fly/trailer_poster.jpg',
+      gallery: ['./assets/fly/ss1.jpg', './assets/fly/ss2.jpg', './assets/fly/ss3.jpg', './assets/fly/ss1.jpg', './assets/fly/ss2.jpg']
+    },
+    snow: {
+      title: 'Above the Snow — Promotional Landing Page',
+      logo: './assets/snow/logo_big.png',
+      modalLogoMaxWidth: '320px',
+      rewards: {
+        email:    { name: 'Founder’s Cabin',  img: './assets/snow/ss1.jpg' },
+        wishlist: { name: 'Cozy Lodge Pack',       img: './assets/snow/ss2.jpg' },
+        discord:  { name: 'Snow Hare Companion',   img: './assets/snow/ss3.jpg' }
+      },
+      cards: {
+        emailStayHeading: 'Stay In The Lodge',
+        emailStayBody: 'Get dev diaries, trail reveals, and launch alerts straight to your inbox.',
+        emailSuccessDefault: 'Cabin is locked in. Now wishlist on Steam and join Discord to claim the rest.',
+        emailSuccessCvp: 'You’re in. Now wishlist on Steam and join Discord to stay close to the launch.',
+        wishlistBeFirstHeading: 'Be First On The Mountain',
+        wishlistBeFirstBody: 'Lock in launch-day alerts, claim early discounts, and boost Steam’s cozy picks.',
+        wishlistBody: 'Never reissued post-release.',
+        wishlistLinking: 'Link Steam to claim your Cozy Lodge Pack.',
+        wishlistSuccessHeading: 'Lodge claimed',
+        wishlistSuccessBody: 'Your Cozy Lodge Pack is set up at base camp at launch.',
+        discordJoinHeading: 'Climb With the Crew',
+        discordJoinBody: 'Dev Q&As, trail contests, beta giveaways, and real-time meetups with the community.',
+        discordBody: 'Discord-exclusive — claim before launch.',
+        discordLinking: 'Link Discord to unlock your Snow Hare in-game.',
+        discordSuccessHeading: 'Hare unlocked',
+        discordSuccessBody: 'Your Snow Hare hops beside you on the trail at launch.'
+      },
+      storeUrl: 'https://store.steampowered.com/app/2423760/Above_the_Snow/',
+      discordUrl: '#',
+      trailerPoster: './assets/snow/trailer_poster.jpg',
+      gallery: ['./assets/snow/ss1.jpg', './assets/snow/ss2.jpg', './assets/snow/ss3.jpg', './assets/snow/ss1.jpg', './assets/snow/ss2.jpg']
+    }
+  };
+
+  var EXTRA_THEME_KEYS = Object.keys(EXTRA_THEMES);
 
   var currentTheme = 'forza';
 
@@ -5707,6 +6055,11 @@
       heroBadge.src = './bearly-surviving-logo.png';
       return;
     }
+    var extra = (typeof EXTRA_THEMES !== 'undefined') ? EXTRA_THEMES[currentTheme] : null;
+    if (extra) {
+      heroBadge.src = extra.logo;
+      return;
+    }
     var html = document.documentElement;
     var heroBgOn   = html.classList.contains('hero-bg');
     var centered   = html.classList.contains('logo-centered');
@@ -5791,7 +6144,10 @@
   }
 
   document.getElementById('feat-video-bg').addEventListener('change', function () {
-    if (this.checked) {
+    // Extra themes don't ship a playable bg clip (Steam serves DASH/HLS
+    // for trailers only) — leave the static bg-image in place.
+    var extraNoVideo = typeof EXTRA_THEMES !== 'undefined' && EXTRA_THEMES[currentTheme];
+    if (this.checked && !extraNoVideo) {
       loadVideo();
       bgVideo.classList.add('active');
       bgImage.classList.add('dimmed');
@@ -5803,11 +6159,11 @@
     }
   });
 
-  // ===== Theme switcher (Forza ↔ Bearly Surviving) =====
+  // ===== Theme switcher (Forza ↔ Bearly Surviving ↔ extra Steam themes) =====
   // Forza is the source of truth in the HTML. On init we capture every
   // theme-aware src/text/href into data-forza-* alongside the existing
-  // data-bear-* values, then applyTheme just walks each element and
-  // assigns the value matching the active theme.
+  // data-bear-* values, then applyTheme either swaps to bear via the
+  // data-bear-* attrs or to one of the EXTRA_THEMES via the manifest.
   document.querySelectorAll('[data-bear-text]').forEach(function (el) {
     el.dataset.forzaText = el.textContent;
   });
@@ -5816,6 +6172,23 @@
   });
   document.querySelectorAll('[data-bear-href]').forEach(function (el) {
     el.dataset.forzaHref = el.getAttribute('href') || '';
+  });
+  // data-reward-name is the Forza baseline (Bear has data-bear-reward-name
+  // alongside). Capture the Forza original so we can restore it after a
+  // switch to one of the extra themes — those mutate the dataset directly.
+  document.querySelectorAll('[data-reward-name]').forEach(function (el) {
+    el.dataset.forzaRewardName = el.dataset.rewardName;
+  });
+  // Capture the original studio nav-logo (Forza baseline) so swapping to
+  // a game-branded logo and back is symmetric.
+  var FORZA_NAV_LOGO = (function () {
+    var nav = document.querySelector('.nav-logo');
+    return nav ? nav.getAttribute('src') : '';
+  })();
+  // Capture the original modal logos for the same reason.
+  var FORZA_MODAL_LOGOS = [];
+  document.querySelectorAll('.modal-logo').forEach(function (el) {
+    FORZA_MODAL_LOGOS.push({ el: el, src: el.getAttribute('src') });
   });
 
   // The Forza gallery + CVP + news use the same handful of Akamai URLs
@@ -5842,12 +6215,28 @@
   // Build the inverse map (bear → forza) by capturing each img's
   // *current* src up-front, so a Forza-tab return can restore the
   // exact original URL (including for elements that didn't have a
-  // data-bear-src tag).
+  // data-bear-src tag). galleryIdx derives from the Forza URL's
+  // screenshot stem so the featured image and its matching thumb
+  // (which share a stem) get the *same* index — that's what keeps
+  // the active thumb in sync with what's shown when we swap a theme.
+  var FORZA_GALLERY_STEMS = [
+    '706eb79418b2a74192de059693ddcbfaa803108a',
+    '383ace7815eaa8f8f5128a58fd8ca7df911d3e14',
+    'd4b81f0cafcfba410371e53bd696fb5cc9b434c0',
+    '041b9a2854dc647bf54d7d8b36d2f4186ed72c13',
+    '945a08124625ffa26ec0077761fcbe19df07dad5'
+  ];
+  function galleryIdxFromUrl(url) {
+    for (var i = 0; i < FORZA_GALLERY_STEMS.length; i++) {
+      if (url.indexOf(FORZA_GALLERY_STEMS[i]) !== -1) return i;
+    }
+    return 0;
+  }
   var akamaiImgs = [];
   document.querySelectorAll('img').forEach(function (img) {
     var s = img.getAttribute('src') || '';
     if (BEAR_IMG_MAP[s]) {
-      akamaiImgs.push({ el: img, forzaSrc: s, bearSrc: BEAR_IMG_MAP[s] });
+      akamaiImgs.push({ el: img, forzaSrc: s, bearSrc: BEAR_IMG_MAP[s], galleryIdx: galleryIdxFromUrl(s) });
     }
   });
   // Same for the data-img full-res lookup attribute on gallery thumbs.
@@ -5855,20 +6244,27 @@
   document.querySelectorAll('[data-img]').forEach(function (el) {
     var s = el.getAttribute('data-img') || '';
     if (BEAR_IMG_MAP[s]) {
-      akamaiDataImg.push({ el: el, forza: s, bear: BEAR_IMG_MAP[s] });
+      akamaiDataImg.push({ el: el, forza: s, bear: BEAR_IMG_MAP[s], galleryIdx: galleryIdxFromUrl(s) });
     }
   });
 
-  // Replace the YouTube iframe trailer with a local <video> when the
-  // Bear theme is active, and restore the iframe when switching back.
+  // Trailer presentation per theme:
+  //  - Forza: YouTube iframe (default)
+  //  - Bear: local <video> with the .mov clip
+  //  - Extra themes: static poster <img> (Steam serves DASH/HLS only;
+  //    we link out to the Steam page on click instead of embedding)
   function applyTrailerForTheme(theme) {
+    var extra = EXTRA_THEMES[theme];
     document.querySelectorAll('.trailer-embed').forEach(function (embed) {
       var frame = embed.querySelector('.trailer-frame');
       if (!frame) return;
       var iframe = frame.querySelector('iframe');
       var video  = frame.querySelector('video.trailer-video');
+      var poster = frame.querySelector('img.trailer-poster');
+
       if (theme === 'bear') {
         if (iframe) iframe.style.display = 'none';
+        if (poster) poster.style.display = 'none';
         if (!video) {
           video = document.createElement('video');
           video.className = 'trailer-video';
@@ -5887,18 +6283,141 @@
         } else {
           video.style.display = 'block';
         }
+      } else if (extra) {
+        if (iframe) iframe.style.display = 'none';
+        if (video) video.style.display = 'none';
+        if (!poster) {
+          poster = document.createElement('img');
+          poster.className = 'trailer-poster';
+          poster.alt = 'Trailer poster';
+          poster.style.position = 'absolute';
+          poster.style.inset = '0';
+          poster.style.width = '100%';
+          poster.style.height = '100%';
+          poster.style.objectFit = 'cover';
+          poster.style.cursor = 'pointer';
+          poster.style.background = '#000';
+          frame.appendChild(poster);
+          poster.addEventListener('click', function () {
+            if (STEAM_URL && STEAM_URL !== '#') window.open(STEAM_URL, '_blank', 'noopener');
+          });
+        }
+        poster.setAttribute('src', extra.trailerPoster);
+        poster.style.display = 'block';
       } else {
         if (video) video.style.display = 'none';
+        if (poster) poster.style.display = 'none';
         if (iframe) iframe.style.display = '';
       }
+    });
+  }
+
+  // Apply one of the extra-theme manifests to the DOM. Assumes the
+  // Forza baseline has already been restored (so we can blindly
+  // overwrite text/src on every themable element).
+  function setTxt(scope, sel, txt) {
+    var el = scope.querySelector(sel);
+    if (el && txt != null) el.textContent = txt;
+  }
+  function applyExtraTheme(t) {
+    // Studio nav logo + modal logos
+    var nav = document.querySelector('.nav-logo');
+    if (nav) nav.setAttribute('src', t.logo);
+    document.querySelectorAll('.modal-logo').forEach(function (el) {
+      el.setAttribute('src', t.logo);
+      if (t.modalLogoMaxWidth) el.style.maxWidth = t.modalLogoMaxWidth;
+      else el.style.maxWidth = '';
+      el.style.height = 'auto';
+    });
+
+    var rewards = t.rewards;
+    var cards = t.cards;
+
+    // --- Email card
+    var cEmail = document.getElementById('card-email');
+    if (cEmail) {
+      cEmail.dataset.rewardName = rewards.email.name;
+      cEmail.querySelectorAll('.reward-image').forEach(function (img) {
+        img.setAttribute('src', rewards.email.img);
+      });
+      setTxt(cEmail, '.cta-card-view-reward .cta-card-heading',
+        'Sign up to claim the Founder ' + rewards.email.name);
+      setTxt(cEmail, '.cta-card-view-default .cta-card-heading', cards.emailStayHeading);
+      setTxt(cEmail, '.cta-card-view-default .cta-card-body',    cards.emailStayBody);
+      setTxt(cEmail, '.cta-card-view-success .success-body-default', cards.emailSuccessDefault);
+      setTxt(cEmail, '.cta-card-view-success .success-body-cvp',     cards.emailSuccessCvp);
+    }
+    // --- Wishlist card
+    var cWl = document.getElementById('card-wishlist');
+    if (cWl) {
+      cWl.dataset.rewardName = rewards.wishlist.name;
+      cWl.querySelectorAll('.reward-image').forEach(function (img) {
+        img.setAttribute('src', rewards.wishlist.img);
+      });
+      setTxt(cWl, '.cta-card-view-default .cta-card-heading', cards.wishlistBeFirstHeading);
+      setTxt(cWl, '.cta-card-view-default .cta-card-body',    cards.wishlistBeFirstBody);
+      setTxt(cWl, '.cta-card-view-reward .cta-card-heading',
+        'Wishlist to claim the ' + rewards.wishlist.name);
+      setTxt(cWl, '.cta-card-view-reward .cta-card-body',     cards.wishlistBody);
+      setTxt(cWl, '.cta-card-view-linking .cvp-copy-reward',  cards.wishlistLinking);
+      setTxt(cWl, '.cta-card-view-success h3.reward-copy-reward', cards.wishlistSuccessHeading);
+      setTxt(cWl, '.cta-card-view-success p.reward-copy-reward',  cards.wishlistSuccessBody);
+    }
+    // --- Discord card
+    var cDc = document.getElementById('card-discord');
+    if (cDc) {
+      cDc.dataset.rewardName = rewards.discord.name;
+      cDc.querySelectorAll('.reward-image').forEach(function (img) {
+        img.setAttribute('src', rewards.discord.img);
+      });
+      setTxt(cDc, '.cta-card-view-default .cta-card-heading', cards.discordJoinHeading);
+      setTxt(cDc, '.cta-card-view-default .cta-card-body',    cards.discordJoinBody);
+      setTxt(cDc, '.cta-card-view-reward .cta-card-heading',
+        'Join Discord to unlock the ' + rewards.discord.name);
+      setTxt(cDc, '.cta-card-view-reward .cta-card-body',     cards.discordBody);
+      setTxt(cDc, '.cta-card-view-linking .cvp-copy-reward',  cards.discordLinking);
+      setTxt(cDc, '.cta-card-view-success h3.reward-copy-reward', cards.discordSuccessHeading);
+      setTxt(cDc, '.cta-card-view-success p.reward-copy-reward',  cards.discordSuccessBody);
+    }
+
+    // Progression hero stack (3 tiles) mirrors the 3 cards.
+    var rewardList = [rewards.email, rewards.wishlist, rewards.discord];
+    document.querySelectorAll('.progression-strip .progression-item').forEach(function (item, i) {
+      var r = rewardList[i];
+      if (!r) return;
+      var img = item.querySelector('.progression-image');
+      var cap = item.querySelector('.progression-caption');
+      if (img) img.setAttribute('src', r.img);
+      if (cap) cap.textContent = r.name;
+    });
+
+    // Reward thumb on the "cards button" reward preview (mirrors the
+    // Discord card's reward in the Forza baseline).
+    document.querySelectorAll('.btn-reward-image').forEach(function (img) {
+      img.setAttribute('src', rewards.discord.img);
+    });
+
+    // Modal reward preview default = email card reward.
+    var modalImg = document.querySelector('.modal-reward-preview .modal-reward-image-frame img');
+    var modalCap = document.querySelector('.modal-reward-caption');
+    if (modalImg) modalImg.setAttribute('src', rewards.email.img);
+    if (modalCap) modalCap.textContent = rewards.email.name;
+
+    // Steam store link on the hero CTA row + cards.
+    document.querySelectorAll('.btn-store').forEach(function (a) {
+      a.setAttribute('href', t.storeUrl);
     });
   }
 
   function applyTheme(theme) {
     currentTheme = theme;
     var html = document.documentElement;
-    html.classList.toggle('theme-bear', theme === 'bear');
+    // Toggle every theme-* CSS class atomically.
+    ['bear'].concat(EXTRA_THEME_KEYS).forEach(function (k) {
+      html.classList.toggle('theme-' + k, theme === k);
+    });
     var bear = theme === 'bear';
+    var extra = EXTRA_THEMES[theme] || null;
 
     // 1. Tagged text elements
     document.querySelectorAll('[data-bear-text]').forEach(function (el) {
@@ -5912,53 +6431,96 @@
     document.querySelectorAll('[data-bear-href]').forEach(function (el) {
       el.setAttribute('href', bear ? el.dataset.bearHref : el.dataset.forzaHref);
     });
-    // 4. Bulk-map all the Akamai screenshot URLs (gallery + news + CVP)
+    // 3b. data-reward-name (Forza baseline) restore.
+    document.querySelectorAll('[data-forza-reward-name]').forEach(function (el) {
+      el.dataset.rewardName = el.dataset.forzaRewardName;
+    });
+    // 3c. Studio nav logo + modal logos baseline restore (extra themes
+    //     overwrite these in applyExtraTheme; bear is wired via the
+    //     data-bear-src attrs already handled above).
+    if (!bear && !extra) {
+      var nav = document.querySelector('.nav-logo');
+      if (nav && FORZA_NAV_LOGO) nav.setAttribute('src', FORZA_NAV_LOGO);
+      FORZA_MODAL_LOGOS.forEach(function (rec) {
+        rec.el.setAttribute('src', rec.src);
+        rec.el.style.maxWidth = '';
+        rec.el.style.height = '';
+      });
+    }
+    // 4. Bulk-map Akamai screenshot URLs.
     akamaiImgs.forEach(function (rec) {
-      rec.el.setAttribute('src', bear ? rec.bearSrc : rec.forzaSrc);
+      var src;
+      if (bear) src = rec.bearSrc;
+      else if (extra && extra.gallery) src = extra.gallery[rec.galleryIdx % extra.gallery.length];
+      else src = rec.forzaSrc;
+      rec.el.setAttribute('src', src);
     });
     akamaiDataImg.forEach(function (rec) {
-      rec.el.setAttribute('data-img', bear ? rec.bear : rec.forza);
+      var src;
+      if (bear) src = rec.bear;
+      else if (extra && extra.gallery) src = extra.gallery[rec.galleryIdx % extra.gallery.length];
+      else src = rec.forza;
+      rec.el.setAttribute('data-img', src);
     });
 
-    // 5. Switch the click-target URLs used by the JS open() calls.
-    STEAM_URL   = bear ? '#' : 'https://store.steampowered.com/app/2483190/Forza_Horizon_6/';
-    DISCORD_URL = bear ? '#' : 'https://discord.gg/forza';
+    // 5. Click-target URLs.
+    if (extra) {
+      STEAM_URL = extra.storeUrl;
+      DISCORD_URL = extra.discordUrl || '#';
+    } else if (bear) {
+      STEAM_URL = '#';
+      DISCORD_URL = '#';
+    } else {
+      STEAM_URL = 'https://store.steampowered.com/app/2483190/Forza_Horizon_6/';
+      DISCORD_URL = 'https://discord.gg/forza';
+    }
 
-    // 6. Modal "success" sub-copy (not driven by updateCtaState).
+    // 6. Extra theme patches over the Forza baseline.
+    if (extra) applyExtraTheme(extra);
+
+    // 7. Modal "success" sub-copy (not driven by updateCtaState).
     var successSub = document.getElementById('modal-success-sub');
-    if (successSub) successSub.textContent = THEME_COPY[theme].successCopy;
+    if (successSub && THEME_COPY[theme]) successSub.textContent = THEME_COPY[theme].successCopy;
 
-    // 7. Hero badge — handled by the shared refreshBadgeSrc helper
-    //    so the same logic applies wherever theme / hero-bg /
-    //    large-logo state changes.
+    // 8. Hero badge.
     if (typeof refreshBadgeSrc === 'function') refreshBadgeSrc();
 
-    // 8. Trailer needs an element swap (iframe ↔ video).
+    // 9. Trailer swap.
     applyTrailerForTheme(theme);
 
-    // 8b. If the bg-video scenario is on, reload it with the active
-    //     theme's clip; otherwise just mark the previously-loaded
-    //     source as stale so the next toggle picks up the new theme.
+    // 10. BG video — only Forza (HLS) + Bear (local mov) ship a clip.
+    //     Extra themes fall back to the static bg-image.
     if (document.getElementById('feat-video-bg').checked) {
-      loadVideo();
-      bgVideo.play().catch(function () {});
+      if (bear || theme === 'forza') {
+        loadVideo();
+        bgVideo.play().catch(function () {});
+      } else {
+        bgVideo.classList.remove('active');
+        bgImage.classList.remove('dimmed');
+        bgVideo.pause();
+      }
     } else {
       loadedVideoTheme = null;
       videoLoaded = false;
     }
 
-    // 9. Page <title>.
-    document.title = bear ? 'Bearly Surviving — Promotional Landing Page' : 'Game Promotional Landing Page';
+    // 11. Page <title>.
+    if (extra) document.title = extra.title;
+    else document.title = bear ? 'Bearly Surviving — Promotional Landing Page'
+                                : 'Game Promotional Landing Page';
 
-    // 10. Replay scenario-driven copy so hero/cta/modal copy matches.
+    // 12. Replay scenario-driven copy so hero/cta/modal copy matches.
     updateCtaState();
   }
 
-  // Patch the hero-bg badge swap so it doesn't clobber the bear logo
-  // when the user toggles hero-bg while the Bear theme is active.
+  // Patch the hero-bg badge swap so it doesn't clobber the active
+  // theme's logo when the user toggles hero-bg while a game theme
+  // is selected.
   document.getElementById('feat-hero-bg').addEventListener('change', function () {
     if (currentTheme === 'bear') {
       heroBadge.src = './bearly-surviving-logo.png';
+    } else if (EXTRA_THEMES[currentTheme]) {
+      heroBadge.src = EXTRA_THEMES[currentTheme].logo;
     }
   });
 
