@@ -258,6 +258,26 @@
         rgb(14, 12, 23) 100%
       ) !important;
     }
+    /* In horizontal lockup mode, also paint the radial spotlight
+       behind the headline column so the text reads over the
+       bright key art. The !important here beats the no-release-
+       date rule above which would otherwise wipe the radial. */
+    html.no-release-date.hero-horizontal .vignette {
+      background:
+        radial-gradient(
+          ellipse 28% 55% at 28% 50%,
+          rgba(0, 0, 0, 0.75) 0%,
+          rgba(0, 0, 0, 0.55) 40%,
+          rgba(0, 0, 0, 0) 80%
+        ),
+        linear-gradient(
+          to bottom,
+          transparent 0%,
+          transparent 30%,
+          rgba(14, 12, 23, 0.78) 70%,
+          rgb(14, 12, 23) 100%
+        ) !important;
+    }
 
     /* ===== Navigation ===== */
     nav {
