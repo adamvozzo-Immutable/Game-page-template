@@ -1930,9 +1930,11 @@
     }
     .preset-card {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 14px 10px;
+      gap: 4px;
+      padding: 12px 10px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 6px;
@@ -1944,6 +1946,17 @@
       cursor: pointer;
       text-align: center;
       transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+    }
+    .preset-card-tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.45);
+      text-transform: uppercase;
+    }
+    .preset-card:hover .preset-card-tag,
+    .preset-card.is-active .preset-card-tag {
+      color: rgba(255, 255, 255, 0.65);
     }
     .preset-card:hover {
       background: rgba(var(--brand-rgb), 0.12);
@@ -3144,7 +3157,6 @@
       color: #ffffff;
       margin-bottom: 8px;
       text-align: center;
-      max-width: 280px;
     }
 
     .modal-sub {
@@ -3155,7 +3167,9 @@
       color: rgba(255,255,255,0.5);
       text-align: center;
       margin-bottom: 28px;
-      max-width: 260px;
+      /* No max-width — share the same horizontal bounds as the
+         buttons below, so the copy and the buttons read as the
+         same column instead of the copy being pinched narrower. */
     }
 
     .modal-google-btn {
@@ -4645,9 +4659,11 @@
         <div class="preset-grid">
           <button type="button" class="preset-card" data-preset="p1-s1">
             <span class="preset-card-name">Scenario 1</span>
+            <span class="preset-card-tag">Hero Background</span>
           </button>
           <button type="button" class="preset-card" data-preset="p1-s2">
             <span class="preset-card-name">Scenario 2</span>
+            <span class="preset-card-tag">Trailer</span>
           </button>
         </div>
       </div>
@@ -4657,9 +4673,11 @@
         <div class="preset-grid">
           <button type="button" class="preset-card" data-preset="p2-s1">
             <span class="preset-card-name">Scenario 1</span>
+            <span class="preset-card-tag">Trailer, nonlinear</span>
           </button>
           <button type="button" class="preset-card" data-preset="p2-s2">
             <span class="preset-card-name">Scenario 2</span>
+            <span class="preset-card-tag">Trailer, rewards</span>
           </button>
         </div>
       </div>
