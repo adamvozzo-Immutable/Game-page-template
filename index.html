@@ -3358,17 +3358,19 @@
         object-position: center bottom;
       }
 
-      /* When media is above the fold on mobile, center the trailer/
-         gallery vertically in the slack between the logo and the
-         headline instead of letting margin-top:auto on the headline
-         pull all the spare space below the media. */
+      /* When media is above the fold on mobile, give the trailer
+         a fixed 24px gap above and below so the spacing reads as
+         even on both sides — the prior auto margins distributed
+         spare space evenly in theory but collapsed to 0 on the
+         logo side when the viewport was short, leaving the
+         trailer touching the badge. */
       html.media-above .hero-headline {
         margin-top: 24px;
       }
       html.media-above .trailer-embed:not(.trailer-cvp),
       html.media-above .screenshot-gallery:not(.gallery-cvp) {
-        margin-top: auto;
-        margin-bottom: auto;
+        margin-top: 24px;
+        margin-bottom: 0;
       }
 
       .hero-text {
