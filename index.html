@@ -3580,18 +3580,16 @@
        Sits at the end of the cascade so each rule beats anything earlier
        without juggling specificity. */
 
-    /* Logo aspect is taller than the Forza wordmark — pull the badge size
-       down so the SURVIVING wordmark doesn't dominate the hero. The
-       :not(.logo-centered) guard lets the large-logo mode override
-       these widths cleanly when active. */
-    html.theme-bear:not(.logo-centered) .hero-badge {
-      width: 420px;
-      max-height: none;
-    }
-    html.theme-bear.media-above:not(.logo-centered) .hero-badge,
-    html.theme-bear.hero-bg:not(.logo-centered) .hero-badge {
-      width: 240px;
-      max-height: none;
+    /* Bear's logo was originally a tall stacked wordmark that
+       needed narrower bounds to keep the hero balanced. The
+       slot is now a fixed 380×110 box in media-above / hero-bg
+       and a 600-wide max-height:110 box in the default, which
+       fits every theme uniformly, so the bear-specific width
+       overrides are no longer needed. Only the logo-centered
+       (large-logo) case keeps a custom max-height to make room
+       for the tall stacked wordmark.  */
+    html.theme-bear.logo-centered .hero-headline .hero-badge {
+      max-height: clamp(160px, 26vh, 320px);
     }
 
     /* Bear badge is much taller than the Forza wordmark at the same
