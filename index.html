@@ -3684,27 +3684,23 @@
     @media (min-width: 721px) {
       html.media-above .hero {
         padding-top: 95px;
-        /* row-gap is the floor between every flex item — guarantees
-           a 32px minimum between trailer and the headline below
-           it even when the viewport collapses. Auto margins on the
-           trailer (below) absorb any extra slack so the trailer
-           floats centred in the vertical space between the badge
-           and the headline. */
-        row-gap: 32px;
       }
+      /* Fixed 32px below the trailer to the headline so the gap
+         doesn't change with viewport. The padding-top:95 above
+         lands the trailer ~40px below the badge slot's bottom
+         edge (badge bottom 163 vs nav+padding 107+95=202),
+         which reads as roughly even spacing on either side of
+         the trailer. */
       html.media-above .trailer-embed:not(.trailer-cvp),
       html.media-above .screenshot-gallery:not(.gallery-cvp) {
-        margin-top: auto;
-        margin-bottom: auto;
+        margin-top: 0;
+        margin-bottom: 32px;
       }
-      /* Drop the headline's margin-top:auto so the trailer's auto
-         margins (above) own the centring distribution; otherwise
-         three competing autos puts the trailer at the top third. */
       html.media-above .hero-headline {
         margin-top: 0;
       }
       /* Push the CTA / cards block to the bottom of the hero so
-         the trailer + headline cluster centres in the upper area. */
+         the trailer + headline cluster sits near the top. */
       html.media-above .hero-text {
         margin-top: auto;
       }
