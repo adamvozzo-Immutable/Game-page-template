@@ -3734,9 +3734,19 @@
          trailer's own margin-bottom. Avoid margin-top on the
          trailer itself — that wouldn't be subtracted from the
          height-bounded width formula and the trailer would stop
-         shrinking responsively. */
+         shrinking responsively.
+         The .no-release-date variant uses a larger padding-top
+         because the empty nav (~72px) makes the trailer start
+         higher in flow; the release-date-on variant uses a
+         smaller padding-top because the taller nav (~104px,
+         release-date eyebrow + date stacked) already pushes the
+         trailer down. Net: equal visible gap between the absolute-
+         positioned badge and the trailer across both scenarios. */
       html.media-above .hero {
         padding-top: 130px;
+      }
+      html.media-above:not(.no-release-date) .hero {
+        padding-top: 98px;
       }
       html.media-above .trailer-embed:not(.trailer-cvp),
       html.media-above .screenshot-gallery:not(.gallery-cvp) {
