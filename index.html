@@ -6481,28 +6481,34 @@
     var cards = t.cards;
 
     // --- Email card
+    // Card views: .cta-card-view-prompt (rewards mode — "Sign up to
+    // claim Founder X"), .cta-card-view-prompt-cvp (CVP mode —
+    // "Stay In The Loop"), .cta-card-view-success.
     var cEmail = document.getElementById('card-email');
     if (cEmail) {
       cEmail.dataset.rewardName = rewards.email.name;
       cEmail.querySelectorAll('.reward-image').forEach(function (img) {
         img.setAttribute('src', rewards.email.img);
       });
-      setTxt(cEmail, '.cta-card-view-reward .cta-card-heading',
+      setTxt(cEmail, '.cta-card-view-prompt .cta-card-heading',
         'Sign up to claim the Founder ' + rewards.email.name);
-      setTxt(cEmail, '.cta-card-view-default .cta-card-heading', cards.emailStayHeading);
-      setTxt(cEmail, '.cta-card-view-default .cta-card-body',    cards.emailStayBody);
+      setTxt(cEmail, '.cta-card-view-prompt-cvp .cta-card-heading', cards.emailStayHeading);
+      setTxt(cEmail, '.cta-card-view-prompt-cvp .cta-card-body',    cards.emailStayBody);
       setTxt(cEmail, '.cta-card-view-success .success-body-default', cards.emailSuccessDefault);
       setTxt(cEmail, '.cta-card-view-success .success-body-cvp',     cards.emailSuccessCvp);
     }
     // --- Wishlist card
+    // Views: .cta-card-view-prompt (default CVP "Be First..."),
+    // .cta-card-view-reward (reward "Wishlist to claim..."),
+    // .cta-card-view-linking, .cta-card-view-success.
     var cWl = document.getElementById('card-wishlist');
     if (cWl) {
       cWl.dataset.rewardName = rewards.wishlist.name;
       cWl.querySelectorAll('.reward-image').forEach(function (img) {
         img.setAttribute('src', rewards.wishlist.img);
       });
-      setTxt(cWl, '.cta-card-view-default .cta-card-heading', cards.wishlistBeFirstHeading);
-      setTxt(cWl, '.cta-card-view-default .cta-card-body',    cards.wishlistBeFirstBody);
+      setTxt(cWl, '.cta-card-view-prompt .cta-card-heading', cards.wishlistBeFirstHeading);
+      setTxt(cWl, '.cta-card-view-prompt .cta-card-body',    cards.wishlistBeFirstBody);
       setTxt(cWl, '.cta-card-view-reward .cta-card-heading',
         'Wishlist to claim the ' + rewards.wishlist.name);
       setTxt(cWl, '.cta-card-view-reward .cta-card-body',     cards.wishlistBody);
@@ -6517,8 +6523,8 @@
       cDc.querySelectorAll('.reward-image').forEach(function (img) {
         img.setAttribute('src', rewards.discord.img);
       });
-      setTxt(cDc, '.cta-card-view-default .cta-card-heading', cards.discordJoinHeading);
-      setTxt(cDc, '.cta-card-view-default .cta-card-body',    cards.discordJoinBody);
+      setTxt(cDc, '.cta-card-view-prompt .cta-card-heading', cards.discordJoinHeading);
+      setTxt(cDc, '.cta-card-view-prompt .cta-card-body',    cards.discordJoinBody);
       setTxt(cDc, '.cta-card-view-reward .cta-card-heading',
         'Join Discord to unlock the ' + rewards.discord.name);
       setTxt(cDc, '.cta-card-view-reward .cta-card-body',     cards.discordBody);
