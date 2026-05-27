@@ -947,14 +947,15 @@
     }
 
     /* ===== Sticky CTA =====
-       Floats at bottom-right on desktop and bottom-centre on mobile so
-       the primary action is always reachable while the user is reading
-       below-fold content. Slides in once the hero CTA scrolls offscreen
-       and disappears the moment the user signs in or no CTA is active. */
+       Floats at bottom-centre so the primary action is always
+       reachable while the user is reading below-fold content.
+       Slides in once the hero CTA scrolls offscreen and
+       disappears the moment the user signs in or no CTA is
+       active. */
     .sticky-cta {
       position: fixed;
       bottom: 24px;
-      right: 24px;
+      left: 50%;
       z-index: 950;
       display: inline-flex;
       align-items: center;
@@ -977,13 +978,13 @@
         0 0 0 1px rgba(255, 255, 255, 0.06),
         0 0 24px rgba(var(--brand-rgb), 0.35);
       opacity: 0;
-      transform: translateY(20px);
+      transform: translate(-50%, 20px);
       pointer-events: none;
       transition: opacity 0.25s ease, transform 0.25s ease, background 0.15s ease;
     }
     .sticky-cta.is-visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate(-50%, 0);
       pointer-events: auto;
     }
     .sticky-cta:hover {
@@ -992,8 +993,6 @@
     @media (max-width: 720px) {
       .sticky-cta {
         bottom: 16px;
-        right: 16px;
-        left: auto;
         height: 44px;
         padding: 0 20px;
         font-size: 13px;
