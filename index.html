@@ -134,7 +134,9 @@
     /* New themes — bg defaults to the library_hero / header, hero-bg
        scenario swaps in the same canonical art (no separate key-art file
        for these themes, so both states share the wide hero). */
-    html.theme-fire .bg-image,
+    html.theme-fire .bg-image {
+      background-image: url('./assets/fire/bg_default.png');
+    }
     html.theme-fire.hero-bg .bg-image {
       background-image: url('./assets/fire/library_hero.jpg');
     }
