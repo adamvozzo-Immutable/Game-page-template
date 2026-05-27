@@ -358,26 +358,21 @@
       transition: width 0.3s ease;
     }
 
-    /* Fixed-height badge box (not max-height) so logos with
-       different aspect ratios still produce the same rendered
-       height — otherwise a wide logo like Fly Corp's cloud ends
-       up 20-30px shorter than a square-ish logo like Above the
-       Snow's crest, and the gap to the trailer below reads
-       inconsistent across themes. object-position:center bottom
-       anchors the visible content to the box's bottom so every
-       logo's bottom edge sits the same distance from the
-       trailer. */
+    /* Shrink badge when any media (trailer or gallery) is above
+       the fold. max-height (not a fixed height) so the badge box
+       stays just as tall as the rendered logo and never reaches
+       down into the trailer's flow position. 120 is a moderate
+       bump from the previous 88 so the wordmark reads larger
+       without colliding with the trailer below. */
     html.media-above .hero-badge {
       width: 380px;
-      height: 160px;
-      object-position: center bottom;
+      max-height: 120px;
     }
 
     /* Same treatment in Hero Background mode. */
     html.hero-bg .hero-badge {
       width: 380px;
-      height: 160px;
-      object-position: center bottom;
+      max-height: 120px;
     }
 
     /* Large logo mode — the badge is moved into the .hero-headline
