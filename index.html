@@ -2481,6 +2481,26 @@
       background: #4752c4 !important;
       border-color: #4752c4 !important;
     }
+    /* Locked wishlist / discord cards (pre-signin in progression-
+       cards or cvp-cards mode) keep the subtle outlined button —
+       the brand fill is reserved for the unlocked / actionable
+       card so the gating is visually obvious. */
+    html.cards-compact.progression-cards:not(.email-done) #card-wishlist .card-cta,
+    html.cards-compact.progression-cards:not(.email-done) #card-discord .card-cta,
+    html.cards-compact.cvp-cards:not(.email-done) #card-wishlist .card-cta,
+    html.cards-compact.cvp-cards:not(.email-done) #card-discord .card-cta {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border-color: rgba(255, 255, 255, 0.18) !important;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    html.cards-compact.progression-cards:not(.email-done) #card-wishlist:hover .card-cta,
+    html.cards-compact.progression-cards:not(.email-done) #card-discord:hover .card-cta,
+    html.cards-compact.cvp-cards:not(.email-done) #card-wishlist:hover .card-cta,
+    html.cards-compact.cvp-cards:not(.email-done) #card-discord:hover .card-cta {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.28) !important;
+      color: rgba(255, 255, 255, 0.85);
+    }
     /* Action label is text-only in compact mode — drop the leading
        icon so the row reads like simple body copy. */
     html.cards-compact .card-cta svg,
