@@ -2168,12 +2168,13 @@
     html.progression-cards.rewards .cta-cards {
       margin-top: 8px;
     }
-    /* In phase1-followup the cards are the only thing in .hero-text
-       (cta-row is hidden), and the hero already has a 32px row-gap
-       between the headline block and .hero-text. Strip the cards'
-       own 32px margin-top so the gap above the card matches the
-       rest of the hero's rhythm. */
-    html.phase1-followup .cta-cards {
+    /* In phase1-followup + media-above (P1S2) the hero already
+       has a 32px row-gap between the headline block and
+       .hero-text, so the cards' own 32px margin-top would stack
+       on top — zero it out. P1S1 doesn't have media-above and
+       therefore no row-gap, so it keeps the default 32px
+       margin-top to maintain the same visible gap. */
+    html.phase1-followup.media-above .cta-cards {
       margin-top: 0;
     }
 
