@@ -2353,31 +2353,48 @@
       height: 100%;
       padding: 0;
     }
-    /* The action button becomes an inline action label that reads
-       like body copy; the parent card carries the click. */
+    /* The action element looks like a small button so the card
+       reads as obviously clickable. pointer-events:none keeps
+       the click on the parent card (card-level cursor:pointer
+       + handler still fires on a click anywhere). Card hover
+       lifts the button's brand accent below. */
     html.cards-compact .card-cta,
     html.cards-compact .card-cta-link {
       grid-area: action;
       width: auto;
       height: auto;
-      padding: 0;
+      padding: 8px 14px;
       margin: 0;
-      background: transparent !important;
-      border: none !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      border-radius: 4px;
       box-shadow: none !important;
-      color: rgba(255, 255, 255, 0.75);
+      color: rgba(255, 255, 255, 0.92);
       font-family: 'Inter', sans-serif;
-      font-weight: 400;
-      font-size: 13px;
-      letter-spacing: 0.02em;
-      line-height: 18px;
-      text-transform: none;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      text-transform: uppercase;
       pointer-events: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      justify-content: flex-start;
+      justify-content: center;
       justify-self: start;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    }
+    /* Card hover tints the inline button with the active brand
+       so the affordance reads even though the button itself is
+       pointer-events:none. */
+    html.cards-compact #card-email:hover .card-cta,
+    html.cards-compact #card-wishlist:hover .card-cta,
+    html.cards-compact #card-wishlist:hover .card-cta-link,
+    html.cards-compact #card-discord:hover .card-cta,
+    html.cards-compact #card-discord:hover .card-cta-link {
+      background: rgba(var(--brand-rgb), 0.22) !important;
+      border-color: rgba(var(--brand-rgb), 0.55) !important;
+      color: #ffffff;
     }
     /* Action label is text-only in compact mode — drop the leading
        icon so the row reads like simple body copy. */
@@ -2388,23 +2405,20 @@
     html.cards-compact .card-cta::before {
       display: none !important;
     }
-    /* Compact action label: underline the text and add an arrow
-       to the right so it reads like a clickable next-step
-       prompt (e.g. "Sign up for updates →"). */
+    /* Drop the prior underline since the label sits inside a
+       button frame now. */
     html.cards-compact .card-cta .btn-label,
     html.cards-compact .card-cta-link .btn-label {
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      text-decoration-color: rgba(255, 255, 255, 0.45);
+      text-decoration: none;
     }
     html.cards-compact .card-cta::after,
     html.cards-compact .card-cta-link::after {
       content: '\2192';
       display: inline-block;
-      margin-left: 6px;
-      font-size: 15px;
+      margin-left: 4px;
+      font-size: 13px;
       line-height: 1;
-      color: rgba(255, 255, 255, 0.75);
+      color: inherit;
       text-decoration: none;
     }
     /* Drop the success circle — the action-label slot already shows
