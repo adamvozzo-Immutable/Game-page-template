@@ -5552,7 +5552,24 @@
   function openModalForCardReward(card) {
     if (!card) return;
     openModal(); // resets defaults first
-    // Apply per-card context on top of the freshly-reset modal.
+    var html = document.documentElement;
+    var modalTitle = document.getElementById('modal-title');
+    var modalSub   = document.getElementById('modal-sub');
+    var verb = card.id === 'card-discord' ? 'join Discord' : 'wishlist on Steam';
+    pendingRewardCardId = card.id;
+
+    if (!html.classList.contains('rewards')) {
+      // CVP-cards mode has no reward to preview — keep the modal as
+      // the standard sign-up modal, just reframe the title / sub so
+      // the user knows the email step is the gate.
+      if (modalTitle) modalTitle.textContent = 'Sign up first';
+      if (modalSub)   modalSub.textContent   = 'Create an account to continue, then ' + verb + '.';
+      return;
+    }
+
+    // Rewards mode: swap the modal's preview image + caption to the
+    // clicked card's reward, and reframe the title / sub copy as a
+    // reward unlock.
     var rewardImg = card.querySelector('.cta-card-view-reward .reward-image')
                  || card.querySelector('.reward-image');
     var modalImg = document.querySelector('.modal-reward-preview .modal-reward-image-frame img');
@@ -5562,12 +5579,9 @@
                   || '';
     if (rewardImg && modalImg) modalImg.src = rewardImg.getAttribute('src');
     if (modalCaption && rewardName) modalCaption.textContent = rewardName;
-    var modalTitle = document.getElementById('modal-title');
-    var modalSub   = document.getElementById('modal-sub');
     if (modalTitle) modalTitle.textContent = 'Sign up to unlock';
-    if (modalSub)   modalSub.textContent   = 'Create an account to unlock this reward, then ' + (card.id === 'card-discord' ? 'join Discord' : 'wishlist on Steam') + ' to claim it.';
-    pendingRewardCardId = card.id;
-    document.documentElement.classList.add('modal-reward-context');
+    if (modalSub)   modalSub.textContent   = 'Create an account to unlock this reward, then ' + verb + ' to claim it.';
+    html.classList.add('modal-reward-context');
   }
 
   // Cards mirror the button two-step: prompt → linking → success.
