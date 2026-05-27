@@ -163,8 +163,8 @@
         rgba(8, 6, 16, 0.78) 0%,
         rgba(8, 6, 16, 0.32) 14%,
         transparent 30%,
-        rgba(0, 0, 0, 0.6) 62%,
-        rgba(8, 6, 16, 0.9) 100%
+        rgba(14, 12, 23, 0.72) 70%,
+        rgb(14, 12, 23) 100%
       );
     }
 
@@ -181,8 +181,8 @@
         rgba(8, 6, 16, 0.78) 0%,
         rgba(8, 6, 16, 0.32) 14%,
         transparent 30%,
-        rgba(0, 0, 0, 0.42) 70%,
-        rgba(8, 6, 16, 0.68) 100%
+        rgba(14, 12, 23, 0.55) 80%,
+        rgb(14, 12, 23) 100%
       );
     }
 
@@ -207,7 +207,11 @@
       opacity: 0;
     }
 
-    /* ===== Vignette overlay ===== */
+    /* ===== Vignette overlay =====
+       Bottom stop matches the cvp-content / studio-credit band
+       (rgb(14,12,23) = #0e0c17) at full opacity so the hero
+       blends seamlessly into the scroll content below the fold
+       — no hard seam where the vignette ends. */
     .vignette {
       position: fixed;
       inset: 0;
@@ -215,11 +219,26 @@
         to bottom,
         rgba(8, 6, 16, 0.4) 0%,
         transparent 25%,
-        rgba(0, 0, 0, 0.64) 60%,
-        rgba(8, 6, 16, 0.92) 100%
+        rgba(14, 12, 23, 0.78) 70%,
+        rgb(14, 12, 23) 100%
       );
       z-index: 1;
       pointer-events: none;
+    }
+
+    /* When the release-date toggle is off, the nav band is empty
+       — kill the top dim of the vignette so the bg art reads
+       straight through behind the empty nav region. Hero Background
+       mode keeps its own darker top so the studio credit / brighter
+       key art still gets a usable contrast band. */
+    html.no-release-date:not(.hero-bg) .vignette {
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 30%,
+        rgba(14, 12, 23, 0.78) 70%,
+        rgb(14, 12, 23) 100%
+      );
     }
 
     /* ===== Navigation ===== */
@@ -1370,7 +1389,32 @@
       position: relative;
       z-index: 5;
       background: #0e0c17;
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    /* Studio credit band — sits between the 100vh page and the
+       cvp-content band. Shares the same solid bg so the eye
+       reads them as one continuous section below the vignette. */
+    .studio-credit {
+      position: relative;
+      z-index: 5;
+      background: #0e0c17;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 36px 80px 32px;
+    }
+    .studio-credit .nav-logo {
+      height: 28px;
+      opacity: 0.55;
+      transition: opacity 0.2s ease, height 0.25s ease;
+    }
+    .studio-credit .nav-logo:hover {
+      opacity: 0.8;
+    }
+    @media (max-width: 720px) {
+      .studio-credit {
+        padding: 28px 24px 24px;
+      }
     }
 
     .cvp-container {
@@ -3330,8 +3374,8 @@
           to bottom,
           rgba(8, 6, 16, 0.4) 0%,
           transparent 25%,
-          rgba(0, 0, 0, 0.64) 60%,
-          rgba(8, 6, 16, 0.92) 100%
+          rgba(14, 12, 23, 0.78) 70%,
+          rgb(14, 12, 23) 100%
         );
     }
     html.hero-horizontal.hero-bg .vignette {
@@ -3347,8 +3391,8 @@
           rgba(8, 6, 16, 0.78) 0%,
           rgba(8, 6, 16, 0.32) 14%,
           transparent 30%,
-          rgba(0, 0, 0, 0.6) 62%,
-          rgba(8, 6, 16, 0.9) 100%
+          rgba(14, 12, 23, 0.72) 70%,
+          rgb(14, 12, 23) 100%
         );
     }
 
@@ -3466,13 +3510,6 @@
 
   <!-- Navigation -->
   <nav>
-    <img
-      class="nav-logo"
-      data-feature="studio-logo"
-      src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE790C2FEFRNJR5YE2ASWA6.png"
-      data-bear-src="./bearly-surviving-logo.png"
-      alt="Studio Logo"
-    />
     <div class="nav-release" data-feature="release-date">
       <span class="nav-release-eyebrow">Release date</span>
       <span class="nav-release-date">25 May 2026</span>
@@ -3899,6 +3936,21 @@
     </div>
   </footer>
 
+</div>
+
+<!-- Studio credit — sibling of .page so it falls directly below
+     the hero footer (and therefore below the fold), matching the
+     bg of the cvp-content band that follows so there's no seam.
+     Carries the data-feature so the Studio Logo toggle still
+     shows / hides it. -->
+<div class="studio-credit">
+  <img
+    class="nav-logo"
+    data-feature="studio-logo"
+    src="https://app.paper.design/file-assets/01KSE66G5TQSZRD5FRF69AYMTE/01KSE790C2FEFRNJR5YE2ASWA6.png"
+    data-bear-src="./bearly-surviving-logo.png"
+    alt="Studio Logo"
+  />
 </div>
 
 <!-- ===== CVP scroll content — toggled by demo panel ===== -->
@@ -4580,6 +4632,19 @@
   bindFeature('feat-heading', 'hero-heading');
   bindFeature('feat-body', 'hero-body');
   bindFeature('feat-updates', 'updates');
+
+  // Mirror the release-date toggle onto html.no-release-date so the
+  // CSS can drop the top vignette dim when there's nothing in the
+  // nav band to anchor it.
+  (function () {
+    var releaseEl = document.getElementById('feat-release-date');
+    if (!releaseEl) return;
+    function syncNoReleaseDateClass() {
+      document.documentElement.classList.toggle('no-release-date', !releaseEl.checked);
+    }
+    releaseEl.addEventListener('change', syncNoReleaseDateClass);
+    syncNoReleaseDateClass();
+  })();
 
   // ===== Large logo placement =====
   // When on, the hero badge is reparented as the first child of
@@ -6651,7 +6716,8 @@
       'feat-screenshots': true,
       'gpos-hero': false,
       'gpos-cvp': true,
-      'feat-social': true
+      'feat-social': true,
+      'feat-social-icons-only': true
     },
     'p2-s1': {
       'feat-studio-logo': true,
@@ -6665,6 +6731,7 @@
       'gpos-cvp': true,
       'feat-scroll': true,
       'feat-social': true,
+      'feat-social-icons-only': true,
       'feat-legal': true,
       'feat-motivation': true,
       'mstyle-cvp': true,
@@ -6683,6 +6750,7 @@
       'feat-scroll': true,
       'feat-updates': true,
       'feat-social': true,
+      'feat-social-icons-only': true,
       'feat-legal': true,
       'feat-motivation': true,
       'mstyle-cvp': false,
