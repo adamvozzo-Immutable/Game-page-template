@@ -3323,11 +3323,6 @@
         max-width: 100%;
         height: auto;
         pointer-events: auto;
-        /* Minimum clearance from the subtitle when the hero is short and
-           .hero-text's margin-top:auto collapses to 0. On taller viewports
-           the auto margin pushes the text (and CTAs) to the bottom of the
-           hero, so this margin only kicks in when space is tight. */
-        margin-bottom: 32px;
       }
 
       html.media-above .hero-badge {
@@ -5986,9 +5981,12 @@
       'cards-borderless',
       motivationOn && featBorderlessEl && featBorderlessEl.checked
     );
+    // cards-compact applies whenever the card row is on screen:
+    // motivation-on cases AND the phase1-followup wishlist card
+    // that appears post-signin in a non-Motivation flow.
     document.documentElement.classList.toggle(
       'cards-compact',
-      motivationOn && featCompactEl && featCompactEl.checked
+      (motivationOn || isSignedIn) && featCompactEl && featCompactEl.checked
     );
     // Rewards is a sub-mode of Motivation — only active when both are on
     var rewardsOn = motivationOn && mstyleRewards.checked;
