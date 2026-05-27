@@ -3319,6 +3319,16 @@
         justify-content: center;
       }
 
+      /* Mobile-only override of the icons-only top padding —
+         desktop keeps the original roomier 30/30 padding. The
+         .social-link adds 10px of inner padding around the icon,
+         so 14px here lands the icon visible edge ~24px from the
+         rule, matching the hero's 24px bottom padding above it. */
+      html.social-icons-only .social-links {
+        padding-top: 14px;
+        padding-bottom: 22px;
+      }
+
       .social-link {
         font-size: 12px;
       }
