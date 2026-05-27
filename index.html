@@ -5616,8 +5616,14 @@
     var rect = primary.getBoundingClientRect();
     stickyCta.classList.toggle('is-visible', rect.bottom <= 0);
   }
+  // When the sticky CTA opens the sign-up flow, remember that so
+  // we can auto-scroll back to the rewards section after the
+  // modal closes (without affecting any other entry point into
+  // the same modal).
+  var pendingStickyScrollback = false;
   if (stickyCta) {
     stickyCta.addEventListener('click', function () {
+      pendingStickyScrollback = true;
       var primary = findPrimaryCta();
       if (primary) primary.click();
       else openModal();
@@ -6347,6 +6353,22 @@
           updateCtaState();
           updateStoreState();
           syncHeroLayout();
+
+          // If the sign-up was kicked off by the sticky CTA, scroll
+          // back up to the rewards card row so the user sees the
+          // newly-unlocked state. updateCtaState above re-renders
+          // the cards in their post-signin state first.
+          if (pendingStickyScrollback) {
+            pendingStickyScrollback = false;
+            var target = document.querySelector('.cards-heading')
+                      || document.getElementById('cta-cards');
+            if (target && typeof target.scrollIntoView === 'function') {
+              // rAF so the layout settles after updateCtaState/syncHeroLayout.
+              window.requestAnimationFrame(function () {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              });
+            }
+          }
         }, 350));
       });
     }, 1400));
@@ -6524,6 +6546,7 @@
   document.getElementById('modal-close').addEventListener('click', function () {
     // Clear any queued progression action — user opted out.
     pendingProgressionAction = null;
+    pendingStickyScrollback = false;
     closeModal();
   });
 
@@ -6532,6 +6555,7 @@
     // Only allow backdrop dismissal in the form state
     if (modalCard.getAttribute('data-state') === 'form') {
       pendingProgressionAction = null;
+      pendingStickyScrollback = false;
       closeModal();
     }
   });
