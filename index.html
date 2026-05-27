@@ -3332,6 +3332,9 @@
       html.cards-compact #card-wishlist,
       html.cards-compact #card-discord {
         padding-right: 140px;
+        /* Override the desktop 380px cap so stacked compact cards
+           on the mobile breakpoint fill the available width. */
+        max-width: 100%;
       }
 
       /* Wider cards on mobile mean the reward image has more horizontal room
