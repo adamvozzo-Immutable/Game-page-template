@@ -2239,10 +2239,10 @@
         "heading"
         "action"
         "lock";
-      row-gap: 2px;
+      row-gap: 14px;
       align-items: center;
       max-width: 380px;
-      padding: 16px 130px 16px 18px;
+      padding: 18px 130px 18px 18px;
       position: relative;
       cursor: pointer;
       overflow: visible;
@@ -2306,6 +2306,17 @@
       letter-spacing: 0.08em;
       margin: 0;
       text-align: left;
+      /* Balance the line breaks so a single word doesn't hang
+         on its own line ("BE FIRST THROUGH THE\nGATE" becomes
+         "BE FIRST THROUGH\nTHE GATE"). */
+      text-wrap: balance;
+    }
+
+    /* Phase 1 follow-up shows only the wishlist card — let it
+       expand to a wider column so the heading and button sit
+       on one comfortable line instead of a narrow stack. */
+    html.phase1-followup.cards-compact #card-wishlist {
+      max-width: 560px;
     }
     /* Hide body copy in compact mode for every state except success
        (where the post-action message is the celebration). The
@@ -3663,6 +3674,29 @@
     @media (min-width: 721px) {
       html.media-above .hero {
         padding-top: 95px;
+        /* row-gap is the floor between every flex item — guarantees
+           a 32px minimum between trailer and the headline below
+           it even when the viewport collapses. Auto margins on the
+           trailer (below) absorb any extra slack so the trailer
+           floats centred in the vertical space between the badge
+           and the headline. */
+        row-gap: 32px;
+      }
+      html.media-above .trailer-embed:not(.trailer-cvp),
+      html.media-above .screenshot-gallery:not(.gallery-cvp) {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+      /* Drop the headline's margin-top:auto so the trailer's auto
+         margins (above) own the centring distribution; otherwise
+         three competing autos puts the trailer at the top third. */
+      html.media-above .hero-headline {
+        margin-top: 0;
+      }
+      /* Push the CTA / cards block to the bottom of the hero so
+         the trailer + headline cluster centres in the upper area. */
+      html.media-above .hero-text {
+        margin-top: auto;
       }
     }
 
