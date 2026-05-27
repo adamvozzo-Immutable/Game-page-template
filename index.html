@@ -2424,7 +2424,12 @@
       transform: translateY(-50%);
       width: 60px;
       height: 60px;
-      opacity: 0.32;
+      /* Force a white base so the icon reads on dark hero
+         backgrounds, then drop opacity so it stays a quiet
+         decorative accent rather than competing with the action
+         label. */
+      color: #ffffff;
+      opacity: 0.42;
       pointer-events: none;
       z-index: 0;
     }
