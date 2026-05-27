@@ -3359,17 +3359,15 @@
       }
 
       /* When media is above the fold on mobile, give the trailer
-         a fixed 24px gap above and below so the spacing reads as
-         even on both sides — the prior auto margins distributed
-         spare space evenly in theory but collapsed to 0 on the
-         logo side when the viewport was short, leaving the
-         trailer touching the badge. */
+         a fixed 20px gap above and below so the spacing reads as
+         even on both sides. The headline's margin-top:20 carries
+         the gap below the trailer. */
       html.media-above .hero-headline {
-        margin-top: 24px;
+        margin-top: 20px;
       }
       html.media-above .trailer-embed:not(.trailer-cvp),
       html.media-above .screenshot-gallery:not(.gallery-cvp) {
-        margin-top: 24px;
+        margin-top: 20px;
         margin-bottom: 0;
       }
 
@@ -3458,8 +3456,8 @@
         width: min(calc(100vw - 40px), calc((100vh - 488px) * 16 / 9));
         max-width: calc(100vw - 40px);
         min-width: 0;
-        margin-top: 24px;
-        margin-bottom: 24px;
+        margin-top: 20px;
+        margin-bottom: 20px;
       }
 
       .trailer-embed.trailer-cvp {
