@@ -942,8 +942,8 @@
       right: 14px;
       top: 50%;
       transform: translateY(-50%);
-      width: 12px;
-      height: 14px;
+      width: 16px;
+      height: 18px;
       background-color: currentColor;
       -webkit-mask: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E") center / contain no-repeat;
               mask: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E") center / contain no-repeat;
@@ -2407,6 +2407,37 @@
        the tick + post-signup copy. */
     html.cards-compact .card-success-icon {
       display: none;
+    }
+
+    /* Decorative side icon for compact CVP cards (no rewards). The
+       card-cta SVG (envelope / Steam glyph / Discord glyph) is
+       hidden by default in compact, but in CVP-cards mode there's
+       no reward sprite using the right side of the card — re-show
+       it as a faded large icon anchored to the right edge so the
+       row reads like a stat card. */
+    html.cards-compact.cvp-cards #card-email .cta-card-view-prompt-cvp .card-cta svg,
+    html.cards-compact.cvp-cards #card-wishlist .cta-card-view-prompt .card-cta svg,
+    html.cards-compact.cvp-cards #card-discord .cta-card-view-prompt .card-cta svg {
+      display: block;
+      position: absolute;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 60px;
+      opacity: 0.32;
+      pointer-events: none;
+    }
+    /* On mobile the side icon shrinks slightly to fit alongside the
+       text in the narrower stacked card. */
+    @media (max-width: 720px) {
+      html.cards-compact.cvp-cards #card-email .cta-card-view-prompt-cvp .card-cta svg,
+      html.cards-compact.cvp-cards #card-wishlist .cta-card-view-prompt .card-cta svg,
+      html.cards-compact.cvp-cards #card-discord .cta-card-view-prompt .card-cta svg {
+        right: 20px;
+        width: 50px;
+        height: 50px;
+      }
     }
     /* Stock tag sits flush with the heading row on the right of the
        text column. */
@@ -6705,7 +6736,11 @@
       el.setAttribute('src', t.logo);
       if (t.modalLogoMaxWidth) el.style.maxWidth = t.modalLogoMaxWidth;
       else el.style.maxWidth = '';
+      // Cap the rendered height so a near-square logo (Fire) doesn't
+      // grow to ~320px tall inside the modal — object-fit:contain
+      // keeps the aspect ratio within the height ceiling.
       el.style.height = 'auto';
+      el.style.maxHeight = '96px';
     });
 
     var rewards = t.rewards;
@@ -6821,14 +6856,22 @@
     });
     // 3c. Studio nav logo + modal logos baseline restore (extra themes
     //     overwrite these in applyExtraTheme; bear is wired via the
-    //     data-bear-src attrs already handled above).
+    //     data-bear-src attrs already handled above). Always clear
+    //     inline modal-logo styles so a prior extra-theme pass
+    //     doesn't leave its maxHeight / maxWidth attached when we
+    //     switch back to Forza or Bear.
+    if (!extra) {
+      FORZA_MODAL_LOGOS.forEach(function (rec) {
+        rec.el.style.maxWidth = '';
+        rec.el.style.height = '';
+        rec.el.style.maxHeight = '';
+      });
+    }
     if (!bear && !extra) {
       var nav = document.querySelector('.nav-logo');
       if (nav && FORZA_NAV_LOGO) nav.setAttribute('src', FORZA_NAV_LOGO);
       FORZA_MODAL_LOGOS.forEach(function (rec) {
         rec.el.setAttribute('src', rec.src);
-        rec.el.style.maxWidth = '';
-        rec.el.style.height = '';
       });
     }
     // 4. Bulk-map Akamai screenshot URLs.
