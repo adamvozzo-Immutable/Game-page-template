@@ -305,6 +305,11 @@
       transform: translateX(-50%);
       width: 600px;
       max-width: calc(100vw - 320px);
+      /* Cap rendered height so wide game-art logos (Steam header
+         images for the extra themes) don't overflow into the
+         trailer/gallery below the nav. Bear opts out further down
+         because its logo art is intentionally tall. */
+      max-height: 110px;
       object-fit: contain;
       display: block;
       z-index: 11;
@@ -315,11 +320,13 @@
     /* Shrink badge when any media (trailer or gallery) is above the fold */
     html.media-above .hero-badge {
       width: 380px;
+      max-height: 88px;
     }
 
     /* Shrink badge in Hero Background mode so it doesn't fight the key art */
     html.hero-bg .hero-badge {
       width: 380px;
+      max-height: 88px;
     }
 
     /* Large logo mode — the badge is moved into the .hero-headline
@@ -335,6 +342,10 @@
       width: min(80%, 720px);
       max-width: 720px;
       height: auto;
+      /* Roomier ceiling than the default header band, but still
+         capped so a tall game logo can't push the headline + CTA
+         off the bottom of the viewport. */
+      max-height: 240px;
       margin: 0 auto 56px;
       display: block;
     }
@@ -2836,7 +2847,7 @@
     }
 
     .modal-submit:hover {
-      background: #c52b6e;
+      background: var(--brand-hover);
     }
 
     .modal-fineprint {
@@ -3271,10 +3282,12 @@
        these widths cleanly when active. */
     html.theme-bear:not(.logo-centered) .hero-badge {
       width: 420px;
+      max-height: none;
     }
     html.theme-bear.media-above:not(.logo-centered) .hero-badge,
     html.theme-bear.hero-bg:not(.logo-centered) .hero-badge {
       width: 240px;
+      max-height: none;
     }
 
     /* Bear badge is much taller than the Forza wordmark at the same
@@ -4027,14 +4040,6 @@
       <p class="cvp-body">This Festival is always better with your friends. Seamlessly participate in Time Attack Circuits and Drag Meets or show off your customized cars at Car Meets. Earn new co-op LINK skills with other players, compete in Spec Racing Championships, or jump into the Horizon Multiplayer modes you know and love including The Eliminator and nailbiting Hide &amp; Seek.</p>
       </div>
       <img class="cvp-image" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/945a08124625ffa26ec0077761fcbe19df07dad5/ss_945a08124625ffa26ec0077761fcbe19df07dad5.1920x1080.jpg" alt="Multiplayer racing" loading="lazy" />
-    </div>
-
-    <div class="cvp-section">
-      <div class="cvp-text">
-        <h2 class="cvp-heading">Build Together, Anywhere in Japan</h2>
-      <p class="cvp-body">Create with unprecedented freedom anywhere in Japan as you build custom events with your friends in CoLab, the upgraded EventLab toolset — now featuring multiplayer support and the ability to build literally anywhere in the world. Share your masterpieces for everyone to play and discover an always evolving catalog of exciting new content created by the community.</p>
-      </div>
-      <img class="cvp-image" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/0824558c70b2e5ed67fe239d577434929f157a26/ss_0824558c70b2e5ed67fe239d577434929f157a26.1920x1080.jpg" alt="EventLab building" loading="lazy" />
     </div>
 
     <!-- Legal section — privacy/terms links + copyright fine print.
