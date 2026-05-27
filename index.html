@@ -2506,12 +2506,16 @@
     /* Bright thin stroke around the edge. inset:-1px extends the
        pseudo to cover the card's 1px border so the ring sits flush
        with the card's actual outer edge instead of 1px inside it
-       (which read as a "ring that doesn't reach the corner"). */
+       (which read as a "ring that doesn't reach the corner"). The
+       9px radius = card's 8px + the 1px outset, keeping the
+       pseudo's corner concentric with the card's so the rounded
+       curves overlap perfectly (otherwise you get a 1px kink at
+       the corners where the two slightly-offset arcs meet). */
     .cta-card[data-state="success"]::before {
       content: '';
       position: absolute;
       inset: -1px;
-      border-radius: inherit;
+      border-radius: 9px;
       padding: 1.5px;
       background: conic-gradient(
         from var(--success-angle, 0deg),
@@ -2545,7 +2549,7 @@
       content: '';
       position: absolute;
       inset: -1px;
-      border-radius: inherit;
+      border-radius: 9px;
       background: conic-gradient(
         from var(--success-angle, 0deg),
         rgba(var(--brand-rgb), 0) 0deg,
@@ -2590,7 +2594,7 @@
       content: '';
       position: absolute;
       inset: -1px;
-      border-radius: inherit;
+      border-radius: 9px;
       padding: 1.5px;
       background: conic-gradient(
         from var(--success-angle, 0deg),
@@ -2618,7 +2622,7 @@
       content: '';
       position: absolute;
       inset: -1px;
-      border-radius: inherit;
+      border-radius: 9px;
       background: conic-gradient(
         from var(--success-angle, 0deg),
         rgba(var(--brand-rgb), 0) 0deg,
