@@ -358,21 +358,25 @@
       transition: width 0.3s ease;
     }
 
-    /* Shrink badge when any media (trailer or gallery) is above
-       the fold. max-height (not a fixed height) so the badge box
-       stays just as tall as the rendered logo and never reaches
-       down into the trailer's flow position. 120 is a moderate
-       bump from the previous 88 so the wordmark reads larger
-       without colliding with the trailer below. */
+    /* Fixed-size badge slot in media-above / hero-bg modes so
+       every theme's logo renders at the same height and anchors
+       to the same baseline regardless of how wide its source PNG
+       is. object-position:center bottom hugs the visible content
+       to the slot's bottom edge so the gap to the trailer is
+       consistent (.hero's media-above padding-top below reserves
+       enough room to fit the slot without overlapping the
+       trailer in flow). */
     html.media-above .hero-badge {
       width: 380px;
-      max-height: 120px;
+      height: 110px;
+      object-position: center bottom;
     }
 
     /* Same treatment in Hero Background mode. */
     html.hero-bg .hero-badge {
       width: 380px;
-      max-height: 120px;
+      height: 110px;
+      object-position: center bottom;
     }
 
     /* Large logo mode — the badge is moved into the .hero-headline
@@ -3591,16 +3595,16 @@
     }
 
     /* Bear badge is much taller than the Forza wordmark at the same
-       width, so when media (trailer/gallery) is above the fold we need
-       extra padding-top on .hero so the badge has the same 40px gap
-       above the trailer that Forza enjoys (matching .trailer-embed's
-       margin-bottom). 82px = 40px target gap + 42px badge-extension
-       into the .hero zone (badge bottom 148 minus .hero top 106).
-       Desktop-only because mobile pushes the badge into flow and
-       uses its own padding stack. */
+       width — and the badge slot in media-above modes is now a
+       fixed 110px tall (top:53 → bottom:163), so .hero needs
+       enough padding-top in those modes to keep the trailer
+       below the badge with a usable gap. 95px = badge bottom
+       163 − .hero top 106 + ~38px target gap to the trailer.
+       Desktop-only because mobile pushes the badge into flow
+       and uses its own padding stack. */
     @media (min-width: 721px) {
-      html.theme-bear.media-above .hero {
-        padding-top: 82px;
+      html.media-above .hero {
+        padding-top: 95px;
       }
     }
 
