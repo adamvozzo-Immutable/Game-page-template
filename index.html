@@ -2430,10 +2430,10 @@
       padding: 0;
     }
     /* The action element looks like a small button so the card
-       reads as obviously clickable. pointer-events:none keeps
-       the click on the parent card (card-level cursor:pointer
-       + handler still fires on a click anywhere). Card hover
-       lifts the button's brand accent below. */
+       reads as obviously clickable. Filled with the active brand
+       colour by default; the Discord card overrides to Discord
+       purple. pointer-events:none keeps the click on the parent
+       card. */
     html.cards-compact .card-cta,
     html.cards-compact .card-cta-link {
       grid-area: action;
@@ -2441,11 +2441,11 @@
       height: auto;
       padding: 8px 14px;
       margin: 0;
-      background: rgba(255, 255, 255, 0.06) !important;
-      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      background: var(--brand) !important;
+      border: 1px solid var(--brand) !important;
       border-radius: 4px;
       box-shadow: none !important;
-      color: rgba(255, 255, 255, 0.92);
+      color: #ffffff;
       font-family: 'Inter', sans-serif;
       font-weight: 500;
       font-size: 12px;
@@ -2460,17 +2460,26 @@
       justify-self: start;
       transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
-    /* Card hover tints the inline button with the active brand
-       so the affordance reads even though the button itself is
-       pointer-events:none. */
+    /* Discord card uses Discord purple, not the active theme's
+       brand colour. */
+    html.cards-compact #card-discord .card-cta,
+    html.cards-compact #card-discord .card-cta-link {
+      background: #5865F2 !important;
+      border-color: #5865F2 !important;
+    }
+    /* Card hover darkens the inline button so the click feedback
+       still reads even though pointer-events:none keeps the
+       click on the parent card. */
     html.cards-compact #card-email:hover .card-cta,
     html.cards-compact #card-wishlist:hover .card-cta,
-    html.cards-compact #card-wishlist:hover .card-cta-link,
+    html.cards-compact #card-wishlist:hover .card-cta-link {
+      background: var(--brand-hover) !important;
+      border-color: var(--brand-hover) !important;
+    }
     html.cards-compact #card-discord:hover .card-cta,
     html.cards-compact #card-discord:hover .card-cta-link {
-      background: rgba(var(--brand-rgb), 0.22) !important;
-      border-color: rgba(var(--brand-rgb), 0.55) !important;
-      color: #ffffff;
+      background: #4752c4 !important;
+      border-color: #4752c4 !important;
     }
     /* Action label is text-only in compact mode — drop the leading
        icon so the row reads like simple body copy. */
