@@ -2323,9 +2323,27 @@
     html.cards-compact .card-cta-link svg {
       display: none;
     }
-    html.cards-compact .card-cta::before,
-    html.cards-compact .card-cta::after {
+    html.cards-compact .card-cta::before {
       display: none !important;
+    }
+    /* Compact action label: underline the text and add an arrow
+       to the right so it reads like a clickable next-step
+       prompt (e.g. "Sign up for updates →"). */
+    html.cards-compact .card-cta .btn-label,
+    html.cards-compact .card-cta-link .btn-label {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(255, 255, 255, 0.45);
+    }
+    html.cards-compact .card-cta::after,
+    html.cards-compact .card-cta-link::after {
+      content: '\2192';
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 15px;
+      line-height: 1;
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
     }
     /* Drop the success circle — the action-label slot already shows
        the tick + post-signup copy. */
@@ -3219,10 +3237,22 @@
         min-height: 0;
       }
 
-      /* Compact cards on mobile still let the reward sprite pop
-         past the card's right edge — the page-level overflow-x:
-         clip on html/body below stops the spill from producing
-         a horizontal scrollbar without clipping the sprite. */
+      /* Compact cards on mobile: cap the reward sprite's outward
+         spill so it can't extend past the viewport's right edge
+         (which would cause horizontal scroll on smaller phones
+         where overflow-x:clip support varies). Sprite still pops
+         past the card edge — just by less than on desktop. */
+      html.cards-compact .reward-media,
+      html.cards-compact .reward-media-cutout {
+        right: -8px;
+        width: 160px;
+        height: 160px;
+      }
+      html.cards-compact #card-email,
+      html.cards-compact #card-wishlist,
+      html.cards-compact #card-discord {
+        padding-right: 140px;
+      }
 
       /* Wider cards on mobile mean the reward image has more horizontal room
          than vertical — bump the cutout slot's height so the whole car fits
