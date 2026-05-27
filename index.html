@@ -361,13 +361,13 @@
     /* Shrink badge when any media (trailer or gallery) is above the fold */
     html.media-above .hero-badge {
       width: 380px;
-      max-height: 88px;
+      max-height: 160px;
     }
 
     /* Shrink badge in Hero Background mode so it doesn't fight the key art */
     html.hero-bg .hero-badge {
       width: 380px;
-      max-height: 88px;
+      max-height: 160px;
     }
 
     /* Large logo mode — the badge is moved into the .hero-headline
@@ -2120,6 +2120,25 @@
       background: #4752c4;
     }
 
+    /* Founder-hype heading shown above the cards in progression-
+       cards + rewards mode (P2S2). Hidden by default so it
+       doesn't render in non-rewards flows. */
+    .cards-heading {
+      display: none;
+      margin: 40px auto 8px;
+      text-align: center;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+    html.progression-cards.rewards .cards-heading {
+      display: block;
+    }
+
     /* ===== Motivation CVP cards ===== */
     .cta-cards {
       display: flex;
@@ -2128,6 +2147,13 @@
       margin-top: 32px;
       width: 100%;
       justify-content: center;
+    }
+
+    /* Tighten the cards' margin-top when the founder-hype heading
+       owns the top spacing — otherwise the 32px row margin stacks
+       on top of the heading's 8px margin-bottom. */
+    html.progression-cards.rewards .cta-cards {
+      margin-top: 8px;
     }
 
     .cta-card {
@@ -3923,6 +3949,11 @@
           Wishlist on Steam
         </a>
       </div>
+
+      <!-- Founder-hype heading — sits above the cards in
+           progression-cards + rewards mode, freeing the hero
+           subtitle/tagline to carry the game pitch. -->
+      <h2 class="cards-heading" id="cards-heading"></h2>
 
       <!-- Motivation cards — shown when motivation is on AND user is signed in -->
       <div class="cta-cards feat-hidden" id="cta-cards">
@@ -5958,12 +5989,24 @@
     // Bear tab swaps every line of copy alongside the assets.
     var copyMode = rewardsOn ? 'rewards' : (motivationOn ? 'motivation' : 'default');
     var heroMode = progressionOn ? 'progression' : (rewardsOn ? 'rewards' : 'default');
+    // In progression-cards + rewards mode (P2S2), the founder hype
+    // lives in a dedicated heading above the cards — so the hero
+    // subtitle/tagline reverts to the game pitch instead of doubling
+    // up on the founder copy.
+    if (progressionCards) heroMode = 'default';
     var pack = THEME_COPY[currentTheme];
     setButtonLabel(btnGetStarted, pack.cta[copyMode]);
     modalTitle.textContent = pack.modal[copyMode].title;
     modalSub.textContent = pack.modal[copyMode].sub;
     heroSubtitle.textContent = pack.hero[heroMode].subtitle;
     heroTagline.textContent = pack.hero[heroMode].tagline;
+    // Populate the founder-hype heading above the cards from the
+    // progression copy pack. CSS gates its visibility on
+    // html.progression-cards.rewards so it only renders in P2S2.
+    var cardsHeadingEl = document.getElementById('cards-heading');
+    if (cardsHeadingEl && pack.hero.progression) {
+      cardsHeadingEl.textContent = pack.hero.progression.subtitle;
+    }
 
     var ctaRow = document.querySelector('.hero-text .cta-row');
 
