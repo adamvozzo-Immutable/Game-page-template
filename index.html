@@ -150,9 +150,7 @@
     html.theme-haunted.hero-bg .bg-image {
       background-image: url('./assets/haunted/library_hero.jpg');
     }
-    html.theme-fly .bg-image {
-      background-image: url('./assets/fly/library_hero.jpg');
-    }
+    html.theme-fly .bg-image,
     html.theme-fly.hero-bg .bg-image {
       background-image: url('./assets/fly/hero_bg.png');
     }
@@ -3099,8 +3097,8 @@
         font-size: 13px;
       }
       html.hero-bg .hero-badge {
-        width: 70%;
-        max-width: 280px;
+        width: 78%;
+        max-width: 340px;
       }
 
       /* Hero — 20px side gutters, content fits */
@@ -3128,8 +3126,21 @@
       }
 
       html.media-above .hero-badge {
-        width: 70%;
-        max-width: 280px;
+        width: 78%;
+        max-width: 340px;
+      }
+
+      /* When media is above the fold on mobile, center the trailer/
+         gallery vertically in the slack between the logo and the
+         headline instead of letting margin-top:auto on the headline
+         pull all the spare space below the media. */
+      html.media-above .hero-headline {
+        margin-top: 24px;
+      }
+      html.media-above .trailer-embed:not(.trailer-cvp),
+      html.media-above .screenshot-gallery:not(.gallery-cvp) {
+        margin-top: auto;
+        margin-bottom: auto;
       }
 
       .hero-text {
@@ -3301,7 +3312,10 @@
         row-gap: 16px;
         column-gap: 28px;
         gap: 16px 28px;
-        padding: 28px 20px;
+        /* Top padding matches the hero's bottom padding (24px),
+           so the divider sits an equal distance from the button
+           above and the icons below. */
+        padding: 20px 20px 24px;
         justify-content: center;
       }
 
