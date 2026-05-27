@@ -2234,15 +2234,14 @@
     html.cards-compact #card-discord {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      grid-template-rows: auto auto auto;
+      grid-template-rows: auto auto;
       grid-template-areas:
         "heading"
-        "action"
-        "lock";
+        "action";
       row-gap: 14px;
       align-items: center;
       max-width: 380px;
-      padding: 18px 130px 18px 18px;
+      padding: 18px 130px 14px 18px;
       position: relative;
       cursor: pointer;
       overflow: visible;
@@ -2483,10 +2482,12 @@
       right: 6px;
     }
     /* Lock hint sits below the action label inside the text column
-       (instead of anchored to the bottom of the card). */
+       (instead of anchored to the bottom of the card). When visible,
+       it auto-places into the next grid row; when display:none, no
+       row is reserved, so the unlocked card collapses to just the
+       heading + action button height. */
     html.cards-compact .card-lock-overlay {
       position: static;
-      grid-area: lock;
       justify-self: start;
       justify-content: flex-start;
       margin-top: 4px;
