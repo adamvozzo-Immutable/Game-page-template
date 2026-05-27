@@ -236,18 +236,20 @@
     }
 
     /* When the release-date toggle is off, the nav band is empty
-       — kill the top dim of the vignette so the bg art reads
-       straight through behind the empty nav region. Hero Background
-       mode keeps its own darker top so the studio credit / brighter
-       key art still gets a usable contrast band. */
-    html.no-release-date:not(.hero-bg) .vignette {
+       (studio logo lives below the fold now), so kill the top dim
+       of the vignette and let the bg art read straight through the
+       empty nav region. Applies in plain mode AND in hero-bg /
+       hero-bg-minimal — the top dim was originally there to keep
+       the studio logo + release date legible over bright key art,
+       and with both gone there's nothing to anchor. */
+    html.no-release-date .vignette {
       background: linear-gradient(
         to bottom,
         transparent 0%,
         transparent 30%,
         rgba(14, 12, 23, 0.78) 70%,
         rgb(14, 12, 23) 100%
-      );
+      ) !important;
     }
 
     /* ===== Navigation ===== */
