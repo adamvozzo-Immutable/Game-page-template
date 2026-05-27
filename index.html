@@ -966,7 +966,7 @@
       background: var(--brand);
       color: #ffffff;
       border: none;
-      border-radius: 999px;
+      border-radius: 0;
       font-family: 'Rajdhani', sans-serif;
       font-weight: 600;
       font-size: 14px;
@@ -1425,6 +1425,16 @@
       max-width: 1180px;
       margin: 0 auto;
       padding: 96px 40px 120px;
+    }
+
+    /* When the only thing inside the cvp band is the legal footer
+       (description off, no below-fold trailer / gallery), collapse
+       the container's tall vertical padding — its 96px + 120px is
+       sized for full description content, and leaves a huge empty
+       gap when only the legal block is in play. */
+    html.cvp-legal-only .cvp-container {
+      padding-top: 0;
+      padding-bottom: 56px;
     }
 
     /* Alternating image / text lockup — image on one side, text on the other;
@@ -3945,9 +3955,10 @@
 <!-- Studio credit — sibling of .page so it falls directly below
      the hero footer (and therefore below the fold), matching the
      bg of the cvp-content band that follows so there's no seam.
-     Carries the data-feature so the Studio Logo toggle still
-     shows / hides it. -->
-<div class="studio-credit">
+     Both the wrapper and the img carry data-feature="studio-logo"
+     so the whole band collapses (not just the img going to
+     display:none inside an empty padded wrapper). -->
+<div class="studio-credit" data-feature="studio-logo">
   <img
     class="nav-logo"
     data-feature="studio-logo"
@@ -4794,6 +4805,16 @@
       || (trailerOn && trailerBelow)
       || legalOn;
     cvpSection.classList.toggle('feat-hidden', !showCvpContainer);
+
+    // Collapse the cvp-container's tall vertical padding when the
+    // only thing inside it is the legal footer — otherwise the
+    // hero band ends, then ~200px of empty cvp padding, then the
+    // legal divider. Looks like a broken layout.
+    var legalOnly = legalOn
+      && !descriptionOn
+      && !(galleryOn && galleryBelow)
+      && !(trailerOn && trailerBelow);
+    document.documentElement.classList.toggle('cvp-legal-only', legalOnly);
 
     // CVP text sections only visible when Description is on
     cvpTextSections.forEach(function (s) {
