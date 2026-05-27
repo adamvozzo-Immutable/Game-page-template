@@ -1195,7 +1195,7 @@
        (hero padding-top) and the gap below it (this margin-bottom) stay equal. */
     .trailer-embed {
       width: min(760px, calc((100vh - var(--hero-reserve)) * 16 / 9), calc(100vw - 160px));
-      min-width: 280px;
+      min-width: 220px;
       flex-shrink: 0;
       margin-top: auto;
       margin-bottom: 40px;
@@ -5443,10 +5443,11 @@
   // Measurement is taken in vertical mode so the headline height isn't
   // already wrapped by the narrow horizontal column.
   var HORIZONTAL_MIN_WIDTH = 1000;
-  // Comfortable minimum trailer height for vertical mode — at
-  // 16:9 this renders ~427px wide, still a usable preview before
-  // we'd rather fall back to the horizontal lockup.
-  var MIN_TRAILER_H = 240;
+  // Minimum trailer height we'll tolerate in vertical mode before
+  // falling back to the horizontal lockup. 160 lets the vertical
+  // stack persist longer on short viewports (trailer renders
+  // ~285px wide at 16:9 — still a usable preview).
+  var MIN_TRAILER_H = 160;
   function updateLayoutMode() {
     var html = document.documentElement;
     var trailerHero = document.getElementById('trailer-hero');
