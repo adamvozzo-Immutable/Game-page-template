@@ -77,6 +77,13 @@
          margin-collapse / overscroll never reveals the default
          white canvas behind a dark section. */
       background-color: #0e0c17;
+      /* overflow-x:clip lets absolute-positioned children (e.g.
+         the compact-card reward sprite that spills past the card
+         on mobile) still render past the viewport edge without
+         producing a horizontal scrollbar. Unlike overflow:hidden
+         it doesn't establish a scroll container, so sticky
+         positioning + the sticky CTA still work. */
+      overflow-x: clip;
     }
 
     a {
@@ -3212,23 +3219,10 @@
         min-height: 0;
       }
 
-      /* Compact cards on mobile: keep the reward sprite inside the
-         card on mobile so it can't push past the viewport's right
-         edge and produce a horizontal scroll. Desktop keeps the
-         sprite spilling 50px past the card edge (room is reserved
-         in the side gutters). */
-      html.cards-compact #card-email,
-      html.cards-compact #card-wishlist,
-      html.cards-compact #card-discord {
-        padding-right: 150px;
-        overflow: hidden;
-      }
-      html.cards-compact .reward-media,
-      html.cards-compact .reward-media-cutout {
-        right: 0;
-        width: 150px;
-        height: 150px;
-      }
+      /* Compact cards on mobile still let the reward sprite pop
+         past the card's right edge — the page-level overflow-x:
+         clip on html/body below stops the spill from producing
+         a horizontal scrollbar without clipping the sprite. */
 
       /* Wider cards on mobile mean the reward image has more horizontal room
          than vertical — bump the cutout slot's height so the whole car fits
