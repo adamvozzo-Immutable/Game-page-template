@@ -73,6 +73,10 @@
     html, body {
       width: 100vw;
       min-height: 100vh;
+      /* Match the cvp-content / studio-credit band bg so any
+         margin-collapse / overscroll never reveals the default
+         white canvas behind a dark section. */
+      background-color: #0e0c17;
     }
 
     a {
@@ -1393,6 +1397,11 @@
       position: relative;
       z-index: 5;
       background: #0e0c17;
+      /* New BFC so .legal-section's margin-top can't collapse out
+         of cvp-container (which has padding:0 in legal-only mode)
+         and reveal the body's default white bg between .page and
+         this section. */
+      display: flow-root;
     }
 
     /* Studio credit band — sits between the 100vh page and the
