@@ -358,16 +358,26 @@
       transition: width 0.3s ease;
     }
 
-    /* Shrink badge when any media (trailer or gallery) is above the fold */
+    /* Fixed-height badge box (not max-height) so logos with
+       different aspect ratios still produce the same rendered
+       height — otherwise a wide logo like Fly Corp's cloud ends
+       up 20-30px shorter than a square-ish logo like Above the
+       Snow's crest, and the gap to the trailer below reads
+       inconsistent across themes. object-position:center bottom
+       anchors the visible content to the box's bottom so every
+       logo's bottom edge sits the same distance from the
+       trailer. */
     html.media-above .hero-badge {
       width: 380px;
-      max-height: 160px;
+      height: 160px;
+      object-position: center bottom;
     }
 
-    /* Shrink badge in Hero Background mode so it doesn't fight the key art */
+    /* Same treatment in Hero Background mode. */
     html.hero-bg .hero-badge {
       width: 380px;
-      max-height: 160px;
+      height: 160px;
+      object-position: center bottom;
     }
 
     /* Large logo mode — the badge is moved into the .hero-headline
