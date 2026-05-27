@@ -1194,7 +1194,7 @@
        the hero (no spare space, scrollable mode), the gap above the trailer
        (hero padding-top) and the gap below it (this margin-bottom) stay equal. */
     .trailer-embed {
-      width: min(760px, calc((100vh - var(--hero-reserve)) * 16 / 9), calc(100vw - 160px));
+      width: min(1000px, calc((100vh - var(--hero-reserve)) * 16 / 9), calc(100vw - 160px));
       min-width: 220px;
       flex-shrink: 0;
       margin-top: auto;
@@ -6184,6 +6184,13 @@
       'phase1-followup',
       isSignedIn && !motivationOn
     );
+    // Two short CVP bullets show below the Get Updates CTA in
+    // Phase 1 (no motivation) pre-signin only. Toggle here so it
+    // also clears when switching to a P2 motivation preset.
+    document.documentElement.classList.toggle(
+      'show-hero-bullets',
+      !motivationOn && !isSignedIn
+    );
 
     // 3-card gated layout (progression-cards OR cvp-cards) — the email
     // card replaces the hero CTA as the sign-up entry point, so we
@@ -6211,14 +6218,6 @@
     // Not in progression — make sure the cta-row is back from any
     // earlier hide (motivation+signed-in path may re-hide it below).
     if (ctaRow) ctaRow.classList.remove('feat-hidden');
-
-    // Two short CVP bullets show below the Get Updates CTA in
-    // Phase 1 (no motivation) pre-signin only. CSS reveals them
-    // via html.show-hero-bullets.
-    document.documentElement.classList.toggle(
-      'show-hero-bullets',
-      !motivationOn && !isSignedIn
-    );
 
     // No card-gated layout active: cards should be hidden pre-sign-in.
     // Without this reset, a previous cards-mode (e.g. cvp-cards preset)
