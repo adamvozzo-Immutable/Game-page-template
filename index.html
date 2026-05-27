@@ -2503,11 +2503,14 @@
       border-color: rgba(255, 255, 255, 0.04);
     }
 
-    /* Bright thin stroke around the edge */
+    /* Bright thin stroke around the edge. inset:-1px extends the
+       pseudo to cover the card's 1px border so the ring sits flush
+       with the card's actual outer edge instead of 1px inside it
+       (which read as a "ring that doesn't reach the corner"). */
     .cta-card[data-state="success"]::before {
       content: '';
       position: absolute;
-      inset: 0;
+      inset: -1px;
       border-radius: inherit;
       padding: 1.5px;
       background: conic-gradient(
@@ -2541,7 +2544,7 @@
     .cta-card[data-state="success"]::after {
       content: '';
       position: absolute;
-      inset: 0;
+      inset: -1px;
       border-radius: inherit;
       background: conic-gradient(
         from var(--success-angle, 0deg),
@@ -2569,6 +2572,73 @@
       to {
         --success-angle: 360deg;
       }
+    }
+
+    /* Pre-signin highlight on the email card — when the wishlist
+       and discord cards are locked behind the signup, draw the
+       same orbiting conic-gradient edge highlight around the
+       email card so the eye lands on the only unlocked action.
+       Mirrors the success-state rings exactly so the visual
+       language is shared. */
+    html.progression-cards:not(.email-done) #card-email,
+    html.cvp-cards:not(.email-done) #card-email {
+      isolation: isolate;
+      border-color: rgba(255, 255, 255, 0.04);
+    }
+    html.progression-cards:not(.email-done) #card-email::before,
+    html.cvp-cards:not(.email-done) #card-email::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(
+        from var(--success-angle, 0deg),
+        rgba(var(--brand-rgb), 0) 0deg,
+        rgba(var(--brand-rgb), 0.7) 60deg,
+        rgba(255, 200, 220, 0.5) 80deg,
+        rgba(var(--brand-rgb), 0.35) 110deg,
+        rgba(var(--brand-rgb), 0) 160deg,
+        rgba(var(--brand-rgb), 0) 360deg
+      );
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      animation: orbit-success 6s linear infinite;
+      z-index: 2;
+    }
+    html.progression-cards:not(.email-done) #card-email::after,
+    html.cvp-cards:not(.email-done) #card-email::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: conic-gradient(
+        from var(--success-angle, 0deg),
+        rgba(var(--brand-rgb), 0) 0deg,
+        rgba(var(--brand-rgb), 0.38) 60deg,
+        rgba(var(--brand-rgb), 0.14) 110deg,
+        rgba(var(--brand-rgb), 0) 170deg,
+        rgba(var(--brand-rgb), 0) 360deg
+      );
+      filter: blur(18px);
+      -webkit-mask: radial-gradient(ellipse 90% 90% at center, transparent 40%, black 85%);
+      mask: radial-gradient(ellipse 90% 90% at center, transparent 40%, black 85%);
+      pointer-events: none;
+      animation: orbit-success 6s linear infinite;
+      z-index: 0;
+    }
+    /* Card content lifts above the inner glow but stays below the stroke. */
+    html.progression-cards:not(.email-done) #card-email .cta-card-view,
+    html.cvp-cards:not(.email-done) #card-email .cta-card-view {
+      position: relative;
+      z-index: 1;
     }
 
     .cta-card[data-state="success"] .cta-card-view-success {
