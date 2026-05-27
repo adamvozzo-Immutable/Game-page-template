@@ -2205,13 +2205,13 @@
     html.progression-cards.rewards .cta-cards {
       margin-top: 8px;
     }
-    /* In phase1-followup + media-above (P1S2) the hero already
-       has a 32px row-gap between the headline block and
-       .hero-text, so the cards' own 32px margin-top would stack
-       on top — zero it out. P1S1 doesn't have media-above and
-       therefore no row-gap, so it keeps the default 32px
-       margin-top to maintain the same visible gap. */
-    html.phase1-followup.media-above .cta-cards {
+    /* In media-above mode the hero already adds a row-gap
+       between the headline block and .hero-text, so the cards'
+       own 32px margin-top would stack on top. Zero it out for
+       every media-above scenario so P1S2 and P2S1 land at the
+       same gap. Non-media-above scenarios (P1S1) keep the
+       default 32px margin-top to maintain visible spacing. */
+    html.media-above .cta-cards {
       margin-top: 0;
     }
 
@@ -6176,6 +6176,15 @@
 
     var ctaRow = document.querySelector('.hero-text .cta-row');
 
+    // phase1-followup = signed in, no motivation flow active.
+    // Compute and toggle BEFORE the card-gated early returns so a
+    // previously-set class doesn't leak into a P2 scenario and
+    // hide the email / discord cards.
+    document.documentElement.classList.toggle(
+      'phase1-followup',
+      isSignedIn && !motivationOn
+    );
+
     // 3-card gated layout (progression-cards OR cvp-cards) — the email
     // card replaces the hero CTA as the sign-up entry point, so we
     // need the cards container visible pre-sign-in (the other cards
@@ -6216,7 +6225,6 @@
     // would leave .cta-cards visible after the scenario flips off.
     if (!isSignedIn) {
       ctaCards.classList.add('feat-hidden');
-      document.documentElement.classList.remove('phase1-followup');
       return;
     }
     // Post-sign-in: even without Motivation enabled, the inline
@@ -6228,7 +6236,6 @@
     btnDiscord.classList.add('feat-hidden');
     ctaCards.classList.remove('feat-hidden');
     if (ctaRow) ctaRow.classList.add('feat-hidden');
-    document.documentElement.classList.toggle('phase1-followup', !motivationOn);
   }
 
   featMotivation.addEventListener('change', updateCtaState);
