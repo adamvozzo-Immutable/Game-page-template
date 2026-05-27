@@ -2133,6 +2133,43 @@
       background: #4752c4;
     }
 
+    /* Two short CVP bullets shown below the Get Updates CTA in
+       Phase 1 (no motivation, pre-signin). Hidden by default;
+       JS toggles html.show-hero-bullets when conditions match. */
+    .hero-bullets {
+      display: none;
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      flex-direction: row;
+      gap: 28px;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.78);
+    }
+    html.show-hero-bullets .hero-bullets {
+      display: flex;
+    }
+    .hero-bullets li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-bullet-tick {
+      color: var(--brand);
+      font-weight: 700;
+    }
+    @media (max-width: 720px) {
+      .hero-bullets {
+        gap: 18px;
+        font-size: 12px;
+        margin-top: 14px;
+      }
+    }
+
     /* Founder-hype heading shown above the cards in progression-
        cards + rewards mode (P2S2). Hidden by default so it
        doesn't render in non-rewards flows. */
@@ -3415,6 +3452,16 @@
         line-height: 28px;
       }
 
+      /* Match the founder-hype cards-heading to the hero subtitle
+         size on mobile so it reads as a peer headline above the
+         compact cards rather than a louder competing title. */
+      .cards-heading {
+        font-size: 22px;
+        line-height: 28px;
+        letter-spacing: 0.08em;
+        margin-top: 24px;
+      }
+
       .hero-tagline {
         font-size: 14px;
         line-height: 22px;
@@ -3682,15 +3729,15 @@
        Desktop-only because mobile pushes the badge into flow
        and uses its own padding stack. */
     @media (min-width: 721px) {
+      /* Gap above the trailer is owned by hero padding-top (so
+         the updateHeroReserve calc sees it) and gap below by the
+         trailer's own margin-bottom. Avoid margin-top on the
+         trailer itself — that wouldn't be subtracted from the
+         height-bounded width formula and the trailer would stop
+         shrinking responsively. */
       html.media-above .hero {
-        padding-top: 95px;
+        padding-top: 130px;
       }
-      /* Fixed 32px below the trailer to the headline so the gap
-         doesn't change with viewport. The padding-top:95 above
-         lands the trailer ~40px below the badge slot's bottom
-         edge (badge bottom 163 vs nav+padding 107+95=202),
-         which reads as roughly even spacing on either side of
-         the trailer. */
       html.media-above .trailer-embed:not(.trailer-cvp),
       html.media-above .screenshot-gallery:not(.gallery-cvp) {
         margin-top: 0;
@@ -4057,6 +4104,14 @@
         </a>
       </div>
 
+      <!-- Two short CVP bullets shown below the Get Updates CTA
+           in Phase 1 only (no motivation, pre-signin). Gated via
+           html.show-hero-bullets in CSS. -->
+      <ul class="hero-bullets" id="hero-bullets" aria-label="Why sign up">
+        <li><span class="hero-bullet-tick" aria-hidden="true">✓</span>Day-one launch alerts</li>
+        <li><span class="hero-bullet-tick" aria-hidden="true">✓</span>Founder-only rewards</li>
+      </ul>
+
       <!-- Founder-hype heading — sits above the cards in
            progression-cards + rewards mode, freeing the hero
            subtitle/tagline to carry the game pitch. -->
@@ -4109,8 +4164,8 @@
               </svg>
             </div>
             <h3 class="cta-card-heading">Signed up</h3>
-            <p class="cta-card-body success-body-default" data-bear-text="Crown is locked in. Now wishlist on Steam and join Discord to claim the rest.">Supra livery is locked in. Now wishlist on Steam and join Discord to unlock the rest.</p>
-            <p class="cta-card-body success-body-cvp" data-bear-text="You're in. Now wishlist on Steam and join the Discord to stay close to the launch.">You're in. Now wishlist on Steam and join Discord to stay close to the launch.</p>
+            <p class="cta-card-body success-body-default" data-bear-text="Crown locked in. Wishlist + Discord for the rest.">Supra livery locked in. Wishlist + Discord for the rest.</p>
+            <p class="cta-card-body success-body-cvp" data-bear-text="You’re in. Wishlist + Discord to stay close.">You’re in. Wishlist + Discord to stay close.</p>
           </div>
         </div>
 
@@ -6147,6 +6202,14 @@
     // earlier hide (motivation+signed-in path may re-hide it below).
     if (ctaRow) ctaRow.classList.remove('feat-hidden');
 
+    // Two short CVP bullets show below the Get Updates CTA in
+    // Phase 1 (no motivation) pre-signin only. CSS reveals them
+    // via html.show-hero-bullets.
+    document.documentElement.classList.toggle(
+      'show-hero-bullets',
+      !motivationOn && !isSignedIn
+    );
+
     // No card-gated layout active: cards should be hidden pre-sign-in.
     // Without this reset, a previous cards-mode (e.g. cvp-cards preset)
     // would leave .cta-cards visible after the scenario flips off.
@@ -7143,9 +7206,6 @@
       'feat-body': true,
       'feat-trailer': true,
       'tpos-hero': true,
-      'feat-screenshots': true,
-      'gpos-hero': false,
-      'gpos-cvp': true,
       'feat-social': true,
       'feat-social-icons-only': true,
       'feat-cards-compact': true
