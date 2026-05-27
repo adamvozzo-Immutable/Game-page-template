@@ -94,11 +94,11 @@
     }
 
     /* ===== Background image =====
-       position:fixed so the bg stays viewport-sized and locked to the visual
-       viewport when the page scrolls; otherwise inset:0 against a taller
-       .page would stretch the image. */
+       position:absolute so the bg sits inside .page (which is
+       position:relative) and scrolls out naturally with the hero
+       when the user reaches the cvp-content below. */
     .bg-image {
-      position: fixed;
+      position: absolute;
       inset: 0;
       background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/5ce35cb7c29431e9c58ec2228f6eaa8842953bc2/page_bg_raw.jpg');
       background-size: cover;
@@ -187,9 +187,11 @@
     }
 
 
-    /* ===== Background video ===== */
+    /* ===== Background video =====
+       Same absolute positioning as the bg image — sits inside
+       .page and scrolls out with the hero. */
     .bg-video {
-      position: fixed;
+      position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
@@ -208,12 +210,15 @@
     }
 
     /* ===== Vignette overlay =====
-       Bottom stop matches the cvp-content / studio-credit band
-       (rgb(14,12,23) = #0e0c17) at full opacity so the hero
-       blends seamlessly into the scroll content below the fold
-       — no hard seam where the vignette ends. */
+       position:absolute so it covers the .page bounds and scrolls
+       with the hero — when the user scrolls into the cvp-content,
+       the vignette goes with the hero instead of staying pinned
+       to the viewport and being covered by incoming content.
+       Bottom stop lands on rgb(14,12,23) = #0e0c17 (the bg of the
+       studio-credit + cvp-content bands) at full opacity so the
+       hero fades cleanly into the scroll section. */
     .vignette {
-      position: fixed;
+      position: absolute;
       inset: 0;
       background: linear-gradient(
         to bottom,
