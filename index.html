@@ -3194,6 +3194,24 @@
         min-height: 0;
       }
 
+      /* Compact cards on mobile: keep the reward sprite inside the
+         card on mobile so it can't push past the viewport's right
+         edge and produce a horizontal scroll. Desktop keeps the
+         sprite spilling 50px past the card edge (room is reserved
+         in the side gutters). */
+      html.cards-compact #card-email,
+      html.cards-compact #card-wishlist,
+      html.cards-compact #card-discord {
+        padding-right: 150px;
+        overflow: hidden;
+      }
+      html.cards-compact .reward-media,
+      html.cards-compact .reward-media-cutout {
+        right: 0;
+        width: 150px;
+        height: 150px;
+      }
+
       /* Wider cards on mobile mean the reward image has more horizontal room
          than vertical — bump the cutout slot's height so the whole car fits
          and switch to object-fit:contain so neither dimension crops. */
