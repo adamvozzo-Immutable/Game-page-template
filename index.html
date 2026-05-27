@@ -398,10 +398,11 @@
          height — clamps to 130px on short screens so the top
          third of the hero key art stays visible (knight / hero
          silhouette), and grows up to 260px on tall screens. The
-         20vh preferred value means the logo starts gradually
-         shrinking once the viewport drops below ~1300px tall,
-         instead of waiting until things are already cramped. */
-      max-height: clamp(130px, 20vh, 260px);
+         17vh preferred value means the logo starts gradually
+         shrinking once the viewport drops below ~1500px tall —
+         earlier than 20vh would so the hero art gets relief
+         sooner. */
+      max-height: clamp(130px, 17vh, 260px);
       margin: 0 auto 56px;
       display: block;
     }
