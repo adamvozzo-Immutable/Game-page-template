@@ -3305,11 +3305,15 @@
       /* Phase 2 (motivation on) packs the hero with extra below-
          logo content (cards / progression stack / extra CTAs).
          Shrink the badge on mobile so more of the available
-         actions stay above the fold. */
+         actions stay above the fold. max-width is generous so
+         wide-aspect logos (Bear 3.3:1, Forza 6:1) can scale up
+         enough to actually reach the 110px height ceiling
+         instead of bottoming out short and leaving the slot
+         half-empty. */
       html.motivation-on .hero-badge {
-        width: 60%;
-        max-width: 240px;
-        max-height: 100px;
+        width: 80%;
+        max-width: 420px;
+        max-height: 110px;
       }
 
       /* When media is above the fold on mobile, center the trailer/
