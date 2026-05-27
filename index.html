@@ -3106,8 +3106,9 @@
         font-size: 13px;
       }
       html.hero-bg .hero-badge {
-        width: 78%;
-        max-width: 340px;
+        width: 80%;
+        max-width: 720px;
+        max-height: 240px;
       }
 
       /* Hero — 20px side gutters, content fits */
@@ -3135,8 +3136,13 @@
       }
 
       html.media-above .hero-badge {
-        width: 78%;
-        max-width: 340px;
+        /* Match the large-logo / hero-bg badge sizing on mobile so a
+           media-above scenario (P1S2) shows the game wordmark at the
+           same scale as a logo-centered scenario (P1S1). The 240px
+           max-height matches html.logo-centered's cap. */
+        width: 80%;
+        max-width: 720px;
+        max-height: 240px;
       }
 
       /* When media is above the fold on mobile, center the trailer/
