@@ -792,10 +792,13 @@
     /* Phase 1 follow-up: signed in without Motivation, so swap the
        inline "Wishlist on Steam" button for the unlocked wishlist
        motivation card alone. Hide the email + discord cards; the
-       wishlist card sits centered in the .cta-cards row. */
+       wishlist card sits centered in the .cta-cards row.
+       !important so this beats the later html.cards-compact
+       #card-email / #card-discord {display:grid} rules — same
+       specificity, but those come further down in source order. */
     html.phase1-followup #card-email,
     html.phase1-followup #card-discord {
-      display: none;
+      display: none !important;
     }
 
     .cta-card.progression-cards-only { display: none; }
