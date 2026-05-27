@@ -2214,6 +2214,23 @@
     html.cards-compact .cta-cards {
       gap: 40px;
     }
+
+    /* Below ~960px the three-up compact row gets too cramped —
+       text wraps a word per line and the sprites collide with the
+       adjacent cards' headings. Switch to a stacked column layout
+       above the mobile breakpoint so the cards stay readable. */
+    @media (max-width: 960px) {
+      html.cards-compact .cta-cards {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+      }
+      html.cards-compact #card-email,
+      html.cards-compact #card-wishlist,
+      html.cards-compact #card-discord {
+        max-width: 100%;
+      }
+    }
     html.cards-compact #card-email:hover,
     html.cards-compact #card-wishlist:hover,
     html.cards-compact #card-discord:hover {
