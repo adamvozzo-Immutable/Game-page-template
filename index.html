@@ -3774,17 +3774,11 @@
        Sits at the end of the cascade so each rule beats anything earlier
        without juggling specificity. */
 
-    /* Bear's logo was originally a tall stacked wordmark that
-       needed narrower bounds to keep the hero balanced. The
-       slot is now a fixed 380×110 box in media-above / hero-bg
-       and a 600-wide max-height:110 box in the default, which
-       fits every theme uniformly, so the bear-specific width
-       overrides are no longer needed. Only the logo-centered
-       (large-logo) case keeps a custom max-height to make room
-       for the tall stacked wordmark.  */
-    html.theme-bear.logo-centered .hero-headline .hero-badge {
-      max-height: clamp(160px, 26vh, 320px);
-    }
+    /* Bear's slot now uses the same shared sizing as every other
+       theme — the previous bear-specific width / max-height
+       overrides were left over from when bear had a custom
+       layout and made the logo render noticeably bigger than the
+       extra themes. Nothing to override anymore. */
 
     /* Bear badge is much taller than the Forza wordmark at the same
        width — and the badge slot in media-above modes is now a
