@@ -1216,7 +1216,7 @@
        the hero (no spare space, scrollable mode), the gap above the trailer
        (hero padding-top) and the gap below it (this margin-bottom) stay equal. */
     .trailer-embed {
-      width: min(1200px, calc((100vh - var(--hero-reserve)) * 16 / 9), calc(100vw - 160px));
+      width: min(1600px, calc((100vh - var(--hero-reserve)) * 16 / 9), calc(100vw - 160px));
       min-width: 220px;
       flex-shrink: 0;
       margin-top: auto;
@@ -3932,6 +3932,15 @@
          the trailer + headline cluster sits near the top. */
       html.media-above .hero-text {
         margin-top: auto;
+      }
+      /* In social-in-footer mode the hero has +80px padding-bottom
+         and the footer below is empty (socials moved into the
+         legal section). Drop the hero-text auto margin so spare
+         vertical space doesn't end up as a brown padding band
+         above the CTA — the bumped trailer max-width above lets
+         the trailer fill that space instead. */
+      html.media-above.social-in-footer .hero-text {
+        margin-top: 0;
       }
     }
 
