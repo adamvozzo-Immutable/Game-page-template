@@ -3948,8 +3948,16 @@
         padding-left: 40px;
         padding-right: 40px;
       }
+      /* Let the trailer escape the hero's horizontal padding via
+         negative margins so the height-bound formula (rather than a
+         horizontal cap) decides its size. That way any spare vertical
+         slack in the hero gets absorbed by a taller trailer instead
+         of leaking out as a margin band above the CTA. The 100vw
+         absolute cap prevents horizontal page overflow. */
       html.social-in-footer.media-above:not(.motivation-on) .trailer-embed:not(.trailer-cvp) {
-        width: min(2400px, calc((100vh - var(--hero-reserve)) * 16 / 9), calc(100vw - 80px));
+        width: min(2400px, calc((100vh - var(--hero-reserve)) * 16 / 9), 100vw);
+        margin-left: -40px;
+        margin-right: -40px;
       }
     }
 
