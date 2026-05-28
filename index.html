@@ -4052,6 +4052,15 @@
     html.hero-horizontal .hero-text {
       margin-top: 24px;
     }
+    /* P2S2 (rewards + progression cards) — the .hero-text below the
+       horizontal stage only contains the founder-hype heading + cards.
+       Without auto margins, all hero slack lands below it and the cards
+       cling to the trailer. Split slack evenly so the cards sit centered
+       between the stage and the bottom of the hero. */
+    html.hero-horizontal.progression-cards.rewards .hero-text {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
 
     /* Pixel-art reward sprites: kill the cutout drop-shadow halo and use
        crisp-edges interpolation so the pixels stay pixelly. */
