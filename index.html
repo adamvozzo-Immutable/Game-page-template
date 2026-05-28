@@ -1223,14 +1223,14 @@
       margin-bottom: 40px;
     }
 
-    /* Between 721-960px width, cards-compact stacks the
+    /* Between 721-1000px width, cards-compact stacks the
        motivation cards vertically, which inflates the
        --hero-reserve calc and squashes the trailer via the
        height-bounded width formula. Set a 480px floor so the
        trailer still shrinks with the viewport (keeps the first
        action in view as the height drops) but stays at a
        readable size in the middle of the band. */
-    @media (min-width: 721px) and (max-width: 960px) {
+    @media (min-width: 721px) and (max-width: 1000px) {
       .trailer-embed {
         min-width: 480px;
       }
@@ -2412,11 +2412,11 @@
       gap: 40px;
     }
 
-    /* Below ~960px the three-up compact row gets too cramped —
+    /* Below ~1000px the three-up compact row gets too cramped —
        text wraps a word per line and the sprites collide with the
        adjacent cards' headings. Switch to a stacked column layout
        above the mobile breakpoint so the cards stay readable. */
-    @media (max-width: 960px) {
+    @media (max-width: 1000px) {
       html.cards-compact .cta-cards {
         flex-direction: column;
         gap: 12px;
