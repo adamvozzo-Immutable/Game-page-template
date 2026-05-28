@@ -1712,41 +1712,40 @@
 
     /* Social-in-footer variant: relocate the .social-links into
        the legal section as a tight vertical stack — social row,
-       legal links, then fineprint. Uses the tighter mobile-style
-       social spacing / icon size at every viewport. The
-       !important on social-links padding is to beat the
-       html.social-icons-only .social-links { padding: 30px 0 }
-       default in icons-only mode, which would otherwise add 60px
-       of vertical air around the icon row. */
+       legal links, then fineprint. Block layout with explicit
+       margins per child so default paddings / margins inside the
+       social-links can't sneak slack in between rows. */
     html.social-in-footer .legal-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding-top: 8px;
+      display: block;
+      text-align: center;
+      padding-top: 20px;
     }
     html.social-in-footer .legal-section .social-links {
+      display: flex !important;
       flex-wrap: wrap;
       row-gap: 6px;
       column-gap: 12px;
       gap: 6px 12px;
       padding: 0 !important;
-      margin: 0;
-      width: auto;
+      margin: 0 !important;
+      width: 100%;
       justify-content: center;
     }
     html.social-in-footer.social-icons-only .legal-section .social-links {
       column-gap: 8px;
     }
     html.social-in-footer.social-icons-only .legal-section .social-link {
-      padding: 4px;
+      padding: 4px !important;
     }
     html.social-in-footer.social-icons-only .legal-section .social-icon {
       width: 20px;
       height: 20px;
     }
+    html.social-in-footer .legal-section .legal-links {
+      margin: 14px 0 0 !important;
+    }
     html.social-in-footer .legal-section .legal-fineprint {
-      margin: 0;
+      margin: 8px 0 0 !important;
       text-align: center;
     }
     /* Hide the divider rule in the hero footer when the social
