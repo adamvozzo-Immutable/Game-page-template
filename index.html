@@ -1713,20 +1713,24 @@
     /* Social-in-footer variant: relocate the .social-links into
        the legal section as a tight vertical stack — social row,
        legal links, then fineprint. Uses the tighter mobile-style
-       social spacing / icon size at every viewport. */
+       social spacing / icon size at every viewport. The
+       !important on social-links padding is to beat the
+       html.social-icons-only .social-links { padding: 30px 0 }
+       default in icons-only mode, which would otherwise add 60px
+       of vertical air around the icon row. */
     html.social-in-footer .legal-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       padding-top: 8px;
     }
     html.social-in-footer .legal-section .social-links {
       flex-wrap: wrap;
-      row-gap: 10px;
+      row-gap: 6px;
       column-gap: 12px;
-      gap: 10px 12px;
-      padding: 0;
+      gap: 6px 12px;
+      padding: 0 !important;
       margin: 0;
       width: auto;
       justify-content: center;
