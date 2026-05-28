@@ -1712,8 +1712,9 @@
 
     /* Social-in-footer variant: relocate the .social-links into
        the legal section as a vertical stack — social row up top,
-       legal links + fineprint centered below. Same layout at
-       every viewport. */
+       legal links + fineprint centered below. Uses the tighter
+       mobile-style social spacing / icon size at every viewport
+       (the looser desktop default looks oversized down here). */
     html.social-in-footer .legal-section {
       display: flex;
       flex-direction: column;
@@ -1722,9 +1723,23 @@
       padding-top: 16px;
     }
     html.social-in-footer .legal-section .social-links {
-      justify-content: center;
+      flex-wrap: wrap;
+      row-gap: 16px;
+      column-gap: 12px;
+      gap: 16px 12px;
       padding: 0;
       width: auto;
+      justify-content: center;
+    }
+    html.social-in-footer.social-icons-only .legal-section .social-links {
+      column-gap: 8px;
+    }
+    html.social-in-footer.social-icons-only .legal-section .social-link {
+      padding: 8px;
+    }
+    html.social-in-footer.social-icons-only .legal-section .social-icon {
+      width: 22px;
+      height: 22px;
     }
     html.social-in-footer .legal-section .legal-fineprint {
       text-align: center;
