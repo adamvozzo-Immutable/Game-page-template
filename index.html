@@ -2244,7 +2244,7 @@
       background: #4752c4;
     }
 
-    /* Two short CVP bullets shown below the Get Updates CTA in
+    /* Three short CVP bullets shown below the Get Updates CTA in
        Phase 1 (no motivation, pre-signin). Hidden by default;
        JS toggles html.show-hero-bullets when conditions match. */
     .hero-bullets {
@@ -2252,8 +2252,10 @@
       list-style: none;
       padding: 0;
       margin: 16px 0 0;
+      max-width: 100%;
       flex-direction: row;
-      gap: 28px;
+      flex-wrap: wrap;
+      gap: 10px 28px;
       justify-content: center;
       align-items: center;
       font-family: 'Inter', sans-serif;
@@ -2275,7 +2277,7 @@
     }
     @media (max-width: 720px) {
       .hero-bullets {
-        gap: 18px;
+        gap: 8px 16px;
         font-size: 12px;
         margin-top: 14px;
       }
@@ -4296,12 +4298,13 @@
         </a>
       </div>
 
-      <!-- Two short CVP bullets shown below the Get Updates CTA
+      <!-- Three short CVP bullets shown below the Get Updates CTA
            in Phase 1 only (no motivation, pre-signin). Gated via
            html.show-hero-bullets in CSS. -->
       <ul class="hero-bullets" id="hero-bullets" aria-label="Why sign up">
         <li><span class="hero-bullet-tick" aria-hidden="true">✓</span>Day-one launch alerts</li>
         <li><span class="hero-bullet-tick" aria-hidden="true">✓</span>Supporter-only rewards</li>
+        <li><span class="hero-bullet-tick" aria-hidden="true">✓</span>Insider community access</li>
       </ul>
 
       <!-- Founder-hype heading — sits above the cards in
@@ -6428,7 +6431,7 @@
       'phase1-followup',
       isSignedIn && !motivationOn
     );
-    // Two short CVP bullets show below the Get Updates CTA in
+    // Three short CVP bullets show below the Get Updates CTA in
     // Phase 1 (no motivation) pre-signin only. Toggle here so it
     // also clears when switching to a P2 motivation preset.
     document.documentElement.classList.toggle(
