@@ -2533,15 +2533,15 @@
     html.cards-compact .card-cta-link .btn-label {
       text-decoration: none;
     }
+    /* No trailing arrow on the compact button. The locked-state
+       rule below still uses ::after for the lock glyph and wins
+       via higher specificity. The arrow was also bumping
+       "WISHLIST ON STEAM" onto two lines once the button became
+       brand-filled (the extra glyph + margin pushed the label
+       past the available width). */
     html.cards-compact .card-cta::after,
     html.cards-compact .card-cta-link::after {
-      content: '\2192';
-      display: inline-block;
-      margin-left: 4px;
-      font-size: 13px;
-      line-height: 1;
-      color: inherit;
-      text-decoration: none;
+      content: none;
     }
     /* Drop the success circle — the action-label slot already shows
        the tick + post-signup copy. */
