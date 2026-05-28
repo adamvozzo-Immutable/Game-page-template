@@ -414,11 +414,11 @@
       width: min(80%, 720px);
       /* max-width tracks viewport height so wide-aspect logos
          (Bear ~3.3:1, Forza ~5:1) also scale down on shorter
-         viewports. Without this, the max-height clamp only
-         affected tall-aspect logos like Snow / Fly — wide logos
-         stayed pinned at 720px wide and their height never hit
-         the height ceiling. */
-      max-width: clamp(280px, 60vh, 720px);
+         viewports. 48vh means the clamp hits its 720 ceiling
+         around 1500px tall, so the width starts shrinking on
+         any viewport shorter than that. Lower clamp floor (280)
+         keeps the logo legible on very short screens. */
+      max-width: clamp(280px, 48vh, 720px);
       height: auto;
       /* Capped so a tall game logo can't push the headline + CTA
          off the bottom of the viewport. Clamps to 130px on short
