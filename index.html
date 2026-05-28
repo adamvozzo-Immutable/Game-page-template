@@ -1711,23 +1711,23 @@
     }
 
     /* Social-in-footer variant: relocate the .social-links into
-       the legal section as a vertical stack — social row up top,
-       legal links + fineprint centered below. Uses the tighter
-       mobile-style social spacing / icon size at every viewport
-       (the looser desktop default looks oversized down here). */
+       the legal section as a tight vertical stack — social row,
+       legal links, then fineprint. Uses the tighter mobile-style
+       social spacing / icon size at every viewport. */
     html.social-in-footer .legal-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
-      padding-top: 16px;
+      gap: 8px;
+      padding-top: 8px;
     }
     html.social-in-footer .legal-section .social-links {
       flex-wrap: wrap;
-      row-gap: 16px;
+      row-gap: 10px;
       column-gap: 12px;
-      gap: 16px 12px;
+      gap: 10px 12px;
       padding: 0;
+      margin: 0;
       width: auto;
       justify-content: center;
     }
@@ -1735,13 +1735,14 @@
       column-gap: 8px;
     }
     html.social-in-footer.social-icons-only .legal-section .social-link {
-      padding: 8px;
+      padding: 4px;
     }
     html.social-in-footer.social-icons-only .legal-section .social-icon {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
     }
     html.social-in-footer .legal-section .legal-fineprint {
+      margin: 0;
       text-align: center;
     }
     /* Hide the divider rule in the hero footer when the social
