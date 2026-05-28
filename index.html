@@ -1226,13 +1226,13 @@
     /* Between 721-960px width, cards-compact stacks the
        motivation cards vertically, which inflates the
        --hero-reserve calc and squashes the trailer via the
-       height-bounded width formula. Set a 360px floor so the
+       height-bounded width formula. Set a 480px floor so the
        trailer still shrinks with the viewport (keeps the first
-       action in view as the height drops) but never collapses
-       to a tiny thumbnail. */
+       action in view as the height drops) but stays at a
+       readable size in the middle of the band. */
     @media (min-width: 721px) and (max-width: 960px) {
       .trailer-embed {
-        min-width: 360px;
+        min-width: 480px;
       }
     }
 
