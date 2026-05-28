@@ -1710,6 +1710,67 @@
       color: rgba(255, 255, 255, 0.25);
     }
 
+    /* Social-in-footer variant: relocate the .social-links into
+       the legal section. Legal links pin to the right, socials to
+       the left, with fineprint spanning a second row below. */
+    html.social-in-footer .legal-section {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px 32px;
+      grid-template-areas:
+        "social legal"
+        "fineprint fineprint";
+      text-align: left;
+      padding-top: 16px;
+    }
+    html.social-in-footer .legal-section .social-links {
+      grid-area: social;
+      justify-self: start;
+      justify-content: flex-start;
+      padding: 0;
+      width: auto;
+    }
+    html.social-in-footer .legal-section .legal-links {
+      grid-area: legal;
+      justify-self: end;
+    }
+    html.social-in-footer .legal-section .legal-fineprint {
+      grid-area: fineprint;
+      text-align: center;
+    }
+    /* Hide the divider rule in the hero footer when the social
+       row has moved into the legal section — there's nothing
+       above the rule anymore. */
+    html.social-in-footer .page > footer[data-feature="social"] .footer-rule {
+      display: none;
+    }
+    /* Stack the social + legal columns on small viewports — social
+       above legal so the heavier (icon) row reads first. */
+    @media (max-width: 720px) {
+      html.social-in-footer .legal-section {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "social"
+          "legal"
+          "fineprint";
+        justify-items: center;
+        gap: 12px;
+      }
+      html.social-in-footer .legal-section .social-links,
+      html.social-in-footer .legal-section .legal-links {
+        justify-self: center;
+      }
+    }
+
+    /* Hero CTA sits 80px from the bottom of the browser when the
+       social row has been moved below the fold (the hero footer
+       no longer anchors the CTA, so we add explicit breathing
+       room). */
+    html.social-in-footer .hero {
+      padding-bottom: 80px;
+    }
+
     .legal-fineprint {
       margin-top: 2px;
       font-family: 'Inter', sans-serif;
@@ -4902,6 +4963,10 @@
           <input type="checkbox" id="feat-social-icons-only" />
           Icons only
         </label>
+        <label class="demo-radio">
+          <input type="checkbox" id="feat-social-in-footer" />
+          In legal footer
+        </label>
       </div>
     </div>
   </div>
@@ -5211,7 +5276,32 @@
   // extra padding-bottom when the socials aren't there to anchor things.
   var featSocial = document.getElementById('feat-social');
   var featSocialIconsOnly = document.getElementById('feat-social-icons-only');
+  var featSocialInFooter = document.getElementById('feat-social-in-footer');
   var socialSub = document.getElementById('social-suboption');
+  // Capture the social-links + the hero footer + the legal section
+  // up-front so we can reparent the social-links element between
+  // the two locations without losing the original anchor.
+  var socialLinksEl = document.querySelector('.social-links');
+  var heroSocialFooter = document.querySelector('footer[data-feature="social"]');
+  var legalSectionEl = document.querySelector('.legal-section');
+  function updateSocialPlacement() {
+    if (!socialLinksEl) return;
+    var html = document.documentElement;
+    var inFooter = html.classList.contains('social-in-footer');
+    if (inFooter && legalSectionEl) {
+      if (socialLinksEl.parentElement !== legalSectionEl) {
+        // Insert before the legal-links nav so the social column
+        // sits on the LEFT of the row.
+        var legalLinks = legalSectionEl.querySelector('.legal-links');
+        if (legalLinks) legalSectionEl.insertBefore(socialLinksEl, legalLinks);
+        else legalSectionEl.appendChild(socialLinksEl);
+      }
+    } else if (heroSocialFooter) {
+      if (socialLinksEl.parentElement !== heroSocialFooter) {
+        heroSocialFooter.appendChild(socialLinksEl);
+      }
+    }
+  }
   function updateSocialState() {
     var on = featSocial.checked;
     document.querySelectorAll('[data-feature="social"]').forEach(function (el) {
@@ -5226,9 +5316,15 @@
       'social-icons-only',
       on && featSocialIconsOnly.checked
     );
+    document.documentElement.classList.toggle(
+      'social-in-footer',
+      on && featSocialInFooter && featSocialInFooter.checked
+    );
+    updateSocialPlacement();
   }
   featSocial.addEventListener('change', updateSocialState);
   featSocialIconsOnly.addEventListener('change', updateSocialState);
+  if (featSocialInFooter) featSocialInFooter.addEventListener('change', updateSocialState);
   updateSocialState();
 
   // Store-link toggle — hide when sign-in has happened, because the
@@ -7314,6 +7410,7 @@
     'feat-updates': false,
     'feat-social': false,
     'feat-social-icons-only': false,
+    'feat-social-in-footer': false,
     'feat-legal': false,
     'feat-hero-bg': false,
     'herobg-content': true,
@@ -7338,6 +7435,7 @@
       'feat-large-logo': true,
       'feat-social': true,
       'feat-social-icons-only': true,
+      'feat-social-in-footer': true,
       'feat-hero-bg': true,
       'herobg-content': true,
       'feat-cards-compact': true,
