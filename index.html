@@ -412,18 +412,18 @@
       left: auto;
       transform: none;
       width: min(80%, 720px);
-      max-width: 720px;
+      /* max-width tracks viewport height so wide-aspect logos
+         (Bear ~3.3:1, Forza ~5:1) also scale down on shorter
+         viewports. Without this, the max-height clamp only
+         affected tall-aspect logos like Snow / Fly — wide logos
+         stayed pinned at 720px wide and their height never hit
+         the height ceiling. */
+      max-width: clamp(280px, 60vh, 720px);
       height: auto;
-      /* Roomier ceiling than the default header band, but still
-         capped so a tall game logo can't push the headline + CTA
-         off the bottom of the viewport. Scales with viewport
-         height — clamps to 130px on short screens so the top
-         third of the hero key art stays visible (knight / hero
-         silhouette), and grows up to 260px on tall screens. The
-         17vh preferred value means the logo starts gradually
-         shrinking once the viewport drops below ~1500px tall —
-         earlier than 20vh would so the hero art gets relief
-         sooner. */
+      /* Capped so a tall game logo can't push the headline + CTA
+         off the bottom of the viewport. Clamps to 130px on short
+         screens so the top third of the hero key art stays
+         visible, and grows up to 260px on tall screens. */
       max-height: clamp(130px, 17vh, 260px);
       margin: 0 auto 56px;
       display: block;
