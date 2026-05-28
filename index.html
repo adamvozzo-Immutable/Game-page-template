@@ -3933,6 +3933,24 @@
       html.media-above .hero-text {
         margin-top: auto;
       }
+
+      /* P1S2 with social-in-footer: the CTA is anchored 80px from
+         the bottom (via html.social-in-footer .hero padding-bottom)
+         and the only thing in .hero-text is the GET UPDATES button.
+         Without a wider trailer, all the spare vertical space lands
+         as an empty margin band above the CTA. Pull in the hero's
+         horizontal padding from 80→40 in this mode and widen the
+         trailer cap to match — the height-bound formula then lets
+         the trailer grow into the slack instead of leaving it as
+         an empty gap. Heading/body keep their own max-width:580 so
+         the body copy stays the same width. */
+      html.social-in-footer.media-above:not(.motivation-on) .hero {
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+      html.social-in-footer.media-above:not(.motivation-on) .trailer-embed:not(.trailer-cvp) {
+        width: min(2400px, calc((100vh - var(--hero-reserve)) * 16 / 9), calc(100vw - 80px));
+      }
     }
 
     /* Horizontal-lockup vignette: the standard top→bottom vignette
