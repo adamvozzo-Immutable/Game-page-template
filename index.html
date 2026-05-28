@@ -1729,17 +1729,24 @@
       padding: 0 !important;
       margin: 0 !important;
       width: 100%;
+      min-height: 0 !important;
+      line-height: 1 !important;
       justify-content: center;
     }
+    /* Override the desktop icons-only social-link / icon size +
+       padding even at desktop widths — match the mobile compact
+       sizing so the icon row's intrinsic height is the same and
+       the gap to the legal links below reads tight. */
     html.social-in-footer.social-icons-only .legal-section .social-links {
       column-gap: 8px;
     }
     html.social-in-footer.social-icons-only .legal-section .social-link {
       padding: 4px !important;
+      line-height: 1 !important;
     }
     html.social-in-footer.social-icons-only .legal-section .social-icon {
-      width: 20px;
-      height: 20px;
+      width: 20px !important;
+      height: 20px !important;
     }
     html.social-in-footer .legal-section .legal-links {
       margin: 14px 0 0 !important;
