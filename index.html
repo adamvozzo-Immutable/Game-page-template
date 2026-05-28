@@ -1725,8 +1725,14 @@
     }
     html.social-in-footer .legal-section > * {
       margin: 0 !important;
+      padding: 0 !important;
       width: auto !important;
     }
+    /* The top-page nav has padding:36px 80px from a global
+       `nav { padding: 36px 80px }` rule, which inherits onto the
+       <nav class="legal-links"> sitting inside the legal section.
+       The wildcard above kills it, but keep this comment so the
+       reason for the explicit reset is obvious. */
     html.social-in-footer .legal-section .social-links {
       display: flex !important;
       flex-wrap: wrap;
