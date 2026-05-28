@@ -3505,10 +3505,10 @@
         margin-bottom: 24px;
       }
 
-      /* When media is above the fold on mobile, give the trailer
-         a fixed 20px gap above and below so the spacing reads as
-         even on both sides. The headline's margin-top:20 carries
-         the gap below the trailer. */
+      /* Default mobile media-above: fixed 20px gap above + below
+         the trailer (the headline carries the gap below). Used
+         in motivation-on flows (P2S1 / P2S2) so the cards don't
+         get pushed to the bottom of the hero. */
       html.media-above .hero-headline {
         margin-top: 20px;
       }
@@ -3516,6 +3516,24 @@
       html.media-above .screenshot-gallery:not(.gallery-cvp) {
         margin-top: 20px;
         margin-bottom: 0;
+      }
+
+      /* Phase 1 + media-above (P1S2): no motivation flow, so the
+         CTA button is the only thing in .hero-text. Centre the
+         trailer + headline group vertically between the logo and
+         the button by absorbing slack with auto margins on the
+         trailer and hero-text; headline sits right against the
+         trailer for a single grouped block. */
+      html.media-above:not(.motivation-on) .trailer-embed:not(.trailer-cvp),
+      html.media-above:not(.motivation-on) .screenshot-gallery:not(.gallery-cvp) {
+        margin-top: auto;
+        margin-bottom: 20px;
+      }
+      html.media-above:not(.motivation-on) .hero-headline {
+        margin-top: 0;
+      }
+      html.media-above:not(.motivation-on) .hero-text {
+        margin-top: auto;
       }
 
       .hero-text {
