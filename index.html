@@ -6507,7 +6507,8 @@
   // updateCtaState handlers so it observes the post-change state.
   ['feat-motivation', 'mstyle-cvp', 'mstyle-rewards', 'feat-progression',
    'prog-layout-hero', 'prog-layout-cards', 'feat-cvp-cards',
-   'feat-body', 'feat-heading'].forEach(function (id) {
+   'feat-body', 'feat-heading',
+   'feat-social', 'feat-social-in-footer', 'feat-social-icons-only'].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) el.addEventListener('change', syncHeroLayout);
   });
