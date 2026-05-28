@@ -1712,35 +1712,35 @@
 
     /* Social-in-footer variant: relocate the .social-links into
        the legal section as a tight vertical stack — social row,
-       legal links, then fineprint. Block layout with explicit
-       margins per child so default paddings / margins inside the
-       social-links can't sneak slack in between rows. */
+       legal links, then fineprint. Use flex-column with an
+       explicit 20px gap, and zero every child's own margin so
+       no default p / nav vertical margin can sneak slack in. */
     html.social-in-footer .legal-section {
-      display: block;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 20px !important;
+      padding-top: 20px !important;
       text-align: center;
-      padding-top: 20px;
+    }
+    html.social-in-footer .legal-section > * {
+      margin: 0 !important;
+      width: auto !important;
     }
     html.social-in-footer .legal-section .social-links {
       display: flex !important;
       flex-wrap: wrap;
-      row-gap: 6px;
       column-gap: 12px;
+      row-gap: 6px;
       gap: 6px 12px;
       padding: 0 !important;
-      margin: 0 !important;
-      width: 100%;
       min-height: 0 !important;
       line-height: 1 !important;
       justify-content: center;
-      /* Cap the row's height so any inherited font-line-box +
-         padding can't bloat it; the icons themselves are 20px
-         + 4*2 link padding = 28, so 32 is a safe ceiling. */
-      max-height: 32px !important;
     }
     /* Override the desktop icons-only social-link / icon size +
        padding even at desktop widths — match the mobile compact
-       sizing so the icon row's intrinsic height is the same and
-       the gap to the legal links below reads tight. */
+       sizing so the icon row stays compact. */
     html.social-in-footer.social-icons-only .legal-section .social-links {
       column-gap: 8px;
     }
@@ -1751,13 +1751,6 @@
     html.social-in-footer.social-icons-only .legal-section .social-icon {
       width: 20px !important;
       height: 20px !important;
-    }
-    html.social-in-footer .legal-section .legal-links {
-      margin: 14px 0 0 !important;
-    }
-    html.social-in-footer .legal-section .legal-fineprint {
-      margin: 8px 0 0 !important;
-      text-align: center;
     }
     /* Hide the divider rule in the hero footer when the social
        row has moved into the legal section — there's nothing
