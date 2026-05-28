@@ -2240,14 +2240,16 @@
     html.progression-cards.rewards .cta-cards {
       margin-top: 8px;
     }
-    /* In media-above mode the hero already adds a row-gap
-       between the headline block and .hero-text, so the cards'
-       own 32px margin-top would stack on top. Zero it out for
-       every media-above scenario so P1S2 and P2S1 land at the
-       same gap. Non-media-above scenarios (P1S1) keep the
-       default 32px margin-top to maintain visible spacing. */
-    html.media-above .cta-cards {
-      margin-top: 0;
+    /* Desktop media-above mode already adds a row-gap between
+       the headline block and .hero-text (see the media-above
+       hero rule below), so the cards' own 32px margin-top would
+       stack on top. Zero it out on desktop only — mobile keeps
+       its default margin so there's still a visible gap between
+       the body copy and the cards. */
+    @media (min-width: 721px) {
+      html.media-above .cta-cards {
+        margin-top: 0;
+      }
     }
 
     .cta-card {
@@ -3496,6 +3498,13 @@
         object-position: center bottom;
       }
 
+      /* Mobile logo-centered: drop the badge's 56px margin-bottom
+         to 24 so the logo sits closer to the heading, matching
+         the visual rhythm of heading → body → CTA. */
+      html.logo-centered .hero-headline .hero-badge {
+        margin-bottom: 24px;
+      }
+
       /* When media is above the fold on mobile, give the trailer
          a fixed 20px gap above and below so the spacing reads as
          even on both sides. The headline's margin-top:20 carries
@@ -3709,12 +3718,13 @@
       .social-links {
         flex-wrap: wrap;
         row-gap: 16px;
-        column-gap: 28px;
-        gap: 16px 28px;
+        column-gap: 12px;
+        gap: 16px 12px;
         /* Top padding matches the hero's bottom padding (24px),
            so the divider sits an equal distance from the button
-           above and the icons below. */
-        padding: 20px 20px 24px;
+           above and the icons below. Side padding tightened so
+           five icons fit in a single row on narrow phones. */
+        padding: 20px 12px 24px;
         justify-content: center;
       }
 
@@ -3726,6 +3736,14 @@
       html.social-icons-only .social-links {
         padding-top: 14px;
         padding-bottom: 22px;
+        column-gap: 8px;
+      }
+      html.social-icons-only .social-link {
+        padding: 8px;
+      }
+      html.social-icons-only .social-icon {
+        width: 22px;
+        height: 22px;
       }
 
       .social-link {
