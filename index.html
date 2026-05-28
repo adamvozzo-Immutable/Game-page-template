@@ -3934,31 +3934,6 @@
         margin-top: auto;
       }
 
-      /* P1S2 with social-in-footer: the CTA is anchored 80px from
-         the bottom (via html.social-in-footer .hero padding-bottom)
-         and the only thing in .hero-text is the GET UPDATES button.
-         Without a wider trailer, all the spare vertical space lands
-         as an empty margin band above the CTA. Pull in the hero's
-         horizontal padding from 80→40 in this mode and widen the
-         trailer cap to match — the height-bound formula then lets
-         the trailer grow into the slack instead of leaving it as
-         an empty gap. Heading/body keep their own max-width:580 so
-         the body copy stays the same width. */
-      html.social-in-footer.media-above:not(.motivation-on) .hero {
-        padding-left: 40px;
-        padding-right: 40px;
-      }
-      /* Let the trailer escape the hero's horizontal padding via
-         negative margins so the height-bound formula (rather than a
-         horizontal cap) decides its size. That way any spare vertical
-         slack in the hero gets absorbed by a taller trailer instead
-         of leaking out as a margin band above the CTA. The 100vw
-         absolute cap prevents horizontal page overflow. */
-      html.social-in-footer.media-above:not(.motivation-on) .trailer-embed:not(.trailer-cvp) {
-        width: min(2400px, calc((100vh - var(--hero-reserve)) * 16 / 9), 100vw);
-        margin-left: -40px;
-        margin-right: -40px;
-      }
     }
 
     /* Horizontal-lockup vignette: the standard top→bottom vignette
@@ -5686,8 +5661,15 @@
     var cs = getComputedStyle(hero);
     var heroPadTop = parseFloat(cs.paddingTop) || 0;
     var heroPadBot = parseFloat(cs.paddingBottom) || 0;
-    // Trailer margin-bottom (40px) + a small breathing buffer (16px).
-    var reserve = navH + heroPadTop + headlineH + heroTextH + heroPadBot + footerH + 40 + 16;
+    // Read the active above-fold media element's actual margin-bottom
+    // instead of assuming 40px — media-above mode uses 32px, and any
+    // mismatch shows up as residual margin-top:auto slack on .hero-text.
+    var mediaEl = document.querySelector('.trailer-embed:not(.trailer-cvp):not(.feat-hidden), .screenshot-gallery:not(.gallery-cvp):not(.feat-hidden)');
+    var mediaMarginBottom = 0;
+    if (mediaEl) {
+      mediaMarginBottom = parseFloat(getComputedStyle(mediaEl).marginBottom) || 0;
+    }
+    var reserve = navH + heroPadTop + headlineH + heroTextH + heroPadBot + footerH + mediaMarginBottom;
     document.documentElement.style.setProperty('--hero-reserve', reserve + 'px');
   }
 
