@@ -2328,6 +2328,13 @@
       html.media-above .cta-cards {
         margin-top: 0;
       }
+      /* P2S1 (CVP cards): no founder-hype .cards-heading, so the
+         zero-out above leaves the tagline flush against the cards.
+         Restore the default row gap; P2S2 keeps margin-top: 0 because
+         .cards-heading's 40px top margin owns the spacing. */
+      html.media-above.cvp-cards .cta-cards {
+        margin-top: 32px;
+      }
     }
 
     .cta-card {
