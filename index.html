@@ -2408,6 +2408,17 @@
       overflow: visible;
       transition: background 0.18s, border-color 0.18s, transform 0.18s;
     }
+    /* Keep P2S1 CVP cards and P2S2 reward cards on the same row
+       geometry. Without this, .hero-text can shrink-wrap to different
+       content and make one scenario's cards look wider than the other. */
+    html.cards-compact .hero-text {
+      width: 100%;
+    }
+    html.cards-compact .cta-cards {
+      max-width: calc((380px * 3) + (40px * 2));
+      margin-left: auto;
+      margin-right: auto;
+    }
     /* Wider gap between compact cards so the oversized sprite
        spilling past the right edge doesn't crowd the next card. */
     html.cards-compact .cta-cards {
@@ -2464,6 +2475,7 @@
       font-size: 18px;
       line-height: 22px;
       letter-spacing: 0.08em;
+      min-height: 44px;
       margin: 0;
       text-align: left;
       /* Balance the line breaks so a single word doesn't hang
@@ -2547,6 +2559,7 @@
       letter-spacing: 0.06em;
       line-height: 1;
       text-transform: uppercase;
+      white-space: nowrap;
       pointer-events: none;
       display: inline-flex;
       align-items: center;
@@ -2636,13 +2649,14 @@
     }
     html.cards-compact.cvp-cards .card-side-icon,
     html.cards-compact.phase1-followup .card-side-icon {
-      display: block;
+      display: flex;
       position: absolute;
-      right: 28px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 60px;
-      height: 60px;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 130px;
+      align-items: center;
+      justify-content: center;
       /* Force a white base so the icon reads on dark hero
          backgrounds, then drop opacity so it stays a quiet
          decorative accent rather than competing with the action
@@ -2653,16 +2667,28 @@
       z-index: 0;
     }
     .card-side-icon svg {
-      width: 100%;
-      height: 100%;
+      width: 75px;
+      height: 75px;
       display: block;
+    }
+    html.cards-compact #card-email .card-side-icon svg {
+      width: 92px;
+      height: 92px;
     }
     @media (max-width: 720px) {
       html.cards-compact.cvp-cards .card-side-icon,
       html.cards-compact.phase1-followup .card-side-icon {
-        right: 20px;
-        width: 50px;
-        height: 50px;
+        right: 0;
+        width: 140px;
+      }
+      html.cards-compact.cvp-cards .card-side-icon svg,
+      html.cards-compact.phase1-followup .card-side-icon svg {
+        width: 70px;
+        height: 70px;
+      }
+      html.cards-compact #card-email .card-side-icon svg {
+        width: 86px;
+        height: 86px;
       }
     }
     /* Stock tag sits flush with the heading row on the right of the
